@@ -1,0 +1,235 @@
+//package com.bankbroker.loanapp.controller;
+//
+//import com.bankbroker.loanapp.controller.api.ApplicationStageControllerApi;
+//import com.bankbroker.loanapp.dto.stage.*;
+//import com.bankbroker.loanapp.service.ApplicationStageService;
+//import lombok.RequiredArgsConstructor;
+//import lombok.extern.slf4j.Slf4j;
+//import org.springframework.http.ResponseEntity;
+//import org.springframework.web.bind.annotation.RestController;
+//
+//import java.util.List;
+//
+//@Slf4j
+//@RestController
+//@RequiredArgsConstructor
+//public class ApplicationStageController implements ApplicationStageControllerApi {
+//
+//    private final ApplicationStageService applicationStageService;
+//
+////    @Override
+////    public ResponseEntity<ApplicationStageCurrentResponse> saveCurrentStage(
+////            String applicationId, ApplicationStageCurrentRequest request) {
+////        return ResponseEntity.ok(applicationStageService.saveCurrentStage(applicationId, request));
+////    }
+////
+////    @Override
+////    public ResponseEntity<List<ApplicationStageCurrentResponse>> getCurrentStages(String applicationId) {
+////        return ResponseEntity.ok(applicationStageService.getCurrentStages(applicationId));
+////    }
+//
+//
+//    @Override
+//    public ResponseEntity<ApplicationHistoryResponse> addHistory(String applicationId, ApplicationHistoryRequest request) {
+//        return ResponseEntity.ok(applicationStageService.addHistory(applicationId, request));
+//    }
+//
+//
+//    @Override
+//    public ResponseEntity<List<ApplicationHistoryResponse>> getHistory(String applicationId) {
+//        return ResponseEntity.ok(applicationStageService.getHistory(applicationId));
+//    }
+//
+//    @Override
+//    public ResponseEntity<ApplicationCustomerDetailsResponse> saveCustomerDetails(
+//           ApplicationCustomerDetailsRequest request) {
+//        log.info("Saving customer details");
+//        return ResponseEntity.ok(applicationStageService.createApplicationThenSaveCustomerDetails ( request));
+//    }
+//
+//    @Override
+//    public ResponseEntity<ApplicationCustomerDetailsResponse> getCustomerDetails(String applicationId) {
+//        log.info("Application Id : {}", applicationId);
+//        return ResponseEntity.ok(applicationStageService.getCustomerDetails(applicationId));
+//    }
+//
+////    @Override
+////    public ResponseEntity<ApplicationPropertyDetailsResponse> savePropertyDetails(
+////            String applicationId, ApplicationPropertyDetailsRequest request) {
+////        return ResponseEntity.ok(applicationStageService.savePropertyDetails(applicationId, request));
+////    }
+//
+//    @Override
+//    public ResponseEntity<ApplicationPropertyDetailsResponse> savePropertyDetails(
+//            String applicationId,
+//            ApplicationPropertyDetailsRequest request) {
+//
+//        return ResponseEntity.ok(
+//                applicationStageService.savePropertyDetails(applicationId, request)
+//        );
+//    }
+//
+//    @Override
+//    public ResponseEntity<ApplicationPropertyDetailsResponse> getPropertyDetails(String applicationId) {
+//        return ResponseEntity.ok(applicationStageService.getPropertyDetails(applicationId));
+//    }
+//
+//    @Override
+//    public ResponseEntity<ApplicationDocumentDetailsResponse> saveDocumentDetails(
+//            String applicationId, ApplicationDocumentDetailsRequest request) {
+//        return ResponseEntity.ok(applicationStageService.saveDocumentDetails(applicationId, request));
+//    }
+//
+//    @Override
+//    public ResponseEntity<ApplicationDocumentDetailsResponse> getDocumentDetails(String applicationId) {
+//        return ResponseEntity.ok(applicationStageService.getDocumentDetails(applicationId));
+//    }
+//
+//    @Override
+//    public ResponseEntity<ApplicationAgencyAssignmentResponse>
+//    saveAgencyAssignment(
+//            String applicationId, ApplicationAgencyAssignmentRequest request) {
+//        return ResponseEntity.ok(applicationStageService.saveAgencyAssignment(applicationId, request));
+//    }
+//
+//    @Override
+//    public ResponseEntity<ApplicationAgencyAssignmentResponse> getAgencyAssignment(String applicationId) {
+//        return ResponseEntity.ok(applicationStageService.getAgencyAssignment(applicationId));
+//    }
+//
+//    @Override
+//    public ResponseEntity<ApplicationSummaryResponse> saveSummary(
+//            String applicationId, ApplicationSummaryRequest request) {
+//        return ResponseEntity.ok(applicationStageService.saveSummary(applicationId, request));
+//    }
+//
+//    @Override
+//    public ResponseEntity<ApplicationSummaryResponse> getSummary(String applicationId) {
+//        return ResponseEntity.ok(applicationStageService.getSummary(applicationId));
+//    }
+//}
+
+package com.bankbroker.loanapp.controller;
+
+import com.bankbroker.loanapp.controller.api.ApplicationStageControllerApi;
+import com.bankbroker.loanapp.dto.stage.*;
+import com.bankbroker.loanapp.service.ApplicationStageService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+
+@Slf4j
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/applications")   // ADD THIS
+public class ApplicationStageController implements ApplicationStageControllerApi {
+
+    private final ApplicationStageService applicationStageService;
+
+    // ========================= HISTORY =========================
+    @Override
+    public ResponseEntity<ApplicationHistoryResponse> addHistory(
+            String applicationId, ApplicationHistoryRequest request) {
+
+        return ResponseEntity.ok(applicationStageService.addHistory(applicationId, request));
+    }
+
+    @Override
+    public ResponseEntity<List<ApplicationHistoryResponse>> getHistory(String applicationId) {
+        return ResponseEntity.ok(applicationStageService.getHistory(applicationId));
+    }
+
+    // ========================= CUSTOMER =========================
+    @Override
+    public ResponseEntity<ApplicationCustomerDetailsResponse> saveCustomerDetails(
+            ApplicationCustomerDetailsRequest request) {
+
+        return ResponseEntity.ok(applicationStageService.createApplicationThenSaveCustomerDetails(request));
+    }
+
+    @Override
+    public ResponseEntity<ApplicationCustomerDetailsResponse> getCustomerDetails(String applicationId) {
+        return ResponseEntity.ok(applicationStageService.getCustomerDetails(applicationId));
+    }
+
+    // ========================= PROPERTY =========================
+    @Override
+    public ResponseEntity<ApplicationPropertyDetailsResponse> savePropertyDetails(
+            String applicationId, ApplicationPropertyDetailsRequest request) {
+
+        return ResponseEntity.ok(applicationStageService.savePropertyDetails(applicationId, request));
+    }
+
+    @Override
+    public ResponseEntity<ApplicationPropertyDetailsResponse> getPropertyDetails(String applicationId) {
+        return ResponseEntity.ok(applicationStageService.getPropertyDetails(applicationId));
+    }
+
+    // ========================= DOCUMENTS (MULTIPART) =========================
+//    @Override
+//    public ResponseEntity<ApplicationDocumentDetailsResponse> uploadDocuments(
+//            @PathVariable String applicationId,
+//            @RequestPart("files") List<MultipartFile> files,
+//            @RequestPart("documentTypes") List<String> documentTypes) {
+//
+//        log.info("Uploading documents");
+//
+//        return ResponseEntity.ok(
+//                applicationStageService.uploadDocuments(applicationId, files, documentTypes)
+//        );
+//    }
+
+    @PostMapping(
+            path = "/{applicationId}/upload-documents",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
+    public ResponseEntity<ApplicationDocumentDetailsResponse> uploadDocuments(
+            @PathVariable String applicationId,
+            @RequestPart("files") List<MultipartFile> files,
+            @RequestParam("documentTypes") List<String> documentTypes
+    ) {
+        log.info("Uploading documents");
+        return ResponseEntity.ok(
+                applicationStageService.uploadDocuments(applicationId, files, documentTypes)
+        );
+    }
+
+    @Override
+    public ResponseEntity<ApplicationDocumentDetailsResponse> getDocumentDetails(String applicationId) {
+        return ResponseEntity.ok(applicationStageService.getDocumentDetails(applicationId));
+    }
+
+    // ========================= AGENCY =========================
+    @Override
+    public ResponseEntity<ApplicationAgencyAssignmentResponse> saveAgencyAssignment(
+            @PathVariable String applicationId,
+            @RequestBody ApplicationAgencyAssignmentRequest request) {
+
+        return ResponseEntity.ok(applicationStageService.saveAgencyAssignment(applicationId, request));
+    }
+
+    @Override
+    public ResponseEntity<ApplicationAgencyAssignmentResponse> getAgencyAssignment(
+            @PathVariable String applicationId) {
+
+        return ResponseEntity.ok(applicationStageService.getAgencyAssignment(applicationId));
+    }
+
+    // ========================= SUMMARY =========================
+    @Override
+    public ResponseEntity<ApplicationSummaryResponse> saveSummary(
+            String applicationId, ApplicationSummaryRequest request) {
+
+        return ResponseEntity.ok(applicationStageService.saveSummary(applicationId, request));
+    }
+
+    @Override
+    public ResponseEntity<ApplicationSummaryResponse> getSummary(String applicationId) {
+        return ResponseEntity.ok(applicationStageService.getSummary(applicationId));
+    }
+}

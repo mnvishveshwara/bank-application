@@ -1,0 +1,16 @@
+package com.bankbroker.loanapp.dto.stage;
+
+import lombok.*;
+
+import java.time.LocalDateTime;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class ApplicationSummaryRequest {
+    private String summaryText;
+    private Double finalApprovedAmount;
+    private String reviewedByAdminId;
+}
