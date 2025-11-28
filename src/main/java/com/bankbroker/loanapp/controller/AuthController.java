@@ -28,27 +28,6 @@ public class AuthController {
     private final JwtTokenProvider tokenProvider;
     private final AdminUserRepository adminUserRepository;
 
-//
-//    @PostMapping("/login")
-//    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
-//        Authentication authentication = authenticationManager.authenticate(
-//                new UsernamePasswordAuthenticationToken(
-//                        request.getUsername(),
-//                        request.getPassword()
-//                )
-//        );
-//        UserDetails principal = (UserDetails) authentication.getPrincipal();
-//        String role = principal.getAuthorities().stream()
-//                .map(GrantedAuthority::getAuthority)
-//                .findFirst()
-//                .orElse("ROLE_USER");
-//
-//        String token = tokenProvider.generateToken(principal.getUsername(), role);
-//        return ResponseEntity.ok(AuthResponse.builder()
-//                .token(token)
-//                .role(role)
-//                .build());
-//    }
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {

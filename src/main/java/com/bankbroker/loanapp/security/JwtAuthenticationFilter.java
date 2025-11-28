@@ -30,12 +30,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = null;
         String username = null;
 
-//        if (header != null && header.startsWith("Bearer ")) {
-//            token = header.substring(7);
-//            if (tokenProvider.validateToken(token)) {
-//                username = tokenProvider.getUsernameFromJwt(token);
-//            }
-//        }
 
         if (header != null && header.startsWith("Bearer ")) {
             token = header.substring(7);
@@ -50,14 +44,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
 
-//        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-//            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-//            UsernamePasswordAuthenticationToken auth =
-//                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-//            auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-//            SecurityContextHolder.getContext().setAuthentication(auth);
-//        }
-
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
@@ -65,7 +51,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             UsernamePasswordAuthenticationToken auth =
                     new UsernamePasswordAuthenticationToken(
-                            adminId,                // 🔥 store adminId as principal
+                            adminId,
                             null,
                             userDetails.getAuthorities()
                     );

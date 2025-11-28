@@ -23,8 +23,6 @@ public interface ApplicationStageService {
                                                            ApplicationPropertyDetailsRequest request);
     ApplicationPropertyDetailsResponse getPropertyDetails(String applicationId);
 
-//    ApplicationDocumentDetailsResponse saveDocumentDetails(String applicationId,
-//                                                           ApplicationDocumentDetailsRequest request);
 ApplicationDocumentDetailsResponse uploadDocuments(
         String applicationId,
         List<MultipartFile> files,

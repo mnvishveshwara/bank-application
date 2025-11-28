@@ -27,8 +27,8 @@ public class AgencyMasterServiceImpl implements AgencyMasterService {
             throw new IllegalArgumentException("Agency name already exists.");
         }
 
-        String admin = getLoggedInAdminId(); // <-- use your existing method
-
+        String admin = getLoggedInAdminId();
+        log.info("Admin Id: " + admin);
         AgencyMaster agency = AgencyMaster.builder()
                 .agencyName(req.getAgencyName())
                 .contactName(req.getContactName())
@@ -118,7 +118,6 @@ public class AgencyMasterServiceImpl implements AgencyMasterService {
 
     // 🔥 Reuse your existing method from security context
     private String getLoggedInAdminId() {
-        return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
+        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 }

@@ -17,11 +17,11 @@ public class ApplicationAgencyAssignmentResponse {
     private Long agencyId;
     private String agencyName;
 
-    private String createdByAdminId;   // <-- ADD THIS
-    private String updatedByAdminId;   // <-- ADD THIS
+    private String createdByAdminId;
+    private String updatedByAdminId;
 
-    private LocalDateTime createdAt;   // <-- ADD THIS
-    private LocalDateTime updatedAt;   // <-- ADD THIS
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     private String remarks;
 }

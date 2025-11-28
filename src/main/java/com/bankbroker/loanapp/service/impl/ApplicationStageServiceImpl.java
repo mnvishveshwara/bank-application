@@ -278,24 +278,7 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
                         "ApplicationDocumentDetails", "applicationId", applicationId));
         return mapDocumentDetailsToResponse(entity);
     }
-//
-//    @Override
-//    public ApplicationAgencyAssignmentResponse saveAgencyAssignment(String applicationId,
-//                                                                    ApplicationAgencyAssignmentRequest request) {
-//        LoanApplication app = getApplicationOrThrow(applicationId);
-//        AdminUser assignedBy = getAdminOrThrow(request.getAssignedByAdminId());
-//
-//        ApplicationAgencyAssignment entity = applicationAgencyAssignmentRepository
-//                .findByApplication(app)
-//                .orElse(ApplicationAgencyAssignment.builder().application(app).build());
-//
-//        entity.setAgencyName(request.getAgencyName());
-//        entity.setAssignedBy(assignedBy);
-//        entity.setComments(request.getComments());
-//
-//        entity = applicationAgencyAssignmentRepository.save(entity);
-//        return mapAgencyAssignmentToResponse(entity);
-//    }
+
 
     @Override
     @Transactional
@@ -306,6 +289,7 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
         LoanApplication app = getApplicationOrThrow(applicationId);
 
         String adminId = getLoggedInAdminId();
+        log.info("admin details: {}",adminId);
         AdminUser admin = getAdminOrThrow(adminId);
 
         AgencyMaster agency = agencyMasterRepository.findById(request.getAgencyId())
@@ -325,7 +309,7 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
         entity.setUpdatedBy(admin);
 
         entity = applicationAgencyAssignmentRepository.save(entity);
-
+        updateStage(app, ApplicationStageType.ASSIGN_AGENCY, admin);
         return agencyAssignmentMapper.toResponse(entity);
     }
 
@@ -637,6 +621,5 @@ private void updateStage(LoanApplication app, ApplicationStageType stageType, Ad
 
         return f + lastFive;
     }
-
 
 }
