@@ -7,9 +7,7 @@ import java.util.List;
 
 public interface ApplicationStageService {
 
-    ApplicationStageCurrentResponse saveCurrentStage(String applicationId,
-                                                     ApplicationStageCurrentRequest request);
-    List<ApplicationStageCurrentResponse> getCurrentStages(String applicationId);
+
 
     ApplicationHistoryResponse addHistory(String applicationId,
                                           ApplicationHistoryRequest request);

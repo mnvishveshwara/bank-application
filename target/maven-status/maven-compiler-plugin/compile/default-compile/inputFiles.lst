@@ -14,6 +14,7 @@ D:\loanapp_full\src\main\java\com\bankbroker\loanapp\entity\stage\ApplicationSum
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\service\ApplicationStageService.java
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\repository\stage\ApplicationSummaryRepository.java
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\dto\stage\PropertyAddressDTO.java
+D:\loanapp_full\src\main\java\com\bankbroker\loanapp\entity\AgencyMaster.java
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\service\AdminUserService.java
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\entity\AdminUser.java
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\mapper\ApplicationDocumentDetailsMapper.java
@@ -21,12 +22,16 @@ D:\loanapp_full\src\main\java\com\bankbroker\loanapp\dto\stage\ApplicationCustom
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\mapper\ApplicationCustomerDetailsMapper.java
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\dto\stage\ApplicationAgencyAssignmentResponse.java
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\dto\stage\ApplicationSummaryRequest.java
+D:\loanapp_full\src\main\java\com\bankbroker\loanapp\controller\AgencyMasterController.java
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\service\impl\AdminUserServiceImpl.java
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\service\impl\ApplicationStageServiceImpl.java
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\LoanAppApplication.java
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\repository\AdminUserRepository.java
+D:\loanapp_full\src\main\java\com\bankbroker\loanapp\dto\master\AgencyMasterResponse.java
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\mapper\ApplicationPropertyDetailsMapper.java
+D:\loanapp_full\src\main\java\com\bankbroker\loanapp\service\AgencyMasterService.java
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\service\CustomerService.java
+D:\loanapp_full\src\main\java\com\bankbroker\loanapp\service\impl\AgencyMasterServiceImpl.java
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\dto\admin\AdminRequest.java
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\entity\ApplicationStageHistory.java
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\dto\customer\CustomerRequest.java
@@ -42,6 +47,7 @@ D:\loanapp_full\src\main\java\com\bankbroker\loanapp\repository\stage\Applicatio
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\dto\stage\ApplicationPropertyDetailsResponse.java
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\dto\auth\AuthResponse.java
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\controller\AuthController.java
+D:\loanapp_full\src\main\java\com\bankbroker\loanapp\controller\api\AgencyMasterControllerApi.java
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\dto\stage\ApplicationStageCurrentRequest.java
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\entity\stage\ApplicationDocumentDetails.java
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\repository\ApplicationStageHistoryRepository.java
@@ -52,6 +58,7 @@ D:\loanapp_full\src\main\java\com\bankbroker\loanapp\dto\application\LoanApplica
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\entity\Customer.java
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\entity\stage\ApplicationPropertyAddress.java
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\repository\ApplicationStageCurrentRepository.java
+D:\loanapp_full\src\main\java\com\bankbroker\loanapp\mapper\ApplicationAgencyAssignmentMapper.java
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\repository\LoanApplicationRepository.java
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\security\CustomUserDetailsService.java
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\dto\stage\ApplicationStageCurrentResponse.java
@@ -73,6 +80,7 @@ D:\loanapp_full\src\main\java\com\bankbroker\loanapp\dto\stage\ResidentialAddres
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\dto\stage\ApplicationDocumentDetailsResponse.java
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\controller\LoanApplicationController.java
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\dto\stage\ApplicationDocumentDetailsRequest.java
+D:\loanapp_full\src\main\java\com\bankbroker\loanapp\dto\master\AgencyMasterRequest.java
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\entity\enums\Role.java
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\dto\stage\ApplicationCustomerDetailsRequest.java
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\entity\enums\ApplicationHistoryStatus.java
@@ -80,6 +88,7 @@ D:\loanapp_full\src\main\java\com\bankbroker\loanapp\entity\ApplicationStageCurr
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\exception\ResourceNotFoundException.java
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\dto\application\LoanApplicationResponse.java
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\dto\customer\CustomerResponse.java
+D:\loanapp_full\src\main\java\com\bankbroker\loanapp\repository\AgencyMasterRepository.java
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\security\JwtAuthenticationFilter.java
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\mapper\CustomerMapper.java
 D:\loanapp_full\src\main\java\com\bankbroker\loanapp\controller\api\AdminControllerApi.java

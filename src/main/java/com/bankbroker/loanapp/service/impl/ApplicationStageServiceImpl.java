@@ -22,8 +22,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
@@ -39,52 +37,35 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
     private final AdminUserRepository adminUserRepository;
     private final ApplicationStageCurrentRepository applicationStageCurrentRepository;
     private final ApplicationStageHistoryRepository applicationStageHistoryRepository;
-
-    private final ApplicationCustomerDetailsRepository applicationCustomerDetailsRepository;
-    private final ApplicationPropertyDetailsRepository applicationPropertyDetailsRepository;
-    private final ApplicationDocumentDetailsRepository applicationDocumentDetailsRepository;
-    private final ApplicationAgencyAssignmentRepository applicationAgencyAssignmentRepository;
-    private final ApplicationSummaryRepository applicationSummaryRepository;
-    private final CustomerRepository customerRepository;
     private final PasswordEncoder passwordEncoder;
-    private final ApplicationPropertyDetailsMapper propertyDetailsMapper;
-    private final ApplicationCustomerDetailsMapper customerDetailsMapper;
     private final FileStorageService fileStorageService;
     private final ApplicationDocumentDetailsMapper documentMapper;
-    private final AgencyMasterRepository agencyMasterRepository;
-    private final ApplicationAgencyAssignmentMapper agencyAssignmentMapper;
+    private final CustomerRepository customerRepo;
+    private final ApplicationCustomerDetailsRepository customerDetailsRepo;
+    private final ApplicationCustomerDetailsMapper customerMapper;
+    private final ApplicationPropertyDetailsMapper propertyMapper;
+    private final ApplicationPropertyDetailsRepository propertyDetailsRepo;
+    private final ApplicationDocumentDetailsRepository documentRepo;
+    private final ApplicationSummaryRepository summaryRepo;
+    private final ApplicationAgencyAssignmentMapper agencyMapper;
+    private final ApplicationAgencyAssignmentRepository agencyAssignmentRepo;
+    private final AgencyMasterRepository agencyRepo;
 
 
 
-    @Override
-    public ApplicationStageCurrentResponse saveCurrentStage(String applicationId,
-                                                            ApplicationStageCurrentRequest request) {
-        LoanApplication app = getApplicationOrThrow(applicationId);
-        AdminUser updatedBy = getAdminOrThrow(request.getUpdatedByAdminId());
-
-        ApplicationStageType stageType = ApplicationStageType.valueOf(request.getStage().toUpperCase());
-
-        ApplicationStageCurrent stage = ApplicationStageCurrent.builder()
-                .application(app)
-                .stage(stageType)
-                .updatedDate(LocalDateTime.now())
-                .remark(request.getRemark())
-                .updatedBy(updatedBy)
-                .build();
-
-        stage = applicationStageCurrentRepository.save(stage);
-
-        return mapCurrentStageToResponse(stage);
+    private LoanApplication getApplication(String id) {
+        return loanApplicationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("LoanApplication", "id", id));
     }
 
-    @Override
-    public List<ApplicationStageCurrentResponse> getCurrentStages(String applicationId) {
-        LoanApplication app = getApplicationOrThrow(applicationId);
 
-        return applicationStageCurrentRepository.findByApplication(app)
-                .stream()
-                .map(this::mapCurrentStageToResponse)
-                .toList();
+    private AdminUser getAdmin(String id) {
+        return adminUserRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("AdminUser", "id", id));
+    }
+
+    private String currentAdminId() {
+        return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
     @Override
@@ -122,39 +103,34 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
 
     @Override
     public ApplicationCustomerDetailsResponse saveCustomerDetails(
-            String applicationId,
-            ApplicationCustomerDetailsRequest request) {
+            String applicationId, ApplicationCustomerDetailsRequest request) {
 
-        LoanApplication app = getApplicationOrThrow(applicationId);
-
-        String adminId = getLoggedInAdminId();
-        AdminUser admin = getAdminOrThrow(adminId);
+        LoanApplication app = getApplication(applicationId);
+        AdminUser admin = getAdmin(currentAdminId());
 
         ApplicationCustomerDetails entity =
-                applicationCustomerDetailsRepository.findByApplication(app)
-                        .orElse(null);
+                customerDetailsRepo.findByApplication(app)
+                        .map(existing -> {
+                            customerMapper.updateEntityFromRequest(request, existing);
+                            return existing;
+                        })
+                        .orElseGet(() -> {
+                            ApplicationCustomerDetails newEntity = customerMapper.toEntity(request);
+                            newEntity.setApplication(app);
+                            return newEntity;
+                        });
 
-        if (entity == null) {
-
-            entity = customerDetailsMapper.toEntity(request);
-            entity.setApplication(app);
-        } else {
-            // Update existing entity
-            customerDetailsMapper.updateEntityFromRequest(request, entity);
-        }
-
-        entity = applicationCustomerDetailsRepository.save(entity);
-
+        customerDetailsRepo.save(entity);
         updateStage(app, ApplicationStageType.CUSTOMER_DETAILS, admin);
 
-        return customerDetailsMapper.toResponse(entity);
+        return customerMapper.toResponse(entity);
     }
 
     @Override
     public ApplicationCustomerDetailsResponse getCustomerDetails(String applicationId) {
         LoanApplication app = getApplicationOrThrow(applicationId);
 
-        ApplicationCustomerDetails entity = applicationCustomerDetailsRepository
+        ApplicationCustomerDetails entity = customerDetailsRepo
                 .findByApplication(app)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "ApplicationCustomerDetails", "applicationId", applicationId));
@@ -166,105 +142,84 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
 
     @Override
     public ApplicationPropertyDetailsResponse savePropertyDetails(
-            String applicationId,
-            ApplicationPropertyDetailsRequest request) {
+            String applicationId, ApplicationPropertyDetailsRequest request) {
 
-        LoanApplication app = getApplicationOrThrow(applicationId);
-
-        String adminId = getLoggedInAdminId();
-        AdminUser admin = getAdminOrThrow(adminId);
+        LoanApplication app = getApplication(applicationId);
+        AdminUser admin = getAdmin(currentAdminId());
 
         ApplicationPropertyDetails entity =
-                applicationPropertyDetailsRepository
-                        .findByApplication(app)
-                        .orElse(ApplicationPropertyDetails.builder()
-                                .application(app)
-                                .build());
+                propertyDetailsRepo.findByApplication(app)
+                        .map(existing -> {
+                            propertyMapper.updateEntityFromRequest(request, existing);
+                            return existing;
+                        })
+                        .orElseGet(() -> {
+                            ApplicationPropertyDetails pd = propertyMapper.toEntity(request);
+                            pd.setApplication(app);
+                            return pd;
+                        });
 
-        if (entity.getId() == null) {
-            // create new
-            ApplicationPropertyDetails mapped = propertyDetailsMapper.toEntity(request);
-            mapped.setApplication(app);
-            entity = mapped;
-        } else {
-            // update existing
-            propertyDetailsMapper.updateEntityFromRequest(request, entity);
-        }
-
-        entity = applicationPropertyDetailsRepository.save(entity);
-
-        // 🔥 NEW: update property stage
+        propertyDetailsRepo.save(entity);
         updateStage(app, ApplicationStageType.PROPERTY_DETAILS, admin);
 
-        return propertyDetailsMapper.toResponse(entity);
+        return propertyMapper.toResponse(entity);
     }
-
 
     @Override
     public ApplicationPropertyDetailsResponse getPropertyDetails(String applicationId) {
         LoanApplication app = getApplicationOrThrow(applicationId);
 
         ApplicationPropertyDetails entity =
-                applicationPropertyDetailsRepository.findByApplication(app)
+                propertyDetailsRepo.findByApplication(app)
                         .orElseThrow(() -> new ResourceNotFoundException(
                                 "ApplicationPropertyDetails", "applicationId", applicationId));
 
-        return propertyDetailsMapper.toResponse(entity);
+        return propertyMapper.toResponse(entity);
     }
+
 
 
     @Override
     @Transactional
     public ApplicationDocumentDetailsResponse uploadDocuments(
-            String applicationId,
-            List<MultipartFile> files,
-            List<String> documentTypes) {
+            String applicationId, List<MultipartFile> files, List<String> types) {
 
-        LoanApplication app = getApplicationOrThrow(applicationId);
+        LoanApplication app = getApplication(applicationId);
+        AdminUser admin = getAdmin(currentAdminId());
 
-        if (files.size() != documentTypes.size())
-            throw new IllegalArgumentException("Each file must have a document type");
+        if (files.size() != types.size())
+            throw new IllegalArgumentException("Each file must match a document type");
 
-        if (files.size() > 5)
-            throw new IllegalArgumentException("Maximum 5 files allowed");
+        ApplicationDocumentDetails docDetails =
+                documentRepo.findByApplication(app)
+                        .orElseGet(() -> {
+                            ApplicationDocumentDetails d = new ApplicationDocumentDetails();
+                            d.setApplication(app);
+                            d.setDocuments(new ArrayList<>());
+                            return d;
+                        });
 
-        ApplicationDocumentDetails details =
-                applicationDocumentDetailsRepository.findByApplication(app)
-                        .orElse(ApplicationDocumentDetails.builder()
-                                .application(app)
-                                .documents(new ArrayList<>())
-                                .build());
-
-        // Clear old documents
-        details.getDocuments().clear();
+        docDetails.getDocuments().clear();
 
         for (int i = 0; i < files.size(); i++) {
-
             MultipartFile file = files.get(i);
-            String type = documentTypes.get(i);
-
-            String url = fileStorageService.store(file);
 
             ApplicationUploadedDocument doc = ApplicationUploadedDocument.builder()
-                    .documentDetails(details)
+                    .documentDetails(docDetails)
                     .fileName(file.getOriginalFilename())
                     .fileType(file.getContentType())
                     .fileSizeKB(file.getSize() / 1024)
-                    .documentType(type)
-                    .fileUrl(url)
+                    .documentType(types.get(i))
+                    .fileUrl(fileStorageService.store(file))
                     .build();
 
-            details.getDocuments().add(doc);
+            docDetails.getDocuments().add(doc);
         }
 
-        details = applicationDocumentDetailsRepository.save(details);
-
-        // Update stage
-        String adminId = getLoggedInAdminId();
-        AdminUser admin = getAdminOrThrow(adminId);
+        documentRepo.save(docDetails);
         updateStage(app, ApplicationStageType.DOCUMENTS_UPLOADED, admin);
 
-        return documentMapper.toResponse(details);
+        return documentMapper.toResponse(docDetails);
     }
 
 
@@ -272,7 +227,7 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
     public ApplicationDocumentDetailsResponse getDocumentDetails(String applicationId) {
         LoanApplication app = getApplicationOrThrow(applicationId);
 
-        ApplicationDocumentDetails entity = applicationDocumentDetailsRepository
+        ApplicationDocumentDetails entity = documentRepo
                 .findByApplication(app)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "ApplicationDocumentDetails", "applicationId", applicationId));
@@ -281,78 +236,84 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
 
 
     @Override
-    @Transactional
     public ApplicationAgencyAssignmentResponse saveAgencyAssignment(
-            String applicationId,
-            ApplicationAgencyAssignmentRequest request) {
+            String applicationId, ApplicationAgencyAssignmentRequest request) {
 
-        LoanApplication app = getApplicationOrThrow(applicationId);
+        LoanApplication app = getApplication(applicationId);
+        AdminUser admin = getAdmin(currentAdminId());
 
-        String adminId = getLoggedInAdminId();
-        log.info("admin details: {}",adminId);
-        AdminUser admin = getAdminOrThrow(adminId);
-
-        AgencyMaster agency = agencyMasterRepository.findById(request.getAgencyId())
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "AgencyMaster", "id", request.getAgencyId()
-                ));
+        AgencyMaster agency = agencyRepo.findById(request.getAgencyId())
+                .orElseThrow(() -> new ResourceNotFoundException("AgencyMaster", "id", request.getAgencyId()));
 
         ApplicationAgencyAssignment entity =
-                applicationAgencyAssignmentRepository.findByApplication(app)
-                        .orElse(ApplicationAgencyAssignment.builder()
+                agencyAssignmentRepo.findByApplication(app)
+                        .orElseGet(() -> ApplicationAgencyAssignment.builder()
                                 .application(app)
                                 .createdBy(admin)
-                                .build());
+                                .build()
+                        );
 
         entity.setAgency(agency);
-        entity.setRemarks(request.getRemarks());
         entity.setUpdatedBy(admin);
+        entity.setRemarks(request.getRemarks());
 
-        entity = applicationAgencyAssignmentRepository.save(entity);
+        agencyAssignmentRepo.save(entity);
         updateStage(app, ApplicationStageType.ASSIGN_AGENCY, admin);
-        return agencyAssignmentMapper.toResponse(entity);
-    }
 
+        return agencyMapper.toResponse(entity);
+    }
 
 
     @Override
     public ApplicationAgencyAssignmentResponse getAgencyAssignment(String applicationId) {
         LoanApplication app = getApplicationOrThrow(applicationId);
 
-        ApplicationAgencyAssignment entity = applicationAgencyAssignmentRepository
+        ApplicationAgencyAssignment entity = agencyAssignmentRepo
                 .findByApplication(app)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "ApplicationAgencyAssignment", "applicationId", applicationId));
 
-        return agencyAssignmentMapper.toResponse(entity);
+        return agencyMapper.toResponse(entity);
     }
 
-
     @Override
-    public ApplicationSummaryResponse saveSummary(String applicationId,
-                                                  ApplicationSummaryRequest request) {
-        LoanApplication app = getApplicationOrThrow(applicationId);
-        AdminUser reviewedBy = getAdminOrThrow(request.getReviewedByAdminId());
+    public ApplicationSummaryResponse saveSummary(String appId, ApplicationSummaryRequest request) {
 
-        ApplicationSummary entity = applicationSummaryRepository
-                .findByApplication(app)
-                .orElse(ApplicationSummary.builder().application(app).build());
+        LoanApplication app = getApplication(appId);
+        AdminUser reviewer = getAdmin(request.getReviewedByAdminId());
+
+        ApplicationSummary entity =
+                summaryRepo.findByApplication(app)
+                        .orElseGet(() -> ApplicationSummary.builder()
+                                .application(app)
+                                .build()
+                        );
 
         entity.setSummaryText(request.getSummaryText());
         entity.setFinalApprovedAmount(request.getFinalApprovedAmount());
-        entity.setReviewedBy(reviewedBy);
+        entity.setReviewedBy(reviewer);
         entity.setReviewedDate(LocalDateTime.now());
 
-        entity = applicationSummaryRepository.save(entity);
+        summaryRepo.save(entity);
+        return mapSummary(entity);
+    }
 
-        return mapSummaryToResponse(entity);
+    private ApplicationSummaryResponse mapSummary(ApplicationSummary e) {
+        return ApplicationSummaryResponse.builder()
+                .id(e.getId())
+                .applicationId(e.getApplication().getId())
+                .summaryText(e.getSummaryText())
+                .finalApprovedAmount(e.getFinalApprovedAmount())
+                .reviewedByAdminId(e.getReviewedBy() != null ? e.getReviewedBy().getId() : null)
+                .reviewedDate(e.getReviewedDate())
+                .build();
     }
 
     @Override
     public ApplicationSummaryResponse getSummary(String applicationId) {
         LoanApplication app = getApplicationOrThrow(applicationId);
 
-        ApplicationSummary entity = applicationSummaryRepository
+        ApplicationSummary entity = summaryRepo
                 .findByApplication(app)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "ApplicationSummary", "applicationId", applicationId));
@@ -372,16 +333,6 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
                         "AdminUser", "id", adminId));
     }
 
-    private ApplicationStageCurrentResponse mapCurrentStageToResponse(ApplicationStageCurrent stage) {
-        return ApplicationStageCurrentResponse.builder()
-                .id(stage.getId())
-                .applicationId(stage.getApplication().getId())
-                .stage(stage.getStage().name())
-                .remark(stage.getRemark())
-                .updatedDate(stage.getUpdatedDate())
-                .updatedByAdminId(stage.getUpdatedBy().getId())
-                .build();
-    }
 
     private ApplicationHistoryResponse mapHistoryToResponse(ApplicationStageHistory history) {
         return ApplicationHistoryResponse.builder()
@@ -444,20 +395,6 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
     }
 
 
-    private ApplicationAgencyAssignmentResponse mapAgencyAssignmentToResponse(ApplicationAgencyAssignment e) {
-        return ApplicationAgencyAssignmentResponse.builder()
-                .id(e.getId())
-                .applicationId(e.getApplication().getId())
-                .agencyId(e.getAgency().getId())
-                .agencyName(e.getAgency().getAgencyName())
-                .createdByAdminId(e.getCreatedBy().getId())
-                .updatedByAdminId(e.getUpdatedBy() != null ? e.getUpdatedBy().getId() : null)
-                .createdAt(e.getCreatedAt())
-                .updatedAt(e.getUpdatedAt())
-                .remarks(e.getRemarks())
-                .build();
-    }
-
 
     private ApplicationSummaryResponse mapSummaryToResponse(ApplicationSummary e) {
         return ApplicationSummaryResponse.builder()
@@ -470,56 +407,37 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
                 .build();
     }
 
-private void updateStage(LoanApplication app, ApplicationStageType stageType, AdminUser adminUser) {
+private void updateStage(LoanApplication app, ApplicationStageType stage, AdminUser admin) {
 
-    // ⭐ 1️⃣ UPDATE application_stage_current
-    ApplicationStageCurrent current =
-            applicationStageCurrentRepository.findByApplication(app).orElse(null);
+    // ----- Update Current Stage -----
+    ApplicationStageCurrent current = applicationStageCurrentRepository
+            .findByApplication(app)
+            .orElse(new ApplicationStageCurrent());
 
-    if (current == null) {
-        current = ApplicationStageCurrent.builder()
-                .application(app)
-                .stage(stageType)
-                .remark("Updated to: " + stageType.name())
-                .updatedDate(LocalDateTime.now())
-                .updatedBy(adminUser)
-                .build();
-    } else {
-        current.setStage(stageType);
-        current.setRemark("Updated to: " + stageType.name());
-        current.setUpdatedDate(LocalDateTime.now());
-        current.setUpdatedBy(adminUser);
-    }
+    current.setApplication(app);
+    current.setStage(stage);
+    current.setUpdatedBy(admin);
+    current.setRemark("Updated to: " + stage.name());
+    current.setUpdatedDate(LocalDateTime.now());
 
     applicationStageCurrentRepository.save(current);
 
+    // ----- Update History (always update same row) -----
+    ApplicationStageHistory history = applicationStageHistoryRepository
+            .findByApplication(app)
+            .orElse(new ApplicationStageHistory());
 
-    // ⭐ 2️⃣ UPDATE application_stage_history (NO NEW INSERTS)
-    ApplicationStageHistory history =
-            applicationStageHistoryRepository.findByApplication(app).orElse(null);
+    history.setApplication(app);
+    history.setStatus(ApplicationHistoryStatus.IN_PROGRESS);
+    history.setUpdatedBy(admin);
+    history.setUpdatedDate(LocalDateTime.now());
+    history.setRemarks("Stage updated to: " + stage.name());
 
-    if (history == null) {
-        // Only first time, create one row
-        history = ApplicationStageHistory.builder()
-                .application(app)
-                .status(ApplicationHistoryStatus.IN_PROGRESS)
-                .createdDate(LocalDateTime.now())
-                .updatedDate(LocalDateTime.now())
-                .updatedBy(adminUser)
-                .remarks("Stage updated to: " + stageType.name())
-                .build();
-    } else {
-        // Always update existing row
-        history.setStatus(ApplicationHistoryStatus.IN_PROGRESS);
-        history.setUpdatedDate(LocalDateTime.now());
-        history.setUpdatedBy(adminUser);
-        history.setRemarks("Stage updated to: " + stageType.name());
-    }
+    if (history.getCreatedDate() == null)
+        history.setCreatedDate(LocalDateTime.now());
 
     applicationStageHistoryRepository.save(history);
 }
-
-
 
 
     private String getLoggedInAdminId() {
@@ -554,7 +472,7 @@ private void updateStage(LoanApplication app, ApplicationStageType stageType, Ad
 
         // 2️⃣ STEP 2: Check if customer exists by email from request
 
-        Customer customer = customerRepository.findByEmail(request.getEmail())
+        Customer customer = customerRepo.findByEmail(request.getEmail())
                 .orElse(null);
 
 
@@ -582,7 +500,7 @@ private void updateStage(LoanApplication app, ApplicationStageType stageType, Ad
                     .createdDate(LocalDateTime.now())
                     .build();
 
-            customerRepository.save(customer);
+            customerRepo.save(customer);
         }
 
 
@@ -595,10 +513,10 @@ private void updateStage(LoanApplication app, ApplicationStageType stageType, Ad
 
         // 5️⃣ STEP 5: Save customer details linked to this application
 
-        ApplicationCustomerDetails details = customerDetailsMapper.toEntity(request);
+        ApplicationCustomerDetails details = customerMapper.toEntity(request);
         details.setApplication(app);
 
-        details = applicationCustomerDetailsRepository.save(details);
+        details = customerDetailsRepo.save(details);
 
 
         // 6️⃣ STEP 6: Update stage history
@@ -608,7 +526,7 @@ private void updateStage(LoanApplication app, ApplicationStageType stageType, Ad
 
         // 7️⃣ DONE → return final response
 
-        return customerDetailsMapper.toResponse(details);
+        return customerMapper.toResponse(details);
     }
 
     private String generateCustomerPassword(String firstName, String phone) {

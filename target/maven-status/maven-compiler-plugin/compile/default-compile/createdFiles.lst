@@ -1,5 +1,6 @@
 com\bankbroker\loanapp\dto\customer\CustomerResponse.class
 com\bankbroker\loanapp\dto\customer\CustomerRequest$CustomerRequestBuilder.class
+com\bankbroker\loanapp\mapper\ApplicationAgencyAssignmentMapperImpl.class
 com\bankbroker\loanapp\dto\application\LoanApplicationRequest.class
 com\bankbroker\loanapp\dto\stage\ApplicationStageCurrentRequest$ApplicationStageCurrentRequestBuilder.class
 com\bankbroker\loanapp\dto\admin\AdminResponse$AdminResponseBuilder.class
@@ -32,6 +33,7 @@ com\bankbroker\loanapp\entity\stage\ApplicationUploadedDocument.class
 com\bankbroker\loanapp\service\AdminUserService.class
 com\bankbroker\loanapp\repository\stage\ApplicationPropertyDetailsRepository.class
 com\bankbroker\loanapp\service\storage\FileStorageService.class
+com\bankbroker\loanapp\dto\master\AgencyMasterResponse.class
 com\bankbroker\loanapp\dto\stage\ApplicationSummaryRequest.class
 com\bankbroker\loanapp\entity\stage\ApplicationDocumentDetails$ApplicationDocumentDetailsBuilder.class
 com\bankbroker\loanapp\service\ApplicationStageService.class
@@ -39,6 +41,8 @@ com\bankbroker\loanapp\dto\stage\ApplicationDocumentDetailsResponse$ApplicationD
 com\bankbroker\loanapp\dto\stage\ApplicationHistoryRequest$ApplicationHistoryRequestBuilder.class
 com\bankbroker\loanapp\mapper\ApplicationPropertyDetailsMapperImpl.class
 com\bankbroker\loanapp\exception\ApiError.class
+com\bankbroker\loanapp\service\AgencyMasterService.class
+com\bankbroker\loanapp\dto\master\AgencyMasterResponse$AgencyMasterResponseBuilder.class
 com\bankbroker\loanapp\dto\stage\ApplicationDocumentDetailsResponse.class
 com\bankbroker\loanapp\dto\stage\ApplicationStageCurrentResponse.class
 com\bankbroker\loanapp\dto\stage\ResidentialAddressDTO.class
@@ -55,17 +59,21 @@ com\bankbroker\loanapp\dto\stage\ApplicationSummaryResponse$ApplicationSummaryRe
 com\bankbroker\loanapp\service\impl\ApplicationStageServiceImpl.class
 com\bankbroker\loanapp\dto\auth\AuthResponse$AuthResponseBuilder.class
 com\bankbroker\loanapp\entity\stage\ApplicationCustomerDetails.class
+com\bankbroker\loanapp\controller\api\AgencyMasterControllerApi.class
 com\bankbroker\loanapp\controller\AdminController.class
 com\bankbroker\loanapp\entity\AdminUser$AdminUserBuilder.class
+com\bankbroker\loanapp\entity\AgencyMaster.class
 com\bankbroker\loanapp\entity\Customer$CustomerBuilder.class
 com\bankbroker\loanapp\dto\stage\ApplicationAgencyAssignmentResponse$ApplicationAgencyAssignmentResponseBuilder.class
 com\bankbroker\loanapp\controller\api\ApplicationStageControllerApi.class
 com\bankbroker\loanapp\mapper\ApplicationDocumentDetailsMapperImpl.class
 com\bankbroker\loanapp\dto\customer\CustomerRequest.class
+com\bankbroker\loanapp\entity\AgencyMaster$AgencyMasterBuilder.class
 com\bankbroker\loanapp\mapper\ApplicationPropertyDetailsMapper.class
 com\bankbroker\loanapp\entity\ApplicationStageHistory$ApplicationStageHistoryBuilder.class
 com\bankbroker\loanapp\repository\stage\ApplicationSummaryRepository.class
 com\bankbroker\loanapp\entity\ApplicationStageHistory.class
+com\bankbroker\loanapp\dto\master\AgencyMasterRequest.class
 com\bankbroker\loanapp\dto\stage\ApplicationHistoryRequest.class
 com\bankbroker\loanapp\dto\application\LoanApplicationResponse.class
 com\bankbroker\loanapp\entity\stage\ApplicationResidentialAddress.class
@@ -74,6 +82,7 @@ com\bankbroker\loanapp\entity\ApplicationStageCurrent$ApplicationStageCurrentBui
 com\bankbroker\loanapp\entity\enums\Role.class
 com\bankbroker\loanapp\entity\LoanApplication.class
 com\bankbroker\loanapp\dto\auth\LoginRequest.class
+com\bankbroker\loanapp\repository\AgencyMasterRepository.class
 com\bankbroker\loanapp\entity\stage\ApplicationPropertyAddress.class
 com\bankbroker\loanapp\security\JwtTokenProvider.class
 com\bankbroker\loanapp\exception\ResourceNotFoundException.class
@@ -82,6 +91,8 @@ com\bankbroker\loanapp\dto\stage\PropertyAddressDTO.class
 com\bankbroker\loanapp\entity\stage\ApplicationUploadedDocument$ApplicationUploadedDocumentBuilder.class
 com\bankbroker\loanapp\entity\Customer.class
 com\bankbroker\loanapp\dto\application\LoanApplicationAssignRequest$LoanApplicationAssignRequestBuilder.class
+com\bankbroker\loanapp\dto\master\AgencyMasterRequest$AgencyMasterRequestBuilder.class
+com\bankbroker\loanapp\service\impl\AgencyMasterServiceImpl.class
 com\bankbroker\loanapp\dto\stage\ApplicationStageCurrentResponse$ApplicationStageCurrentResponseBuilder.class
 com\bankbroker\loanapp\dto\stage\ApplicationUploadedDocumentResponse$ApplicationUploadedDocumentResponseBuilder.class
 com\bankbroker\loanapp\repository\LoanApplicationRepository.class
@@ -100,6 +111,7 @@ com\bankbroker\loanapp\dto\stage\ApplicationHistoryResponse$ApplicationHistoryRe
 com\bankbroker\loanapp\mapper\ApplicationCustomerDetailsMapper.class
 com\bankbroker\loanapp\dto\stage\ApplicationAgencyAssignmentRequest$ApplicationAgencyAssignmentRequestBuilder.class
 com\bankbroker\loanapp\dto\stage\ApplicationAgencyAssignmentRequest.class
+com\bankbroker\loanapp\mapper\ApplicationAgencyAssignmentMapper.class
 com\bankbroker\loanapp\entity\stage\ApplicationPropertyDetails$ApplicationPropertyDetailsBuilder.class
 com\bankbroker\loanapp\repository\ApplicationStageHistoryRepository.class
 com\bankbroker\loanapp\dto\stage\ApplicationCustomerDetailsRequest.class
@@ -123,6 +135,7 @@ com\bankbroker\loanapp\dto\stage\ApplicationPropertyDetailsRequest.class
 com\bankbroker\loanapp\mapper\ApplicationDocumentDetailsMapper.class
 com\bankbroker\loanapp\repository\stage\ApplicationDocumentDetailsRepository.class
 com\bankbroker\loanapp\controller\api\AdminControllerApi.class
+com\bankbroker\loanapp\controller\AgencyMasterController.class
 com\bankbroker\loanapp\dto\customer\CustomerResponse$CustomerResponseBuilder.class
 com\bankbroker\loanapp\dto\stage\ApplicationCustomerDetailsResponse.class
 com\bankbroker\loanapp\dto\stage\PropertyAddressDTO$PropertyAddressDTOBuilder.class
