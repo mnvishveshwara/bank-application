@@ -57,6 +57,11 @@ public class AgencyMaster {
     @Column(name = "map_url")
     private String mapURL;
 
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private AdminUser owner;
+
+
     // ---------------- AUDIT FIELDS ----------------
 
     @Column(name = "created_by")
