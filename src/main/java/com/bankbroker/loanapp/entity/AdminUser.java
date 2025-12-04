@@ -43,4 +43,8 @@ public class AdminUser {
 
     @Column(name = "bank", nullable = false)
     private String bank;
+
+    @Column(name = "agency_id")
+    private Long agencyId;
+
 }

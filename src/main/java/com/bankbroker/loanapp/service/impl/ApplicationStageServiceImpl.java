@@ -235,6 +235,37 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
     }
 
 
+//    @Override
+//    public ApplicationAgencyAssignmentResponse saveAgencyAssignment(
+//            String applicationId, ApplicationAgencyAssignmentRequest request) {
+//
+//        LoanApplication app = getApplication(applicationId);
+//        AdminUser admin = getAdmin(currentAdminId());
+//        log.info("Assigning agency ID {} to application ID {} by admin ID {}",
+//                request.getAgencyId(), applicationId, admin.getId());
+//        AgencyMaster agency = agencyRepo.findById(request.getAgencyId())
+//                .orElseThrow(() -> new ResourceNotFoundException("AgencyMaster", "id", request.getAgencyId()));
+//
+//        ApplicationAgencyAssignment entity =
+//                agencyAssignmentRepo.findByApplication(app)
+//                        .orElseGet(() -> ApplicationAgencyAssignment.builder()
+//                                .application(app)
+//                                .createdBy(admin)
+//                                .build()
+//                        );
+//
+//        log.info("Current assigned agency ID: {}",agency);
+//        entity.setAgency(agency);
+//        entity.setUpdatedBy(admin);
+//        entity.setRemarks(request.getRemarks());
+//        entity.setAgency(agency);
+//
+//        agencyAssignmentRepo.save(entity);
+//        updateStage(app, ApplicationStageType.ASSIGN_AGENCY, admin);
+//
+//        return agencyMapper.toResponse(entity);
+//    }
+
     @Override
     public ApplicationAgencyAssignmentResponse saveAgencyAssignment(
             String applicationId, ApplicationAgencyAssignmentRequest request) {
@@ -242,9 +273,11 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
         LoanApplication app = getApplication(applicationId);
         AdminUser admin = getAdmin(currentAdminId());
 
+        // Fetch agency
         AgencyMaster agency = agencyRepo.findById(request.getAgencyId())
                 .orElseThrow(() -> new ResourceNotFoundException("AgencyMaster", "id", request.getAgencyId()));
 
+        // Create / Update assignment entry
         ApplicationAgencyAssignment entity =
                 agencyAssignmentRepo.findByApplication(app)
                         .orElseGet(() -> ApplicationAgencyAssignment.builder()
@@ -256,12 +289,25 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
         entity.setAgency(agency);
         entity.setUpdatedBy(admin);
         entity.setRemarks(request.getRemarks());
-
         agencyAssignmentRepo.save(entity);
+
+        // ⭐ NEW: Assign application to the agency admin user
+        AdminUser agencyUser = adminUserRepository.findByAgencyId(agency.getId())
+                .orElseThrow(() -> new IllegalArgumentException("No admin user found for this agency"));
+
+        app.setAssignedTo(agencyUser);
+        app.setUpdatedDate(LocalDateTime.now());
+        loanApplicationRepository.save(app);
+
+        log.info("Application {} is now assigned to agency admin {}",
+                app.getId(), agencyUser.getId());
+
+        // Update stage
         updateStage(app, ApplicationStageType.ASSIGN_AGENCY, admin);
 
         return agencyMapper.toResponse(entity);
     }
+
 
 
     @Override

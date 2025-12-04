@@ -51,25 +51,19 @@ public class AgencyMaster {
     @Column(name = "longitude")
     private Double longitude;
 
-
-
-
     @Column(name = "map_url")
     private String mapURL;
 
+     // ---------------- AUDIT FIELDS ----------------
+
     @ManyToOne
-    @JoinColumn(name = "owner_id")
-    private AdminUser owner;
+    @JoinColumn(name = "created_by")
+    private AdminUser createdBy;
 
+    @ManyToOne
+    @JoinColumn(name = "updated_by")
+    private AdminUser updatedBy;
 
-    // ---------------- AUDIT FIELDS ----------------
-
-    @Column(name = "created_by")
-    private String createdBy;
-
-
-    @Column(name = "updated_by")
-    private String updatedBy;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

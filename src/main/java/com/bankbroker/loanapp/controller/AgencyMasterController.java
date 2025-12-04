@@ -2,6 +2,7 @@ package com.bankbroker.loanapp.controller;
 
 
 import com.bankbroker.loanapp.controller.api.AgencyMasterControllerApi;
+import com.bankbroker.loanapp.dto.application.LoanApplicationResponse;
 import com.bankbroker.loanapp.dto.master.AgencyMasterRequest;
 import com.bankbroker.loanapp.dto.master.AgencyMasterResponse;
 import com.bankbroker.loanapp.service.AgencyMasterService;
@@ -41,5 +42,10 @@ public class AgencyMasterController implements AgencyMasterControllerApi {
     public ResponseEntity<Void> deleteAgency(Long id) {
         service.deleteAgency(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    public ResponseEntity<List<LoanApplicationResponse>> getAssignedApplicationsForAgency() {
+        return ResponseEntity.ok(service.getApplicationsForLoggedInAgency());
     }
 }

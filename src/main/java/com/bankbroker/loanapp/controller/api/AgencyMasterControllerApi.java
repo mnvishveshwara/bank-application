@@ -1,6 +1,7 @@
 package com.bankbroker.loanapp.controller.api;
 
 
+import com.bankbroker.loanapp.dto.application.LoanApplicationResponse;
 import com.bankbroker.loanapp.dto.master.AgencyMasterRequest;
 import com.bankbroker.loanapp.dto.master.AgencyMasterResponse;
 import org.springframework.http.ResponseEntity;
@@ -34,4 +35,8 @@ public interface AgencyMasterControllerApi {
     ResponseEntity<Void> deleteAgency(
             @PathVariable Long id
     );
+
+    @GetMapping("/assigned-applications")
+    ResponseEntity<List<LoanApplicationResponse>> getAssignedApplicationsForAgency();
+
 }

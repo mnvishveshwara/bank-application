@@ -21,4 +21,9 @@ public class AgencyMasterRequest {
     private Double latitude;
     private Double longitude;
     private String mapURL;
+
+    // Login details for agency admin
+    private String email;
+    private String password;
+    private String bank;
 }

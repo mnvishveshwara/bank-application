@@ -103,6 +103,7 @@ com\bankbroker\loanapp\service\impl\LoanApplicationServiceImpl.class
 com\bankbroker\loanapp\dto\auth\AuthResponse.class
 com\bankbroker\loanapp\dto\stage\ApplicationDocumentDetailsRequest.class
 com\bankbroker\loanapp\exception\ApiError$ApiErrorBuilder.class
+com\bankbroker\loanapp\service\impl\AdminUserServiceImpl$1.class
 com\bankbroker\loanapp\repository\stage\ApplicationAgencyAssignmentRepository.class
 com\bankbroker\loanapp\dto\customer\CustomerDTO.class
 com\bankbroker\loanapp\repository\AdminUserRepository.class

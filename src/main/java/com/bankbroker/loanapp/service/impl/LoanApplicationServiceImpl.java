@@ -123,7 +123,7 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
                 : null;
 
         return LoanApplicationResponse.builder()
-                .id(app.getId())
+                .applicationId(app.getId())
                 .active(app.getActive())
                 .clientId(app.getClient().getId())
                 .clientName(clientName.trim())

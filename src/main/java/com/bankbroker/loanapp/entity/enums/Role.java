@@ -6,5 +6,7 @@ public enum Role {
     BROKER,
     AGENT,
     EMPLOYEE,
-    ADMIN
+    ADMIN,
+    AGENCY,
+    VALUATOR
 }

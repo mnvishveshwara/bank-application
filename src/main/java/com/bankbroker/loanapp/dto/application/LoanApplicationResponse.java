@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class LoanApplicationResponse {
-    private String id;
+    private String applicationId;
     private Boolean active;
     private String clientId;
     private String clientName;
