@@ -1,0 +1,1063 @@
+{
+	"info": {
+		"_postman_id": "f00ef575-df6a-494d-bd18-21131f4f0316",
+		"name": "LoanApp Full API Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "49248478",
+		"_collection_link": "https://mnvishveshwara-3214747.postman.co/workspace/Vishveshwara-M-N's-Workspace~ef8e0249-8369-4801-888a-b17335c605f4/collection/49248478-f00ef575-df6a-494d-bd18-21131f4f0316?action=share&source=collection_link&creator=49248478"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"staragency1@gmail.com\",\n  \"password\": \"Agency@123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Customers",
+			"item": [
+				{
+					"name": "Create Customer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"customer@example.com\",\n  \"password\": \"password\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"phoneNumber\": \"9999999999\",\n  \"bank\": \"HDFC\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/customers",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Customers",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/customers",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Customer By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/customers/{{customerId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"customers",
+								"{{customerId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admins",
+			"item": [
+				{
+					"name": "Create Admin",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"password\",\n  \"firstName\": \"Super\",\n  \"lastName\": \"Admin\",\n  \"phoneNumber\": \"8888888888\",\n  \"bank\": \"HDFC\",\n  \"role\": \"ADMIN\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/admins",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"admins"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Admins",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/admins",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"admins"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Applications",
+			"item": [
+				{
+					"name": "Create Application",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"clientId\": \"{{customerId}}\",\n  \"createdByAdminId\": \"{{adminId}}\",\n  \"assignedToAdminId\": null\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/applications",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"applications"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Applications",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/applications",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"applications"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Application By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/applications/{{applicationId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{applicationId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Applications By Client",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/applications/client/{{customerId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"client",
+								"{{customerId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Assign Application",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"assignedToAdminId\": \"{{adminId}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/applications/{{applicationId}}/assign",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{applicationId}}",
+								"assign"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Agency",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlcklkIjoiTlRKTVBNMDVPN0dRIiwiaWF0IjoxNzY0MjM3MTc0LCJleHAiOjE3NjQzMjM1NzR9.FB9rIKqgWtTFWmCixZ-HmvZTlvrnaBnMgKCjA4B3LmM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"agencyName\": \"ABC Home\",\r\n  \"contactName\": \"Rohit Sharma\",\r\n  \"contactNumber\": \"9876543210\",\r\n  \"streetLine1\": \"12th Main Road\",\r\n  \"streetLine2\": \"BTM 2nd Stage\",\r\n  \"pinCode\": \"560076\",\r\n  \"city\": \"Bengaluru\",\r\n  \"state\": \"Karnataka\",\r\n  \"latitude\": 12.934533,\r\n  \"longitude\": 77.626579,\r\n  \"mapURL\": \"https://maps.google.com/?q=12.934533,77.626579\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/agency-master",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"agency-master"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Application Stages",
+			"item": [
+				{
+					"name": "Update Application Status",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/applications/{{applicationId}}/status?active=true",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{applicationId}}",
+								"status"
+							],
+							"query": [
+								{
+									"key": "active",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add History",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"IN_PROGRESS\",\n  \"remarks\": \"In progress\",\n  \"updatedByAdminId\": \"{{adminId}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/applications/{{applicationId}}/history",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{applicationId}}",
+								"history"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get History",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/applications/{{applicationId}}/history",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{applicationId}}",
+								"history"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Save Customer Details",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlcklkIjoiQURNSlc4RDNCUkVQIiwiaWF0IjoxNzY0ODQzOTczLCJleHAiOjE3NjQ5MzAzNzN9.lq5wCllP7zaqk_dM2A0pKwA8KRr4sF3h1qzKsxhNJ2A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"spockName\": \"Ravi\",\n  \"leadSource\": \"HDFC\",\n  \n  \"firstName\": \"Karan\",\n  \"middleName\": \"Singh\",\n  \"lastName\": \"Yadav\",\n\n  \"primaryContactNumber\": \"9876543210\",\n  \"secondaryContactNumber\": \"9876500001\",\n\n  \"email\": \"karan.yadav@example.com\",\n\n  \"propertyReferenceNo\": \"PROP-67891\",\n  \"propertyType\": \"Apartment\",\n  \"propertySubType\": \"3BHK\",\n\n  \"loanType\": \"HomeLoan\",\n  \"remarks\": \"Customer interested in home loan, salary credited in HDFC\",\n\n  \"bank\": \"HDFC\"  \n}\n"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/applications/customer-details",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"customer-details"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Customer Details",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/applications/{{applicationId}}/customer-details",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{applicationId}}",
+								"customer-details"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Save Property Details",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlcklkIjoiQURNSlc4RDNCUkVQIiwiaWF0IjoxNzY0ODQzOTczLCJleHAiOjE3NjQ5MzAzNzN9.lq5wCllP7zaqk_dM2A0pKwA8KRr4sF3h1qzKsxhNJ2A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"residentialAddress\": {\n    \"doorOrApartmentNumber\": \"101\",\n    \"buildingOrApartmentName\": \"Green Homes\",\n    \"streetLine1\": \"Main Road\",\n    \"streetLine2\": \"Sector 5\",\n    \"pinCode\": \"560100\",\n    \"city\": \"Bengaluru\",\n    \"state\": \"Karnataka\",\n    \"country\": \"India\"\n  },\n\n  \"propertyAddress\": {\n    \"doorOrApartmentNumber\": \"202\",\n    \"buildingOrApartmentName\": \"Tech Park Residency\",\n    \"streetLine1\": \"Electronic City Phase 1\",\n    \"streetLine2\": \"Near Infosys\",\n    \"pinCode\": \"560100\",\n    \"city\": \"Bengaluru\",\n    \"state\": \"Karnataka\",\n    \"country\": \"India\"\n  }\n}\n"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/applications/{{applicationId}}/property-details",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{applicationId}}",
+								"property-details"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Property Details",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/applications/{{applicationId}}/property-details",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{applicationId}}",
+								"property-details"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upload Document",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlcklkIjoiQURNSlc4RDNCUkVQIiwiaWF0IjoxNzY0ODQzOTczLCJleHAiOjE3NjQ5MzAzNzN9.lq5wCllP7zaqk_dM2A0pKwA8KRr4sF3h1qzKsxhNJ2A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "files",
+									"type": "file",
+									"src": "/C:/Users/COMP/Pictures/Screenshot of scoreboard.png"
+								},
+								{
+									"key": "documentTypes",
+									"value": "Document",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/applications/{{applicationId}}/upload-documents",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{applicationId}}",
+								"upload-documents"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Document Details",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlcklkIjoiTlRKTVBNMDVPN0dRIiwiaWF0IjoxNzY0Mzk5NTUwLCJleHAiOjE3NjQ0ODU5NTB9.SZGdiJeJgYPhD4xfH-NUW8St2RqBsBXvxWq6rOfipRs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/applications/{{applicationId}}/documents",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{applicationId}}",
+								"documents"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Save Agency Assignment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlcklkIjoiQURNSlc4RDNCUkVQIiwiaWF0IjoxNzY0ODQzOTczLCJleHAiOjE3NjQ5MzAzNzN9.lq5wCllP7zaqk_dM2A0pKwA8KRr4sF3h1qzKsxhNJ2A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"agencyId\": 2,\n  \"remarks\": \"Assigned to agency for verification\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/applications/{{applicationId}}/agency-assignment",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{applicationId}}",
+								"agency-assignment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Agency Assignment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlcklkIjoiTlRKTVBNMDVPN0dRIiwiaWF0IjoxNzY0MzI4MDUxLCJleHAiOjE3NjQ0MTQ0NTF9.MmXmoW8-pdpufbrTNC1W8EbwipzfpJcG2xQZQ04ooew",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/applications/{{applicationId}}/agency-assignment",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{applicationId}}",
+								"agency-assignment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Save Summary",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdGFyYWdlbmN5MUBnbWFpbC5jb20iLCJyb2xlIjoiUk9MRV9BR0VOQ1kiLCJ1c2VySWQiOiJBR05ZRUxJVThQWUEiLCJpYXQiOjE3NjUyNTY4NTIsImV4cCI6MTc2NTM0MzI1Mn0.5maxtBEu7npjMyfKNR6RZu3ZfpoBZeY6JO3c6gFb6IY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"summaryText\": \"Approved after verification\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/applications/{{applicationId}}/summary",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{applicationId}}",
+								"summary"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Summary",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlcklkIjoiTlRKTVBNMDVPN0dRIiwiaWF0IjoxNzY0Mzk5NTUwLCJleHAiOjE3NjQ0ODU5NTB9.SZGdiJeJgYPhD4xfH-NUW8St2RqBsBXvxWq6rOfipRs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/applications/{{applicationId}}/summary",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{applicationId}}",
+								"summary"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Agent Steps",
+			"item": []
+		},
+		{
+			"name": "Agency",
+			"item": [
+				{
+					"name": "Create Agent",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdGFyYWdlbmN5MUBnbWFpbC5jb20iLCJyb2xlIjoiUk9MRV9BR0VOQ1kiLCJ1c2VySWQiOiJBR05ZRUxJVThQWUEiLCJpYXQiOjE3NjUyNjM4MjksImV4cCI6MTc2NTM1MDIyOX0.IyFwbQGrTpL3NW99Lq94pU63N4-dv5szabPWPQzTIto",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"agencyName\": \"Star Valuation Services3\",\n  \"contactName\": \"Ramesh Kumar\",\n  \"contactNumber\": \"9876543210\",\n  \"streetLine1\": \"MG Road\",\n  \"streetLine2\": \"Near Metro Station\",\n  \"pinCode\": \"560001\",\n  \"city\": \"Bangalore\",\n  \"state\": \"Karnataka\",\n  \"latitude\": 12.9716,\n  \"longitude\": 77.5946,\n  \"mapURL\": \"https://maps.google.com/location\",\n  \"email\": \"staragency13@gmail.com\",\n  \"password\": \"Agency@123\",\n  \"bank\":\"HDFC\"\n}\n"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/agency-master",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"agency-master"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get assigned application",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/agency-master/assigned-applications",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"agency-master",
+								"assigned-applications"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Agency",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Create Valuator",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdGFyYWdlbmN5MUBnbWFpbC5jb20iLCJyb2xlIjoiUk9MRV9BR0VOQ1kiLCJ1c2VySWQiOiJBR05ZRUxJVThQWUEiLCJpYXQiOjE3NjUyNzcwMjgsImV4cCI6MTc2NTM2MzQyOH0.3OHEtlc-FkACnDBVm0mi_ejpAXJPgcSZYMmUmEbwZdw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"name\": \"Star Valuation Services1\", \"phone\": \"9876543211\", \"email\": \"stageAgencyValuator@agency.com\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/agency/valuators",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"agency",
+								"valuators"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Valuator",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdGFyYWdlbmN5MUBnbWFpbC5jb20iLCJyb2xlIjoiUk9MRV9BR0VOQ1kiLCJ1c2VySWQiOiJBR05ZRUxJVThQWUEiLCJpYXQiOjE3NjUyNzcwMjgsImV4cCI6MTc2NTM2MzQyOH0.3OHEtlc-FkACnDBVm0mi_ejpAXJPgcSZYMmUmEbwZdw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/agency/valuators",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"agency",
+								"valuators"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Assign Valuator",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdGFyYWdlbmN5MUBnbWFpbC5jb20iLCJyb2xlIjoiUk9MRV9BR0VOQ1kiLCJ1c2VySWQiOiJBR05ZRUxJVThQWUEiLCJpYXQiOjE3NjUyNzcwMjgsImV4cCI6MTc2NTM2MzQyOH0.3OHEtlc-FkACnDBVm0mi_ejpAXJPgcSZYMmUmEbwZdw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"valuatorId\": \"VALERPPP0JXH\",\n  \"remarks\": \"Assigning to valuator for site inspection\"\n}\n"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/applications/{{applicationId}}/assign-valuator",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{applicationId}}",
+								"assign-valuator"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get assigned application",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "applicationId",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "adminId",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "default"
+		}
+	]
+}
