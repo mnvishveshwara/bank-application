@@ -47,4 +47,10 @@ public class AdminUser {
     @Column(name = "agency_id")
     private Long agencyId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "agency_id", insertable = false, updatable = false)
+    private AgencyMaster agency;
+
+
+
 }

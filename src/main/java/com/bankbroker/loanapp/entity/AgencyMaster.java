@@ -54,6 +54,9 @@ public class AgencyMaster {
     @Column(name = "map_url")
     private String mapURL;
 
+    @Column(name = "bank", nullable = false)
+    private String bank;
+
      // ---------------- AUDIT FIELDS ----------------
 
     @ManyToOne
@@ -63,7 +66,6 @@ public class AgencyMaster {
     @ManyToOne
     @JoinColumn(name = "updated_by")
     private AdminUser updatedBy;
-
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

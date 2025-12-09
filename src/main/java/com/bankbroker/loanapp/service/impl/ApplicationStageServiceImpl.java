@@ -326,7 +326,8 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
     public ApplicationSummaryResponse saveSummary(String appId, ApplicationSummaryRequest request) {
 
         LoanApplication app = getApplication(appId);
-        AdminUser reviewer = getAdmin(request.getReviewedByAdminId());
+        String adminId = getLoggedInAdminId();
+        AdminUser reviewer = getAdminOrThrow(adminId);
 
         ApplicationSummary entity =
                 summaryRepo.findByApplication(app)
@@ -336,11 +337,12 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
                         );
 
         entity.setSummaryText(request.getSummaryText());
-        entity.setFinalApprovedAmount(request.getFinalApprovedAmount());
         entity.setReviewedBy(reviewer);
         entity.setReviewedDate(LocalDateTime.now());
 
         summaryRepo.save(entity);
+        updateStage(app, ApplicationStageType.APPLICATION_APPLIED, reviewer);
+
         return mapSummary(entity);
     }
 
@@ -349,7 +351,6 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
                 .id(e.getId())
                 .applicationId(e.getApplication().getId())
                 .summaryText(e.getSummaryText())
-                .finalApprovedAmount(e.getFinalApprovedAmount())
                 .reviewedByAdminId(e.getReviewedBy() != null ? e.getReviewedBy().getId() : null)
                 .reviewedDate(e.getReviewedDate())
                 .build();
@@ -447,7 +448,6 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
                 .id(e.getId())
                 .applicationId(e.getApplication().getId())
                 .summaryText(e.getSummaryText())
-                .finalApprovedAmount(e.getFinalApprovedAmount())
                 .reviewedByAdminId(e.getReviewedBy() != null ? e.getReviewedBy().getId() : null)
                 .reviewedDate(e.getReviewedDate())
                 .build();

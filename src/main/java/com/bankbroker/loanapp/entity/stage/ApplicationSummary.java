@@ -25,7 +25,6 @@ public class ApplicationSummary {
     private LoanApplication application;
 
     private String summaryText;
-    private Double finalApprovedAmount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reviewed_by_id")

@@ -5,5 +5,7 @@ public enum ApplicationStageType {
     PROPERTY_DETAILS,
     DOCUMENTS_UPLOADED,
     ASSIGN_AGENCY,
-    SUMMARY
+    APPLICATION_APPLIED,
+    SUMMARY,
+    ASSIGN_VALUATOR
 }

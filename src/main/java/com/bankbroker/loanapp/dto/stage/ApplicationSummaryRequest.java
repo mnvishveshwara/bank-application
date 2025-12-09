@@ -11,6 +11,4 @@ import java.time.LocalDateTime;
 @Builder
 public class ApplicationSummaryRequest {
     private String summaryText;
-    private Double finalApprovedAmount;
-    private String reviewedByAdminId;
 }

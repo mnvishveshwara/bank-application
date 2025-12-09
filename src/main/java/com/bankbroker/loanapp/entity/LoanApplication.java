@@ -41,4 +41,9 @@ public class LoanApplication {
 
     @Column(name = "associated_bank")
     private String associatedBank;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "valuator_id")
+    private AdminUser valuator;
+
 }

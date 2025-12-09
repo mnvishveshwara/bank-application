@@ -54,6 +54,7 @@ public class AgencyMasterServiceImpl implements AgencyMasterService {
 
         AgencyMaster agency = AgencyMaster.builder()
                 .agencyName(req.getAgencyName())
+                .bank(req.getBank())
                 .contactName(req.getContactName())
                 .contactNumber(req.getContactNumber())
                 .streetLine1(req.getStreetLine1())

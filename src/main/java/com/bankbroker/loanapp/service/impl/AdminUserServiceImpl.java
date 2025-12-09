@@ -233,7 +233,7 @@ public class AdminUserServiceImpl implements AdminUserService {
             case ADMIN -> IdGenerator.generateId("ADM");
             case AGENCY -> IdGenerator.generateId("AGN");
             case AGENT -> IdGenerator.generateId("AGT");
-            case VALUATOR -> IdGenerator.generateId("VAL");
+            case AGENCY_VALUATOR -> IdGenerator.generateId("VAL");
             case EMPLOYEE -> IdGenerator.generateId("EMP");
             case USER -> IdGenerator.generateId("USR");
             default -> IdGenerator.generateId("GEN"); // fallback for any other role

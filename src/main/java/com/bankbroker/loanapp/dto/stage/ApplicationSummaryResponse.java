@@ -12,7 +12,6 @@ public class ApplicationSummaryResponse {
     private Long id;
     private String applicationId;
     private String summaryText;
-    private Double finalApprovedAmount;
     private String reviewedByAdminId;
     private LocalDateTime reviewedDate;
 }
