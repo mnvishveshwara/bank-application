@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class ApplicationHistoryRequest {
-    private String status; // enum name
+    private String status;
     private String remarks;
     private String updatedByAdminId;
 }

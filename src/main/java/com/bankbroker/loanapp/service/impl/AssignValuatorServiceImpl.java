@@ -1,10 +1,13 @@
 package com.bankbroker.loanapp.service.impl;
 
+import com.bankbroker.loanapp.dto.siteVisit.SiteVisitRequest;
+import com.bankbroker.loanapp.dto.stage.ApplicationHistoryRequest;
+import com.bankbroker.loanapp.dto.stage.ApplicationHistoryResponse;
 import com.bankbroker.loanapp.dto.valuator.AssignValuatorRequest;
 import com.bankbroker.loanapp.dto.valuator.AssignValuatorResponse;
 import com.bankbroker.loanapp.entity.AdminUser;
 import com.bankbroker.loanapp.entity.LoanApplication;
-import com.bankbroker.loanapp.entity.enums.ApplicationStageType;
+import com.bankbroker.loanapp.entity.enums.ApplicationHistoryStatus;
 import com.bankbroker.loanapp.entity.enums.Role;
 import com.bankbroker.loanapp.entity.valuator.AssignValuator;
 import com.bankbroker.loanapp.exception.ResourceNotFoundException;
@@ -58,8 +61,11 @@ public class AssignValuatorServiceImpl implements AssignValuatorService {
             throw new RuntimeException("You cannot assign valuators for another agency's application.");
 
         // Load valuator
+//        AdminUser valuator = adminRepo.findById(req.getValuatorId())
+//                .orElseThrow(() -> new ResourceNotFoundException("AdminUser", "id", req.getValuatorId()));
+
         AdminUser valuator = adminRepo.findById(req.getValuatorId())
-                .orElseThrow(() -> new ResourceNotFoundException("AdminUser", "id", req.getValuatorId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Valuator", "valuatorId", req.getValuatorId()));
 
         if (valuator.getRole() != Role.AGENCY_VALUATOR)
             throw new RuntimeException("Selected user is not a valuator.");
@@ -86,10 +92,10 @@ public class AssignValuatorServiceImpl implements AssignValuatorService {
         // Add stage history
         stageService.addHistory(
                 applicationId,
-                new com.bankbroker.loanapp.dto.stage.ApplicationHistoryRequest(
-                        ApplicationStageType.ASSIGN_VALUATOR.name(),
-                        logged.getId(),
-                        "Assigned to valuator"
+                new ApplicationHistoryRequest(
+                        ApplicationHistoryStatus.VALUATOR_ASSIGNED.name(),
+                        "Assigned to valuator",
+                        logged.getId()
                 )
         );
 
@@ -109,4 +115,42 @@ public class AssignValuatorServiceImpl implements AssignValuatorService {
 
         return mapper.toResponse(assign);
     }
+
+
+    @Override
+    @Transactional
+    public ApplicationHistoryResponse scheduleSiteVisit(String applicationId, SiteVisitRequest req) {
+
+        AdminUser logged = getLoggedIn();
+
+        if (logged.getRole() != Role.AGENCY_VALUATOR)
+            throw new RuntimeException("Only valuators can update site visit status.");
+
+        LoanApplication app = loanRepo.findById(applicationId)
+                .orElseThrow(() -> new ResourceNotFoundException("LoanApplication", "id", applicationId));
+
+        // Ensure same valuator
+        if (!app.getValuator().getId().equals(logged.getId()))
+            throw new RuntimeException("You are not assigned to this application.");
+
+        // Update planned visit date
+        app.setPlannedSiteVisitDate(req.getSiteVisitDate());
+        app.setUpdatedDate(LocalDateTime.now());
+        loanRepo.save(app);
+
+        // Save stage history (returns DTO)
+        ApplicationHistoryResponse history = stageService.addHistory(
+                applicationId,
+                new ApplicationHistoryRequest(
+                        ApplicationHistoryStatus.SITE_VISIT_SCHEDULED.name(),
+                        req.getRemarks() != null ? req.getRemarks() : "Site visit scheduled",
+                        logged.getId()
+                )
+        );
+
+        // return the DTO directly
+        return history;
+    }
+
+
 }

@@ -1,6 +1,7 @@
 package com.bankbroker.loanapp.controller;
 
 import com.bankbroker.loanapp.controller.api.AssignValuatorControllerApi;
+import com.bankbroker.loanapp.dto.siteVisit.SiteVisitRequest;
 import com.bankbroker.loanapp.dto.valuator.AssignValuatorRequest;
 import com.bankbroker.loanapp.dto.valuator.AssignValuatorResponse;
 import com.bankbroker.loanapp.service.AssignValuatorService;
@@ -52,4 +53,15 @@ public class AssignValuatorController implements AssignValuatorControllerApi {
 
         return ResponseEntity.ok(response);
     }
+
+    @Override
+    @PreAuthorize("hasRole('AGENCY_VALUATOR')")
+    public ResponseEntity<?> scheduleSiteVisit(
+            String applicationId,
+            @Valid SiteVisitRequest request
+    ) {
+        log.info("Scheduling site visit for application {} by valuator", applicationId);
+        return ResponseEntity.ok(assignValuatorService.scheduleSiteVisit(applicationId, request));
+    }
+
 }

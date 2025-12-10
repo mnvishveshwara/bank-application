@@ -1,5 +1,6 @@
 package com.bankbroker.loanapp.controller.api;
 
+import com.bankbroker.loanapp.dto.siteVisit.SiteVisitRequest;
 import com.bankbroker.loanapp.dto.valuator.AssignValuatorRequest;
 import com.bankbroker.loanapp.dto.valuator.AssignValuatorResponse;
 import jakarta.validation.Valid;
@@ -19,4 +20,12 @@ public interface AssignValuatorControllerApi {
     ResponseEntity<AssignValuatorResponse> getValuatorAssignment(
             @PathVariable("applicationId") String applicationId
     );
+
+
+    @PostMapping("/{applicationId}/site-visit")
+    ResponseEntity<?> scheduleSiteVisit(
+            @PathVariable("applicationId") String applicationId,
+            @Valid @RequestBody SiteVisitRequest request
+    );
+
 }

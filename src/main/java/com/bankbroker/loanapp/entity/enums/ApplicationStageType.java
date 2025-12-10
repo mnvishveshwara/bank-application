@@ -7,5 +7,6 @@ public enum ApplicationStageType {
     ASSIGN_AGENCY,
     APPLICATION_APPLIED,
     SUMMARY,
-    ASSIGN_VALUATOR
+    ASSIGN_VALUATOR,
+    SITE_VISIT
 }

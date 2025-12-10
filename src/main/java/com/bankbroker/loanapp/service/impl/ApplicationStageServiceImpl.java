@@ -292,8 +292,12 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
         agencyAssignmentRepo.save(entity);
 
         // ⭐ NEW: Assign application to the agency admin user
-        AdminUser agencyUser = adminUserRepository.findByAgencyId(agency.getId())
-                .orElseThrow(() -> new IllegalArgumentException("No admin user found for this agency"));
+//        AdminUser agencyUser = adminUserRepository.findByAgencyId(agency.getId())
+//                .orElseThrow(() -> new IllegalArgumentException("No admin user found for this agency"));
+
+        AdminUser agencyUser = adminUserRepository
+                .findByAgencyIdAndRole(agency.getId(), Role.AGENCY)
+                .orElseThrow(() -> new IllegalArgumentException("No agency admin user found for this agency"));
 
         app.setAssignedTo(agencyUser);
         app.setUpdatedDate(LocalDateTime.now());

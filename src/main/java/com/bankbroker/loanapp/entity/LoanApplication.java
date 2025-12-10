@@ -3,6 +3,7 @@ package com.bankbroker.loanapp.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -45,5 +46,8 @@ public class LoanApplication {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "valuator_id")
     private AdminUser valuator;
+
+    @Column(name = "planned_site_visit_date")
+    private LocalDate plannedSiteVisitDate;
 
 }

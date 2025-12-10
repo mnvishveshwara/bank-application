@@ -5,5 +5,8 @@ public enum ApplicationHistoryStatus {
     APPROVED,
     REJECTED,
     ON_HOLD,
-    CANCELLED
+    CANCELLED,
+    VALUATOR_ASSIGNED,
+    ASSIGN_VALUATOR,
+    SITE_VISIT_SCHEDULED
 }
