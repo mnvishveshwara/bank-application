@@ -22,7 +22,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"username\": \"staragency1@gmail.com\",\n  \"password\": \"Agency@123\"\n}"
+							"raw": "{\n  \"username\": \"Agent1@agency.com\",\n  \"password\": \"valuator123\"\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/auth/login",
@@ -462,7 +462,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlcklkIjoiQURNSlc4RDNCUkVQIiwiaWF0IjoxNzY0ODQzOTczLCJleHAiOjE3NjQ5MzAzNzN9.lq5wCllP7zaqk_dM2A0pKwA8KRr4sF3h1qzKsxhNJ2A",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlcklkIjoiQURNNkVFUjVRMzRVIiwiaWF0IjoxNzY1MzQ4MTk3LCJleHAiOjE3NjU0MzQ1OTd9.FFXcDvxno5FnssQlXCRi-fGV9vwjcCl-B3W7ckLTa7I",
 									"type": "string"
 								}
 							]
@@ -480,7 +480,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"spockName\": \"Ravi\",\n  \"leadSource\": \"HDFC\",\n  \n  \"firstName\": \"Karan\",\n  \"middleName\": \"Singh\",\n  \"lastName\": \"Yadav\",\n\n  \"primaryContactNumber\": \"9876543210\",\n  \"secondaryContactNumber\": \"9876500001\",\n\n  \"email\": \"karan.yadav@example.com\",\n\n  \"propertyReferenceNo\": \"PROP-67891\",\n  \"propertyType\": \"Apartment\",\n  \"propertySubType\": \"3BHK\",\n\n  \"loanType\": \"HomeLoan\",\n  \"remarks\": \"Customer interested in home loan, salary credited in HDFC\",\n\n  \"bank\": \"HDFC\"  \n}\n"
+							"raw": "{\n  \"spockName\": \"Customer\",\n  \"leadSource\": \"HDFC\",\n  \n  \"firstName\": \"Customer\",\n  \"middleName\": \"\",\n  \"lastName\": \"one\",\n\n  \"primaryContactNumber\": \"9876543210\",\n  \"secondaryContactNumber\": \"9876500001\",\n\n  \"email\": \"customer@example.com\",\n\n  \"propertyReferenceNo\": \"PROP-67891\",\n  \"propertyType\": \"Apartment\",\n  \"propertySubType\": \"3BHK\",\n\n  \"loanType\": \"HomeLoan\",\n  \"remarks\": \"Customer interested in home loan, salary credited in HDFC\",\n\n  \"bank\": \"HDFC\"  \n}\n"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/applications/customer-details",
@@ -529,7 +529,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlcklkIjoiQURNSlc4RDNCUkVQIiwiaWF0IjoxNzY0ODQzOTczLCJleHAiOjE3NjQ5MzAzNzN9.lq5wCllP7zaqk_dM2A0pKwA8KRr4sF3h1qzKsxhNJ2A",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlcklkIjoiQURNNkVFUjVRMzRVIiwiaWF0IjoxNzY1MzQ4MTk3LCJleHAiOjE3NjU0MzQ1OTd9.FFXcDvxno5FnssQlXCRi-fGV9vwjcCl-B3W7ckLTa7I",
 									"type": "string"
 								}
 							]
@@ -597,7 +597,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlcklkIjoiQURNSlc4RDNCUkVQIiwiaWF0IjoxNzY0ODQzOTczLCJleHAiOjE3NjQ5MzAzNzN9.lq5wCllP7zaqk_dM2A0pKwA8KRr4sF3h1qzKsxhNJ2A",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlcklkIjoiQURNNkVFUjVRMzRVIiwiaWF0IjoxNzY1MzQ4MTk3LCJleHAiOjE3NjU0MzQ1OTd9.FFXcDvxno5FnssQlXCRi-fGV9vwjcCl-B3W7ckLTa7I",
 									"type": "string"
 								}
 							]
@@ -610,7 +610,7 @@
 								{
 									"key": "files",
 									"type": "file",
-									"src": "/C:/Users/COMP/Pictures/Screenshot of scoreboard.png"
+									"src": "/C:/Users/COMP/Pictures/WhatsApp Image 2025-09-12 at 9.57.59 AM (1).jpeg"
 								},
 								{
 									"key": "documentTypes",
@@ -677,7 +677,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlcklkIjoiQURNSlc4RDNCUkVQIiwiaWF0IjoxNzY0ODQzOTczLCJleHAiOjE3NjQ5MzAzNzN9.lq5wCllP7zaqk_dM2A0pKwA8KRr4sF3h1qzKsxhNJ2A",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlcklkIjoiQURNNkVFUjVRMzRVIiwiaWF0IjoxNzY1MzQ4MTk3LCJleHAiOjE3NjU0MzQ1OTd9.FFXcDvxno5FnssQlXCRi-fGV9vwjcCl-B3W7ckLTa7I",
 									"type": "string"
 								}
 							]
@@ -695,7 +695,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"agencyId\": 2,\n  \"remarks\": \"Assigned to agency for verification\"\n}"
+							"raw": "{\n  \"agencyId\": 1,\n  \"remarks\": \"Assigned to agency for verification\"\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/applications/{{applicationId}}/agency-assignment",
@@ -755,7 +755,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdGFyYWdlbmN5MUBnbWFpbC5jb20iLCJyb2xlIjoiUk9MRV9BR0VOQ1kiLCJ1c2VySWQiOiJBR05ZRUxJVThQWUEiLCJpYXQiOjE3NjUyNTY4NTIsImV4cCI6MTc2NTM0MzI1Mn0.5maxtBEu7npjMyfKNR6RZu3ZfpoBZeY6JO3c6gFb6IY",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlcklkIjoiQURNNkVFUjVRMzRVIiwiaWF0IjoxNzY1MzUwMDE0LCJleHAiOjE3NjU0MzY0MTR9.-0i7zWZQQSWNp-bFyWGpdAJXNI8K1wFLiwDUZpesV1g",
 									"type": "string"
 								}
 							]
@@ -842,7 +842,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdGFyYWdlbmN5MUBnbWFpbC5jb20iLCJyb2xlIjoiUk9MRV9BR0VOQ1kiLCJ1c2VySWQiOiJBR05ZRUxJVThQWUEiLCJpYXQiOjE3NjUyNjM4MjksImV4cCI6MTc2NTM1MDIyOX0.IyFwbQGrTpL3NW99Lq94pU63N4-dv5szabPWPQzTIto",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJST0xFX0FETUlOIiwidXNlcklkIjoiQURNNkVFUjVRMzRVIiwiaWF0IjoxNzY1MzQ3NDk0LCJleHAiOjE3NjU0MzM4OTR9.nJV2BEzX_adYoj9P2Jt63SZwuFNut5vt1FmVK7MXFlw",
 									"type": "string"
 								}
 							]
@@ -860,7 +860,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"agencyName\": \"Star Valuation Services3\",\n  \"contactName\": \"Ramesh Kumar\",\n  \"contactNumber\": \"9876543210\",\n  \"streetLine1\": \"MG Road\",\n  \"streetLine2\": \"Near Metro Station\",\n  \"pinCode\": \"560001\",\n  \"city\": \"Bangalore\",\n  \"state\": \"Karnataka\",\n  \"latitude\": 12.9716,\n  \"longitude\": 77.5946,\n  \"mapURL\": \"https://maps.google.com/location\",\n  \"email\": \"staragency13@gmail.com\",\n  \"password\": \"Agency@123\",\n  \"bank\":\"HDFC\"\n}\n"
+							"raw": "{\n  \"agencyName\": \"Agency1\",\n  \"contactName\": \"Agency1\",\n  \"contactNumber\": \"9876543210\",\n  \"streetLine1\": \"MG Road\",\n  \"streetLine2\": \"Near Metro Station\",\n  \"pinCode\": \"560001\",\n  \"city\": \"Bangalore\",\n  \"state\": \"Karnataka\",\n  \"latitude\": 12.9716,\n  \"longitude\": 77.5946,\n  \"mapURL\": \"https://maps.google.com/location\",\n  \"email\": \"agency1@gmail.com\",\n  \"password\": \"Agency@123\",\n  \"bank\":\"HDFC\"\n}\n"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/agency-master",
@@ -922,7 +922,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdGFyYWdlbmN5MUBnbWFpbC5jb20iLCJyb2xlIjoiUk9MRV9BR0VOQ1kiLCJ1c2VySWQiOiJBR05ZRUxJVThQWUEiLCJpYXQiOjE3NjUyNzcwMjgsImV4cCI6MTc2NTM2MzQyOH0.3OHEtlc-FkACnDBVm0mi_ejpAXJPgcSZYMmUmEbwZdw",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZ2VuY3kxQGdtYWlsLmNvbSIsInJvbGUiOiJST0xFX0FHRU5DWSIsInVzZXJJZCI6IkFHTlBHQ0FBRVhMTiIsImlhdCI6MTc2NTM0NzY3NCwiZXhwIjoxNzY1NDM0MDc0fQ.bhvWh0Ql2UOFGZHcKRInlgdP4sfavbrxUfcSXhORsNg",
 									"type": "string"
 								}
 							]
@@ -958,6 +958,49 @@
 					"response": []
 				},
 				{
+					"name": "Create Valuator Copy",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZ2VuY3kxQGdtYWlsLmNvbSIsInJvbGUiOiJST0xFX0FHRU5DWSIsInVzZXJJZCI6IkFHTlBHQ0FBRVhMTiIsImlhdCI6MTc2NTM0Nzk0NywiZXhwIjoxNzY1NDM0MzQ3fQ.LncijTi7NISGInEOEFzpAkxyErNChmdHb21WJX6YADQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"name\": \"Agent1\", \"phone\": \"9876543211\", \"email\": \"Agent1@agency.com\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/agency/valuators",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"agency",
+								"valuators"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Get All Valuator",
 					"request": {
 						"auth": {
@@ -965,7 +1008,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdGFyYWdlbmN5MUBnbWFpbC5jb20iLCJyb2xlIjoiUk9MRV9BR0VOQ1kiLCJ1c2VySWQiOiJBR05ZRUxJVThQWUEiLCJpYXQiOjE3NjUyNzcwMjgsImV4cCI6MTc2NTM2MzQyOH0.3OHEtlc-FkACnDBVm0mi_ejpAXJPgcSZYMmUmEbwZdw",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZ2VuY3kxQGdtYWlsLmNvbSIsInJvbGUiOiJST0xFX0FHRU5DWSIsInVzZXJJZCI6IkFHTlBHQ0FBRVhMTiIsImlhdCI6MTc2NTM1MDExMSwiZXhwIjoxNzY1NDM2NTExfQ.8RnwQ93kJIKGczFE-f8z0jnn2p6UKzobb5ZgzexnsX4",
 									"type": "string"
 								}
 							]
@@ -1028,10 +1071,410 @@
 					"response": []
 				},
 				{
-					"name": "Get assigned application",
+					"name": "Assign Valuator Copy",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZ2VuY3kxQGdtYWlsLmNvbSIsInJvbGUiOiJST0xFX0FHRU5DWSIsInVzZXJJZCI6IkFHTlBHQ0FBRVhMTiIsImlhdCI6MTc2NTM1MDExMSwiZXhwIjoxNzY1NDM2NTExfQ.8RnwQ93kJIKGczFE-f8z0jnn2p6UKzobb5ZgzexnsX4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"valuatorId\": \"VALU1QQS1IOP\",\n  \"remarks\": \"Assigning to valuator for site inspection\"\n}\n"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/applications/{{applicationId}}/assign-valuator",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{applicationId}}",
+								"assign-valuator"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get assigned application",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBZ2VudDFAYWdlbmN5LmNvbSIsInJvbGUiOiJST0xFX0FHRU5DWV9WQUxVQVRPUiIsInVzZXJJZCI6IlZBTFUxUVFTMUlPUCIsImlhdCI6MTc2NTM1Njc2NywiZXhwIjoxNzY1NDQzMTY3fQ.NRlv7rSjSSRrg7KPcI85VxsCR4OGRAM8-Iuz81clFbo",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": []
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"valuatorId\": \"VALERPPP0JXH\",\n  \"remarks\": \"Assigning to valuator for site inspection\"\n}\n"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/applications/{{applicationId}}/assigned-valuator",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{applicationId}}",
+								"assigned-valuator"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Site Visit",
+			"item": [
+				{
+					"name": "Initiate Site Visit",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBZ2VudDFAYWdlbmN5LmNvbSIsInJvbGUiOiJST0xFX0FHRU5DWV9WQUxVQVRPUiIsInVzZXJJZCI6IlZBTFUxUVFTMUlPUCIsImlhdCI6MTc2NTM1Njc2NywiZXhwIjoxNzY1NDQzMTY3fQ.NRlv7rSjSSRrg7KPcI85VxsCR4OGRAM8-Iuz81clFbo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"siteVisitDate\": \"2025-12-15\",\n  \"remarks\": \"Visiting property on Monday morning\"\n}\n"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/applications/{{applicationId}}/site-visit",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{applicationId}}",
+								"site-visit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Basic Valuation Details",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBZ2VudDFAYWdlbmN5LmNvbSIsInJvbGUiOiJST0xFX0FHRU5DWV9WQUxVQVRPUiIsInVzZXJJZCI6IlZBTFUxUVFTMUlPUCIsImlhdCI6MTc2NTYxMDA0MSwiZXhwIjoxNzY1Njk2NDQxfQ.axmjT7GxHZ0UjyuEEg8W0Op8bqEY8QAOTzU3mrpZLBI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"propertyOwnerName\": \"Customer  one\",\n  \"relationshipWithApplicant\": \"Self\",\n  \"reportDate\": \"2025-12-15\",\n  \"loanType\": \"HomeLoan\",\n  \"personMetAtSite\": \"Customer  one\",\n  \"documentsProvided\": [\n    \"Sale Deed Copy\",\n    \"EC Certificate\",\n    \"Property Tax Receipt\",\n    \"Aadhaar Copy\"\n  ]\n}\n"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/applications/{{applicationId}}/site-visit/basic-valuation",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{applicationId}}",
+								"site-visit",
+								"basic-valuation"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Property Owner Details",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBZ2VudDFAYWdlbmN5LmNvbSIsInJvbGUiOiJST0xFX0FHRU5DWV9WQUxVQVRPUiIsInVzZXJJZCI6IlZBTFUxUVFTMUlPUCIsImlhdCI6MTc2NTYxMDA0MSwiZXhwIjoxNzY1Njk2NDQxfQ.axmjT7GxHZ0UjyuEEg8W0Op8bqEY8QAOTzU3mrpZLBI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"siteVisitDate\": \"2025-12-15\",\n  \"remarks\": \"Visiting property on Monday morning\"\n}\n"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/applications/{{applicationId}}/site-visit/property-owner-details",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{applicationId}}",
+								"site-visit",
+								"property-owner-details"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Save Site Visit Property Details Location Tab",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBZ2VudDFAYWdlbmN5LmNvbSIsInJvbGUiOiJST0xFX0FHRU5DWV9WQUxVQVRPUiIsInVzZXJJZCI6IlZBTFUxUVFTMUlPUCIsImlhdCI6MTc2NTYyMjAyMSwiZXhwIjoxNzY1NzA4NDIxfQ.NWRmmsYB1TGdje4mn7NNGWT7TjHueOIMlTNRENZ_F4Y",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"postalDoorNo\": \"12A\",\n  \"postalBuildingName\": \"Sai Residency\",\n  \"postalStreetLine1\": \"Chiranjeevi Layout, Hebbal\",\n  \"postalStreetLine2\": \"Near Bus Stop\",\n  \"postalPinCode\": \"560045\",\n  \"postalCity\": \"Bangalore\",\n  \"postalState\": \"Karnataka\",\n\n  \"documentDoorNo\": \"12A\",\n  \"documentBuildingName\": \"Sai Residency\",\n  \"documentStreetLine1\": \"Chiranjeevi Layout, Hebbal\",\n  \"documentStreetLine2\": \"Near Bus Stop\",\n  \"documentPinCode\": \"560045\",\n  \"documentCity\": \"Bangalore\",\n  \"documentState\": \"Karnataka\",\n\n  \"latitude\": 13.035542,\n  \"longitude\": 77.597100,\n  \"distanceFromCityCentre\": 7.5,\n\n  \"jurisdiction\": \"BBMP\",\n  \"nearbyLandmark\": \"Hebbal Flyover\",\n\n  \"propertyType\": \"Residential\",\n  \"propertySubType\": \"Apartment\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/applications/{{applicationId}}/site-visit/property-details",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{applicationId}}",
+								"site-visit",
+								"property-details"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Site Visit save property-boundary-details",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBZ2VudDFAYWdlbmN5LmNvbSIsInJvbGUiOiJST0xFX0FHRU5DWV9WQUxVQVRPUiIsInVzZXJJZCI6IlZBTFUxUVFTMUlPUCIsImlhdCI6MTc2NTYyMjAyMSwiZXhwIjoxNzY1NzA4NDIxfQ.NWRmmsYB1TGdje4mn7NNGWT7TjHueOIMlTNRENZ_F4Y",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"propertyFacing\": \"East\",\n\n  \"eastAsPerSiteVisit\": \"30 ft road\",\n  \"eastAsPerLegalDocument\": \"30 ft road\",\n  \"eastMatch\": true,\n\n  \"southAsPerSiteVisit\": \"Residential building\",\n  \"southAsPerLegalDocument\": \"Residential building\",\n  \"southMatch\": true,\n\n  \"westAsPerSiteVisit\": \"Open land\",\n  \"westAsPerLegalDocument\": \"Drain\",\n  \"westMatch\": false,\n\n  \"northAsPerSiteVisit\": \"Private property\",\n  \"northAsPerLegalDocument\": \"Private property\",\n  \"northMatch\": true,\n\n  \"boundaryMatching\": false,\n  \"earthquakeResistant\": true,\n  \"propertyIdentification\": true,\n\n  \"currentZoning\": \"Residential Zone\"\n}\n"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/applications/{{applicationId}}/site-visit/property-boundary-details",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{applicationId}}",
+								"site-visit",
+								"property-boundary-details"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Site Visit Building Details",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBZ2VudDFAYWdlbmN5LmNvbSIsInJvbGUiOiJST0xFX0FHRU5DWV9WQUxVQVRPUiIsInVzZXJJZCI6IlZBTFUxUVFTMUlPUCIsImlhdCI6MTc2NTYyMjAyMSwiZXhwIjoxNzY1NzA4NDIxfQ.NWRmmsYB1TGdje4mn7NNGWT7TjHueOIMlTNRENZ_F4Y",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"constructionType\": \"RCC\",\n  \"constructionQuality\": \"Good\",\n  \"floorType\": \"Vitrified Tiles\",\n  \"roofType\": \"RCC\",\n  \"starType\": \"3 Star\",\n\n  \"approvedPlanAvailable\": true,\n  \"planIssuingAuthority\": \"BBMP\",\n  \"planApprovalNumber\": \"BBMP/PLAN/2022/4587\",\n  \"planApprovalDate\": \"2022-08-15T00:00:00\",\n  \"planDeviationObserved\": false,\n  \"planDeviationRemarks\": \"\"\n}\n\n\n// {\n//   \"constructionType\": \"Load Bearing\",\n//   \"constructionQuality\": \"Average\",\n//   \"floorType\": \"Cement\",\n//   \"roofType\": \"Sheet\",\n//   \"starType\": \"NA\",\n\n//   \"approvedPlanAvailable\": false,\n//   \"planIssuingAuthority\": null,\n//   \"planApprovalNumber\": null,\n//   \"planApprovalDate\": null,\n//   \"planDeviationObserved\": null,\n//   \"planDeviationRemarks\": null\n// }\n"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/applications/{{applicationId}}/site-visit/building-details",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{applicationId}}",
+								"site-visit",
+								"building-details"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Infrastructure Details",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBZ2VudDFAYWdlbmN5LmNvbSIsInJvbGUiOiJST0xFX0FHRU5DWV9WQUxVQVRPUiIsInVzZXJJZCI6IlZBTFUxUVFTMUlPUCIsImlhdCI6MTc2NTYyMjAyMSwiZXhwIjoxNzY1NzA4NDIxfQ.NWRmmsYB1TGdje4mn7NNGWT7TjHueOIMlTNRENZ_F4Y",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"siteAccessibility\": true,\n  \"accessibleThrough\": \"Main Road\",\n  \"accessibilityType\": \"Concrete Road\",\n  \"roadWidth\": \"30 Feet\",\n\n  \"sewerageSystem\": true,\n  \"electricity\": true,\n  \"waterSupply\": \"Municipal Corporation\",\n  \"numberOfLifts\": 2\n}\n"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/applications/{{applicationId}}/site-visit/infrastructure",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{applicationId}}",
+								"site-visit",
+								"infrastructure"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Technical Document",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBZ2VudDFAYWdlbmN5LmNvbSIsInJvbGUiOiJST0xFX0FHRU5DWV9WQUxVQVRPUiIsInVzZXJJZCI6IlZBTFUxUVFTMUlPUCIsImlhdCI6MTc2NTYyMjAyMSwiZXhwIjoxNzY1NzA4NDIxfQ.NWRmmsYB1TGdje4mn7NNGWT7TjHueOIMlTNRENZ_F4Y",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"propertyType\": \"Independent House\",\n  \"landAreaAsPerActual\": 1200,\n  \"landAreaAsPerDocument\": 1200,\n  \"landAreaAsPerLayoutPlan\": 1200,\n  \"holdingType\": \"Freehold\",\n\n  \"basements\": 1,\n  \"floors\": 2,\n  \"nonRcc\": 0,\n\n  \"groundFloorActual\": 1000,\n  \"groundFloorDocument\": 1000,\n  \"groundFloorApproved\": 1000,\n\n  \"firstFloorActual\": 900,\n  \"firstFloorDocument\": 900,\n  \"firstFloorApproved\": 900,\n\n  \"sbuaActual\": 2200,\n  \"sbuaDocument\": 2200,\n  \"sbuaApproved\": 2200,\n\n  \"riskOfDemolition\": \"No\",\n  \"constructionProgressPercent\": 75,\n  \"constructionProgressRemarks\": \"First floor slab completed\",\n  \"recommendedFundingPercent\": 70,\n\n  \"ageOfProperty\": 5,\n  \"residualAgeOfProperty\": 55,\n\n  \"documentType\": \"Sale Deed\",\n  \"inFavourOf\": \"Ramesh Kumar\",\n  \"documentExecutedOn\": \"2020-05-20\",\n  \"documentNumber\": \"SD/12345/2020\",\n\n  \"reraDetails\": \"RERA12345\",\n  \"marketFeedback\": \"Good demand\",\n  \"developmentInVicinityPercent\": 80,\n\n  \"earlierValuationDone\": false,\n  \"negativeAreaAsPerLocalNorms\": false,\n  \"demolitionNotification\": false,\n\n  \"communitySensitivity\": \"Low\",\n  \"municipalNotification\": \"None\"\n}\n"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/applications/{{applicationId}}/site-visit/technical",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{applicationId}}",
+								"site-visit",
+								"technical"
+							]
+						}
 					},
 					"response": []
 				}

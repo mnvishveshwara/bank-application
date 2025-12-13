@@ -1,6 +1,6 @@
 package com.bankbroker.loanapp.controller.api;
 
-import com.bankbroker.loanapp.dto.siteVisit.SiteVisitRequest;
+import com.bankbroker.loanapp.dto.site_visit.SiteVisitRequest;
 import com.bankbroker.loanapp.dto.valuator.AssignValuatorRequest;
 import com.bankbroker.loanapp.dto.valuator.AssignValuatorResponse;
 import jakarta.validation.Valid;

@@ -1,4 +1,4 @@
-package com.bankbroker.loanapp.dto.siteVisit;
+package com.bankbroker.loanapp.dto.site_visit;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.*;

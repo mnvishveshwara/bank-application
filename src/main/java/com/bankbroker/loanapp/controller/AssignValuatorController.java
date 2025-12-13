@@ -1,7 +1,7 @@
 package com.bankbroker.loanapp.controller;
 
 import com.bankbroker.loanapp.controller.api.AssignValuatorControllerApi;
-import com.bankbroker.loanapp.dto.siteVisit.SiteVisitRequest;
+import com.bankbroker.loanapp.dto.site_visit.SiteVisitRequest;
 import com.bankbroker.loanapp.dto.valuator.AssignValuatorRequest;
 import com.bankbroker.loanapp.dto.valuator.AssignValuatorResponse;
 import com.bankbroker.loanapp.service.AssignValuatorService;

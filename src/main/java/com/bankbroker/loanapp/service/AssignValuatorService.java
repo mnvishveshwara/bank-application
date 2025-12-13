@@ -1,6 +1,6 @@
 package com.bankbroker.loanapp.service;
 
-import com.bankbroker.loanapp.dto.siteVisit.SiteVisitRequest;
+import com.bankbroker.loanapp.dto.site_visit.SiteVisitRequest;
 import com.bankbroker.loanapp.dto.stage.ApplicationHistoryResponse;
 import com.bankbroker.loanapp.dto.valuator.AssignValuatorRequest;
 import com.bankbroker.loanapp.dto.valuator.AssignValuatorResponse;

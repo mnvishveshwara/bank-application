@@ -24,6 +24,8 @@ public class ApplicationDocumentDetails {
     @JoinColumn(name = "application_id", nullable = false, unique = true)
     private LoanApplication application;
 
+
+    @Builder.Default
     @OneToMany(mappedBy = "documentDetails", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ApplicationUploadedDocument> documents = new ArrayList<>();
 }
