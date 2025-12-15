@@ -10,5 +10,5 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class ApplicationSummaryRequest {
-    private String summaryText;
+    private String summary;
 }

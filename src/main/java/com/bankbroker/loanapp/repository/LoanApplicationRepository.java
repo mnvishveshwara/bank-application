@@ -17,4 +17,6 @@ public interface LoanApplicationRepository extends JpaRepository<LoanApplication
         WHERE aa.agency.id = :agencyId
     """)
     List<LoanApplication> findApplicationsByAgencyId(Long agencyId);
+
+    List<LoanApplication> findByClient_Id(String customerId);
 }

@@ -68,27 +68,63 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
         return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
+//    @Override
+//    public ApplicationHistoryResponse addHistory(String applicationId,
+//                                                 ApplicationHistoryRequest request) {
+//        LoanApplication app = getApplicationOrThrow(applicationId);
+//        AdminUser updatedBy = getAdminOrThrow(request.getUpdatedByAdminId());
+//
+//        ApplicationHistoryStatus status = ApplicationHistoryStatus
+//                .valueOf(request.getStatus().toUpperCase());
+//
+//        ApplicationStageHistory history = ApplicationStageHistory.builder()
+//                .application(app)
+//                .status(status)
+//                .createdDate(LocalDateTime.now())
+//                .updatedDate(LocalDateTime.now())
+//                .updatedBy(updatedBy)
+//                .remarks(request.getRemarks())
+//                .build();
+//
+//        history = applicationStageHistoryRepository.save(history);
+//        return mapHistoryToResponse(history);
+//    }
+
+
     @Override
-    public ApplicationHistoryResponse addHistory(String applicationId,
-                                                 ApplicationHistoryRequest request) {
+    @Transactional
+    public ApplicationHistoryResponse addHistory(
+            String applicationId,
+            ApplicationHistoryRequest request) {
+
         LoanApplication app = getApplicationOrThrow(applicationId);
         AdminUser updatedBy = getAdminOrThrow(request.getUpdatedByAdminId());
 
         ApplicationHistoryStatus status = ApplicationHistoryStatus
                 .valueOf(request.getStatus().toUpperCase());
 
-        ApplicationStageHistory history = ApplicationStageHistory.builder()
-                .application(app)
-                .status(status)
-                .createdDate(LocalDateTime.now())
-                .updatedDate(LocalDateTime.now())
-                .updatedBy(updatedBy)
-                .remarks(request.getRemarks())
-                .build();
+        // 🔑 UPSERT LOGIC
+        ApplicationStageHistory history =
+                applicationStageHistoryRepository
+                        .findByApplication(app)
+                        .orElseGet(() -> ApplicationStageHistory.builder()
+                                .application(app)
+                                .createdDate(LocalDateTime.now())
+                                .build()
+                        );
 
+        // UPDATE FIELDS
+        history.setStatus(status);
+        history.setRemarks(request.getRemarks());
+        history.setUpdatedBy(updatedBy);
+        history.setUpdatedDate(LocalDateTime.now());
+
+        // SAVE (INSERT or UPDATE automatically)
         history = applicationStageHistoryRepository.save(history);
+
         return mapHistoryToResponse(history);
     }
+
 
     @Override
     public List<ApplicationHistoryResponse> getHistory(String applicationId) {
@@ -210,7 +246,10 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
                     .fileType(file.getContentType())
                     .fileSizeKB(file.getSize() / 1024)
                     .documentType(types.get(i))
-                    .fileUrl(fileStorageService.store(file))
+//                    .fileUrl(fileStorageService.store(file))
+                    .fileUrl(fileStorageService.store(file,applicationId,
+                            "application-documents",
+                            types.get(i) + fileStorageService.getExtension(file.getOriginalFilename())))
                     .build();
 
             docDetails.getDocuments().add(doc);
@@ -340,7 +379,7 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
                                 .build()
                         );
 
-        entity.setSummaryText(request.getSummaryText());
+        entity.setSummaryText(request.getSummary());
         entity.setReviewedBy(reviewer);
         entity.setReviewedDate(LocalDateTime.now());
 

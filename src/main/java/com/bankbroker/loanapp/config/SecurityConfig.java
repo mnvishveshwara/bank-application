@@ -79,7 +79,7 @@ public class SecurityConfig {
                         sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/auth/**","/api/**").permitAll()
                         .requestMatchers("/api/**").authenticated() // 🔐 protect APIs
                         .anyRequest().authenticated()
                 );

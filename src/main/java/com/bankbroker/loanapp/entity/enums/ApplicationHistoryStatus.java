@@ -12,5 +12,6 @@ public enum ApplicationHistoryStatus {
     SITE_VISIT_COMPLETED,
     REPORT_SUBMITTED,
     SITE_VISIT_IN_PROGRESS,
+    REVIEWING_APPLICATION
 
 }

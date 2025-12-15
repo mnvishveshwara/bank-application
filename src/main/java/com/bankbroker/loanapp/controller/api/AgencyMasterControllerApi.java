@@ -4,6 +4,8 @@ package com.bankbroker.loanapp.controller.api;
 import com.bankbroker.loanapp.dto.application.LoanApplicationResponse;
 import com.bankbroker.loanapp.dto.master.AgencyMasterRequest;
 import com.bankbroker.loanapp.dto.master.AgencyMasterResponse;
+import com.bankbroker.loanapp.dto.stage.ApplicationDecisionRequest;
+import com.bankbroker.loanapp.dto.stage.ApplicationHistoryResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,5 +40,12 @@ public interface AgencyMasterControllerApi {
 
     @GetMapping("/assigned-applications")
     ResponseEntity<List<LoanApplicationResponse>> getAssignedApplicationsForAgency();
+
+    @PostMapping("/application/{applicationId}/status")
+    ResponseEntity<ApplicationHistoryResponse> updateStatus(
+            @PathVariable String applicationId,
+            @RequestBody ApplicationDecisionRequest request
+    );
+
 
 }

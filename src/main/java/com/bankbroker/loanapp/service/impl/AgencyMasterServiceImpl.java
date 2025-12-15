@@ -3,15 +3,22 @@ package com.bankbroker.loanapp.service.impl;
 import com.bankbroker.loanapp.dto.application.LoanApplicationResponse;
 import com.bankbroker.loanapp.dto.master.AgencyMasterRequest;
 import com.bankbroker.loanapp.dto.master.AgencyMasterResponse;
+import com.bankbroker.loanapp.dto.stage.ApplicationDecisionRequest;
+import com.bankbroker.loanapp.dto.stage.ApplicationHistoryRequest;
+import com.bankbroker.loanapp.dto.stage.ApplicationHistoryResponse;
 import com.bankbroker.loanapp.entity.AdminUser;
 import com.bankbroker.loanapp.entity.AgencyMaster;
+import com.bankbroker.loanapp.entity.ApplicationStageHistory;
 import com.bankbroker.loanapp.entity.LoanApplication;
+import com.bankbroker.loanapp.entity.enums.ApplicationHistoryStatus;
 import com.bankbroker.loanapp.entity.enums.Role;
 import com.bankbroker.loanapp.exception.ResourceNotFoundException;
 import com.bankbroker.loanapp.repository.AdminUserRepository;
 import com.bankbroker.loanapp.repository.AgencyMasterRepository;
+import com.bankbroker.loanapp.repository.ApplicationStageHistoryRepository;
 import com.bankbroker.loanapp.repository.LoanApplicationRepository;
 import com.bankbroker.loanapp.service.AgencyMasterService;
+import com.bankbroker.loanapp.service.ApplicationStageService;
 import com.bankbroker.loanapp.util.IdGenerator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +39,8 @@ public class AgencyMasterServiceImpl implements AgencyMasterService {
     private final AdminUserRepository adminUserRepository;
     private final LoanApplicationRepository loanApplicationRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ApplicationStageHistoryRepository applicationStageHistoryRepository;
+    private final ApplicationStageService applicationStageService;
 
     @Override
     @Transactional
@@ -175,7 +184,7 @@ public class AgencyMasterServiceImpl implements AgencyMasterService {
     @Override
     public List<LoanApplicationResponse> getApplicationsForLoggedInAgency() {
 
-        String adminId = currentAdminId();
+        String adminId = getLoggedInAdminId();
 
         AdminUser loggedUser = adminUserRepository.findById(adminId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user"));
@@ -189,39 +198,131 @@ public class AgencyMasterServiceImpl implements AgencyMasterService {
         // 🔥 Fetch applications assigned to this agency
         List<LoanApplication> apps = loanApplicationRepository.findApplicationsByAgencyId(agencyId);
 
+//        return apps.stream()
+//                .map(app -> LoanApplicationResponse.builder()
+//                        .applicationId(app.getId())
+//                        .active(app.getActive())
+//
+//                        // Client details
+//                        .clientId(app.getClient() != null ? app.getClient().getId() : null)
+//                        .clientName(app.getClient() != null ? app.getClient().getFirstName() : null)
+//
+//                        // Created by admin
+//                        .createdByAdminId(app.getCreatedBy() != null ? app.getCreatedBy().getId() : null)
+//                        .createdByName(app.getCreatedBy() != null
+//                                ? app.getCreatedBy().getFirstName() + " " + app.getCreatedBy().getLastName()
+//                                : null)
+//
+//                        // Assigned to admin
+//                        .assignedToAdminId(app.getAssignedTo() != null ? app.getAssignedTo().getId() : null)
+//                        .assignedToName(app.getAssignedTo() != null
+//                                ? app.getAssignedTo().getFirstName() + " " + app.getAssignedTo().getLastName()
+//                                : null)
+//
+//                        .associatedBank(app.getAssociatedBank())
+//                        .createdDate(app.getCreatedDate())
+//                        .updatedDate(app.getUpdatedDate())
+//                        .build()
+//                ).toList();
+
         return apps.stream()
-                .map(app -> LoanApplicationResponse.builder()
-                        .applicationId(app.getId())
-                        .active(app.getActive())
+                .map(app -> {
 
-                        // Client details
-                        .clientId(app.getClient() != null ? app.getClient().getId() : null)
-                        .clientName(app.getClient() != null ? app.getClient().getFirstName() : null)
+                    String status = applicationStageHistoryRepository
+                            .findByApplication(app)
+                            .map(h -> h.getStatus().name())
+                            .orElse("NOT_STARTED");
 
-                        // Created by admin
-                        .createdByAdminId(app.getCreatedBy() != null ? app.getCreatedBy().getId() : null)
-                        .createdByName(app.getCreatedBy() != null
-                                ? app.getCreatedBy().getFirstName() + " " + app.getCreatedBy().getLastName()
-                                : null)
+                    return LoanApplicationResponse.builder()
+                            .applicationId(app.getId())
+                            .active(app.getActive())
+                            .status(status)
 
-                        // Assigned to admin
-                        .assignedToAdminId(app.getAssignedTo() != null ? app.getAssignedTo().getId() : null)
-                        .assignedToName(app.getAssignedTo() != null
-                                ? app.getAssignedTo().getFirstName() + " " + app.getAssignedTo().getLastName()
-                                : null)
+                            // Client details
+                            .clientId(app.getClient() != null ? app.getClient().getId() : null)
+                            .clientName(app.getClient() != null ? app.getClient().getFirstName() : null)
 
-                        .associatedBank(app.getAssociatedBank())
-                        .createdDate(app.getCreatedDate())
-                        .updatedDate(app.getUpdatedDate())
-                        .build()
-                ).toList();
+                            // Created by admin
+                            .createdByAdminId(app.getCreatedBy() != null ? app.getCreatedBy().getId() : null)
+                            .createdByName(app.getCreatedBy() != null
+                                    ? app.getCreatedBy().getFirstName() + " " + app.getCreatedBy().getLastName()
+                                    : null)
+
+                            // Assigned to admin
+                            .assignedToAdminId(app.getAssignedTo() != null ? app.getAssignedTo().getId() : null)
+                            .assignedToName(app.getAssignedTo() != null
+                                    ? app.getAssignedTo().getFirstName() + " " + app.getAssignedTo().getLastName()
+                                    : null)
+
+                            .associatedBank(app.getAssociatedBank())
+                            .createdDate(app.getCreatedDate())
+                            .updatedDate(app.getUpdatedDate())
+                            .build();
+                })
+                .toList();
+
     }
 
     private String getLoggedInAdminId() {
         return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 
-    private String currentAdminId() {
-        return SecurityContextHolder.getContext().getAuthentication().getName();
+
+    @Override
+    @Transactional
+    public ApplicationHistoryResponse updateApplicationStatus(
+            String applicationId,
+            ApplicationDecisionRequest request) {
+
+        String adminId = getLoggedInAdminId();
+
+        AdminUser loggedUser = adminUserRepository.findById(adminId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user"));
+
+        if (loggedUser.getRole() != Role.AGENCY) {
+            throw new IllegalArgumentException("Only agency admins can update application status");
+        }
+
+        LoanApplication app = loanApplicationRepository.findById(applicationId)
+                .orElseThrow(() -> new ResourceNotFoundException("LoanApplication", "id", applicationId));
+
+        // 🔐 Agency ownership check
+        if (!loggedUser.getAgencyId().equals(app.getAssignedTo().getAgencyId())) {
+            throw new IllegalArgumentException("You cannot update another agency's application");
+        }
+
+        ApplicationHistoryStatus newStatus =
+                ApplicationHistoryStatus.valueOf(request.getStatus().toUpperCase());
+
+        // 🔒 VALID TRANSITIONS
+        ApplicationHistoryStatus currentStatus =
+                applicationStageHistoryRepository
+                        .findByApplication(app)
+                        .map(h -> h.getStatus())
+                        .orElseThrow(() ->
+                                new IllegalStateException("Site visit not completed yet"));
+
+        if (currentStatus != ApplicationHistoryStatus.SITE_VISIT_COMPLETED
+                && currentStatus != ApplicationHistoryStatus.REVIEWING_APPLICATION) {
+            throw new IllegalStateException(
+                    "Application must be in SITE_VISIT_COMPLETED or REVIEWING state");
+        }
+
+        // 🚫 Prevent invalid final transitions
+        if (currentStatus == ApplicationHistoryStatus.SITE_VISIT_COMPLETED
+                && newStatus != ApplicationHistoryStatus.REVIEWING_APPLICATION) {
+            throw new IllegalStateException("First move application to REVIEWING");
+        }
+
+        // ✅ UPSERT status
+        return applicationStageService.addHistory(
+                applicationId,
+                new ApplicationHistoryRequest(
+                        newStatus.name(),
+                        request.getRemarks(),
+                        loggedUser.getId()
+                )
+        );
     }
+
 }

@@ -1,6 +1,7 @@
 package com.bankbroker.loanapp.controller;
 
 import com.bankbroker.loanapp.controller.api.CustomerControllerApi;
+import com.bankbroker.loanapp.dto.application.LoanApplicationResponse;
 import com.bankbroker.loanapp.dto.customer.CustomerRequest;
 import com.bankbroker.loanapp.dto.customer.CustomerResponse;
 import com.bankbroker.loanapp.service.CustomerService;
@@ -40,5 +41,10 @@ public class CustomerController implements CustomerControllerApi {
     public ResponseEntity<Void> deleteCustomer(String id) {
         customerService.deleteCustomer(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    public ResponseEntity<List<LoanApplicationResponse>> getMyApplications() {
+        return ResponseEntity.ok(customerService.getMyApplications());
     }
 }

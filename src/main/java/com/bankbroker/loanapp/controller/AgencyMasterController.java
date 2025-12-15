@@ -5,6 +5,8 @@ import com.bankbroker.loanapp.controller.api.AgencyMasterControllerApi;
 import com.bankbroker.loanapp.dto.application.LoanApplicationResponse;
 import com.bankbroker.loanapp.dto.master.AgencyMasterRequest;
 import com.bankbroker.loanapp.dto.master.AgencyMasterResponse;
+import com.bankbroker.loanapp.dto.stage.ApplicationDecisionRequest;
+import com.bankbroker.loanapp.dto.stage.ApplicationHistoryResponse;
 import com.bankbroker.loanapp.service.AgencyMasterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -47,5 +49,16 @@ public class AgencyMasterController implements AgencyMasterControllerApi {
     @Override
     public ResponseEntity<List<LoanApplicationResponse>> getAssignedApplicationsForAgency() {
         return ResponseEntity.ok(service.getApplicationsForLoggedInAgency());
+    }
+
+
+    @Override
+    public ResponseEntity<ApplicationHistoryResponse> updateStatus(
+            String applicationId,
+            ApplicationDecisionRequest request) {
+
+        return ResponseEntity.ok(
+                service.updateApplicationStatus(applicationId, request)
+        );
     }
 }

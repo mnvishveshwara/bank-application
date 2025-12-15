@@ -20,4 +20,5 @@ public class LoanApplicationResponse {
     private String associatedBank;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
+    private String status;
 }
