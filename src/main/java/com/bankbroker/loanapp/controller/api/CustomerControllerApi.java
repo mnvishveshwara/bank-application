@@ -1,5 +1,6 @@
 package com.bankbroker.loanapp.controller.api;
 
+import com.bankbroker.loanapp.dto.application.LoanApplicationResponse;
 import com.bankbroker.loanapp.dto.customer.CustomerRequest;
 import com.bankbroker.loanapp.dto.customer.CustomerResponse;
 import org.springframework.http.ResponseEntity;
@@ -25,4 +26,7 @@ public interface CustomerControllerApi {
 
     @DeleteMapping("/{id}")
     ResponseEntity<Void> deleteCustomer(@PathVariable String id);
+
+    @GetMapping("/myApplications")
+    ResponseEntity<List<LoanApplicationResponse>> getMyApplications();
 }

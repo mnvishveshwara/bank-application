@@ -1,0 +1,26 @@
+package com.bankbroker.loanapp.controller.site_visit.api;
+
+
+import com.bankbroker.loanapp.dto.site_visit.SiteVisitValuerDetailsResponse;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+@RequestMapping("/api/applications/{applicationId}/site-visit")
+public interface SiteVisitValuerDetailsControllerApi {
+
+    @PostMapping(
+            path = "/valuer-details",
+            consumes = "multipart/form-data"
+    )
+    ResponseEntity<SiteVisitValuerDetailsResponse> upload(
+            @PathVariable String applicationId,
+            @RequestPart(required = false) MultipartFile organisationSeal,
+            @RequestPart(required = false) MultipartFile valuerSignature
+    );
+
+    @GetMapping("/valuer-details")
+    ResponseEntity<SiteVisitValuerDetailsResponse> get(
+            @PathVariable String applicationId
+    );
+}
