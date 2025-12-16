@@ -1,6 +1,6 @@
 package com.bankbroker.loanapp.repository.stage;
 
-import com.bankbroker.loanapp.entity.LoanApplication;
+import com.bankbroker.loanapp.entity.core.LoanApplication;
 import com.bankbroker.loanapp.entity.stage.ApplicationDocumentDetails;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;

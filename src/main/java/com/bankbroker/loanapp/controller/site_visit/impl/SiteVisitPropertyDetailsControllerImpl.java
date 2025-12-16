@@ -5,7 +5,7 @@ import com.bankbroker.loanapp.dto.site_visit.SiteVisitPropertyBoundaryDetailsReq
 import com.bankbroker.loanapp.dto.site_visit.SiteVisitPropertyBoundaryDetailsResponse;
 import com.bankbroker.loanapp.dto.site_visit.SiteVisitPropertyDetailsRequest;
 import com.bankbroker.loanapp.dto.site_visit.SiteVisitPropertyDetailsResponse;
-import com.bankbroker.loanapp.service.site_visit.SiteVisitPropertyDetailsService;
+import com.bankbroker.loanapp.service.site_visit.api.SiteVisitPropertyDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;

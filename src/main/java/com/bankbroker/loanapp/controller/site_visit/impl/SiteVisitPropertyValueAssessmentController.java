@@ -4,7 +4,7 @@ package com.bankbroker.loanapp.controller.site_visit.impl;
 import com.bankbroker.loanapp.controller.site_visit.api.SiteVisitPropertyValueAssessmentControllerApi;
 import com.bankbroker.loanapp.dto.site_visit.SiteVisitPropertyValueAssessmentRequest;
 import com.bankbroker.loanapp.dto.site_visit.SiteVisitPropertyValueAssessmentResponse;
-import com.bankbroker.loanapp.service.site_visit.SiteVisitPropertyValueAssessmentService;
+import com.bankbroker.loanapp.service.site_visit.api.SiteVisitPropertyValueAssessmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;

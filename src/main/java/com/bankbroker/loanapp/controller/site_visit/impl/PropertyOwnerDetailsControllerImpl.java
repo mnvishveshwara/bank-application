@@ -3,7 +3,7 @@ package com.bankbroker.loanapp.controller.site_visit.impl;
 
 import com.bankbroker.loanapp.controller.site_visit.api.PropertyOwnerDetailsControllerApi;
 import com.bankbroker.loanapp.dto.site_visit.PropertyOwnerDetailsResponse;
-import com.bankbroker.loanapp.service.site_visit.BasicValuationDetailsService;
+import com.bankbroker.loanapp.service.site_visit.api.BasicValuationDetailsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

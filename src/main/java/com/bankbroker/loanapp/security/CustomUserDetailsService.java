@@ -1,9 +1,9 @@
 package com.bankbroker.loanapp.security;
 
-import com.bankbroker.loanapp.entity.AdminUser;
-import com.bankbroker.loanapp.entity.Customer;
-import com.bankbroker.loanapp.repository.AdminUserRepository;
-import com.bankbroker.loanapp.repository.CustomerRepository;
+import com.bankbroker.loanapp.entity.core.AdminUser;
+import com.bankbroker.loanapp.entity.core.Customer;
+import com.bankbroker.loanapp.repository.core.AdminUserRepository;
+import com.bankbroker.loanapp.repository.core.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

@@ -12,4 +12,6 @@ public class ValuatorRequest {
     private String name;
     private String phone;
     private String email;
+    private String password;
+    private String lastName;
 }

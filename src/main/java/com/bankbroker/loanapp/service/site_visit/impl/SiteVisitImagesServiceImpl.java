@@ -2,13 +2,13 @@ package com.bankbroker.loanapp.service.site_visit.impl;
 
 
 import com.bankbroker.loanapp.dto.site_visit.SiteVisitImageResponse;
-import com.bankbroker.loanapp.entity.LoanApplication;
+import com.bankbroker.loanapp.entity.core.LoanApplication;
 import com.bankbroker.loanapp.entity.enums.SiteVisitImageCategory;
 import com.bankbroker.loanapp.entity.site_visit.*;
-import com.bankbroker.loanapp.repository.LoanApplicationRepository;
+import com.bankbroker.loanapp.repository.core.LoanApplicationRepository;
 import com.bankbroker.loanapp.repository.site_visit.SiteVisitImageGroupRepository;
 import com.bankbroker.loanapp.repository.site_visit.SiteVisitImageRepository;
-import com.bankbroker.loanapp.service.site_visit.SiteVisitImagesService;
+import com.bankbroker.loanapp.service.site_visit.api.SiteVisitImagesService;
 import com.bankbroker.loanapp.service.storage.FileStorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,12 +1,21 @@
 package com.bankbroker.loanapp.entity.stage;
 
-import com.bankbroker.loanapp.entity.LoanApplication;
+import com.bankbroker.loanapp.entity.core.AdminUser;
+import com.bankbroker.loanapp.entity.core.LoanApplication;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
 
 
 @Entity
 @Table(name = "application_customer_details")
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -59,4 +68,22 @@ public class ApplicationCustomerDetails {
     private String loanType;
 
     private String remarks;
+
+    @CreatedDate
+    @Column(name = "created_date",  updatable = false)
+    private LocalDateTime createdDate;
+
+    @LastModifiedDate
+    @Column(name = "updated_date")
+    private LocalDateTime updatedDate;
+
+    @CreatedBy
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by_id", nullable = false, updatable = false)
+    private AdminUser createdBy;
+
+    @LastModifiedBy
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "updated_by_id", nullable = false)
+    private AdminUser updatedBy;
 }

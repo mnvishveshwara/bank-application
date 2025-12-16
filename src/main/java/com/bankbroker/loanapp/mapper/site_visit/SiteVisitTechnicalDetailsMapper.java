@@ -2,12 +2,10 @@ package com.bankbroker.loanapp.mapper.site_visit;
 
 import com.bankbroker.loanapp.dto.site_visit.SiteVisitTechnicalDetailsRequest;
 import com.bankbroker.loanapp.dto.site_visit.SiteVisitTechnicalDetailsResponse;
-import com.bankbroker.loanapp.entity.AdminUser;
-import com.bankbroker.loanapp.entity.LoanApplication;
+import com.bankbroker.loanapp.entity.core.AdminUser;
+import com.bankbroker.loanapp.entity.core.LoanApplication;
 import com.bankbroker.loanapp.entity.site_visit.SiteVisitTechnicalDetails;
 import org.mapstruct.*;
-
-import java.time.LocalDateTime;
 
 @Mapper(componentModel = "spring", imports = {java.time.LocalDateTime.class})
 public interface SiteVisitTechnicalDetailsMapper {

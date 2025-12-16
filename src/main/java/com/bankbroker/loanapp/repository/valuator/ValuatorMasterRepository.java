@@ -1,7 +1,7 @@
 package com.bankbroker.loanapp.repository.valuator;
 
 
-import com.bankbroker.loanapp.entity.AgencyMaster;
+import com.bankbroker.loanapp.entity.core.AgencyMaster;
 import com.bankbroker.loanapp.entity.valuator.ValuatorMaster;
 import org.springframework.data.jpa.repository.JpaRepository;
 

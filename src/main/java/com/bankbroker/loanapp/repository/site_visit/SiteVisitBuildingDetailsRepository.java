@@ -1,6 +1,6 @@
 package com.bankbroker.loanapp.repository.site_visit;
 
-import com.bankbroker.loanapp.entity.LoanApplication;
+import com.bankbroker.loanapp.entity.core.LoanApplication;
 import com.bankbroker.loanapp.entity.site_visit.SiteVisitBuildingDetails;
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -3,7 +3,7 @@ package com.bankbroker.loanapp.controller.site_visit.impl;
 import com.bankbroker.loanapp.controller.site_visit.api.SiteVisitInfrastructureDetailsControllerApi;
 import com.bankbroker.loanapp.dto.site_visit.SiteVisitInfrastructureDetailsRequest;
 import com.bankbroker.loanapp.dto.site_visit.SiteVisitInfrastructureDetailsResponse;
-import com.bankbroker.loanapp.service.site_visit.SiteVisitInfrastructureDetailsService;
+import com.bankbroker.loanapp.service.site_visit.api.SiteVisitInfrastructureDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;

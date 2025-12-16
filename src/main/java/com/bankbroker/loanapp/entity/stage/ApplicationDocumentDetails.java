@@ -1,6 +1,6 @@
 package com.bankbroker.loanapp.entity.stage;
 
-import com.bankbroker.loanapp.entity.LoanApplication;
+import com.bankbroker.loanapp.entity.core.LoanApplication;
 import jakarta.persistence.*;
 import lombok.*;
 

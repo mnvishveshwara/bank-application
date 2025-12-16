@@ -2,6 +2,8 @@ package com.bankbroker.loanapp.dto.stage;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -29,4 +31,5 @@ public class ApplicationCustomerDetailsResponse {
 
     private String loanType;
     private String remarks;
+    private LocalDateTime createdDate;
 }

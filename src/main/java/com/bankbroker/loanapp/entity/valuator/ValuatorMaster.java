@@ -1,7 +1,7 @@
 package com.bankbroker.loanapp.entity.valuator;
 
-import com.bankbroker.loanapp.entity.AgencyMaster;
-import com.bankbroker.loanapp.entity.AdminUser;
+import com.bankbroker.loanapp.entity.core.AgencyMaster;
+import com.bankbroker.loanapp.entity.core.AdminUser;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,6 +22,9 @@ public class ValuatorMaster {
 
     @Column(name = "valuator_name", nullable = false)
     private String valuatorName;
+
+    @Column(name = "valuator_last_name", nullable = false)
+    private String valuatorLastName;
 
     @Column(name = "contact_number", nullable = false)
     private String contactNumber;
