@@ -7,12 +7,6 @@ import java.util.List;
 
 public interface SiteVisitImagesService {
 
-//    void uploadImages(
-//            String applicationId,
-//            SiteVisitImageCategory category,
-//            List<MultipartFile> files
-//    );
-
     void uploadAll(
             String applicationId,
             List<MultipartFile> propertySpecificImages,

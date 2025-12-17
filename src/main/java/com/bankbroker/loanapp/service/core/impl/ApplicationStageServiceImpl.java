@@ -68,29 +68,6 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
         return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
-//    @Override
-//    public ApplicationHistoryResponse addHistory(String applicationId,
-//                                                 ApplicationHistoryRequest request) {
-//        LoanApplication app = getApplicationOrThrow(applicationId);
-//        AdminUser updatedBy = getAdminOrThrow(request.getUpdatedByAdminId());
-//
-//        ApplicationHistoryStatus status = ApplicationHistoryStatus
-//                .valueOf(request.getStatus().toUpperCase());
-//
-//        ApplicationStageHistory history = ApplicationStageHistory.builder()
-//                .application(app)
-//                .status(status)
-//                .createdDate(LocalDateTime.now())
-//                .updatedDate(LocalDateTime.now())
-//                .updatedBy(updatedBy)
-//                .remarks(request.getRemarks())
-//                .build();
-//
-//        history = applicationStageHistoryRepository.save(history);
-//        return mapHistoryToResponse(history);
-//    }
-
-
     @Override
     @Transactional
     public ApplicationHistoryResponse addHistory(
@@ -274,37 +251,6 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
     }
 
 
-//    @Override
-//    public ApplicationAgencyAssignmentResponse saveAgencyAssignment(
-//            String applicationId, ApplicationAgencyAssignmentRequest request) {
-//
-//        LoanApplication app = getApplication(applicationId);
-//        AdminUser admin = getAdmin(currentAdminId());
-//        log.info("Assigning agency ID {} to application ID {} by admin ID {}",
-//                request.getAgencyId(), applicationId, admin.getId());
-//        AgencyMaster agency = agencyRepo.findById(request.getAgencyId())
-//                .orElseThrow(() -> new ResourceNotFoundException("AgencyMaster", "id", request.getAgencyId()));
-//
-//        ApplicationAgencyAssignment entity =
-//                agencyAssignmentRepo.findByApplication(app)
-//                        .orElseGet(() -> ApplicationAgencyAssignment.builder()
-//                                .application(app)
-//                                .createdBy(admin)
-//                                .build()
-//                        );
-//
-//        log.info("Current assigned agency ID: {}",agency);
-//        entity.setAgency(agency);
-//        entity.setUpdatedBy(admin);
-//        entity.setRemarks(request.getRemarks());
-//        entity.setAgency(agency);
-//
-//        agencyAssignmentRepo.save(entity);
-//        updateStage(app, ApplicationStageType.ASSIGN_AGENCY, admin);
-//
-//        return agencyMapper.toResponse(entity);
-//    }
-
     @Override
     public ApplicationAgencyAssignmentResponse saveAgencyAssignment(
             String applicationId, ApplicationAgencyAssignmentRequest request) {
@@ -329,10 +275,6 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
         entity.setUpdatedBy(admin);
         entity.setRemarks(request.getRemarks());
         agencyAssignmentRepo.save(entity);
-
-        // ⭐ NEW: Assign application to the agency admin user
-//        AdminUser agencyUser = adminUserRepository.findByAgencyId(agency.getId())
-//                .orElseThrow(() -> new IllegalArgumentException("No admin user found for this agency"));
 
         AdminUser agencyUser = adminUserRepository
                 .findByAgencyIdAndRole(agency.getId(), Role.AGENCY)

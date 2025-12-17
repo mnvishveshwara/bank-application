@@ -11,7 +11,7 @@
 			"name": "Auth",
 			"item": [
 				{
-					"name": "Login",
+					"name": "valuator Login",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -23,6 +23,90 @@
 						"body": {
 							"mode": "raw",
 							"raw": "{\n  \"username\": \"Agent1@agency.com\",\n  \"password\": \"valuator123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Admin Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"admin@example.com\",\r\n  \"password\": \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Agency Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"agency1@gmail.com\",\r\n  \"password\": \"Agency@123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Customer Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"customer@example.com\",\r\n  \"password\": \"Customer43210\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/auth/login",
@@ -116,6 +200,40 @@
 								"api",
 								"customers",
 								"{{customerId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Application",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjdXN0b21lckBleGFtcGxlLmNvbSIsInJvbGUiOiJST0xFX1VTRVIiLCJ1c2VySWQiOiJHRU5SQ0MwMFFNUlUiLCJpYXQiOjE3NjU4MDE3NzcsImV4cCI6MTc2NTg4ODE3N30.--2VaxitEks8OXWwfZ5CECryy7lnCILTUxSTScuGY1E",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/customers/myApplications",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"customers",
+								"myApplications"
 							]
 						}
 					},
@@ -499,6 +617,16 @@
 				{
 					"name": "Get Customer Details",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjdXN0b21lckBleGFtcGxlLmNvbSIsInJvbGUiOiJST0xFX1VTRVIiLCJ1c2VySWQiOiJHRU5SQ0MwMFFNUlUiLCJpYXQiOjE3NjU4MDE3NzcsImV4cCI6MTc2NTg4ODE3N30.--2VaxitEks8OXWwfZ5CECryy7lnCILTUxSTScuGY1E",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [
 							{
@@ -773,7 +901,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"summaryText\": \"Approved after verification\"\n}"
+							"raw": "{\n  \"summary\": \"Approved after verification\"\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/applications/{{applicationId}}/summary",
@@ -870,37 +998,6 @@
 							"path": [
 								"api",
 								"agency-master"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get assigned application",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/api/agency-master/assigned-applications",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"agency-master",
-								"assigned-applications"
 							]
 						}
 					},
@@ -1146,6 +1243,90 @@
 								"applications",
 								"{{applicationId}}",
 								"assigned-valuator"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Application Status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZ2VuY3kxQGdtYWlsLmNvbSIsInJvbGUiOiJST0xFX0FHRU5DWSIsInVzZXJJZCI6IkFHTlBHQ0FBRVhMTiIsImlhdCI6MTc2NTc5OTQ1MSwiZXhwIjoxNzY1ODg1ODUxfQ.SYg765pqmOKXYeREqwVpOnh2uiLfQonQl693gfbtttI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"REVIEWING_APPLICATION\",\r\n  \"remarks\": \"All site visit documents verified\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/agency-master/application/{{applicationId}}/status",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"agency-master",
+								"application",
+								"{{applicationId}}",
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Valuator Applications",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBZ2VudDFAYWdlbmN5LmNvbSIsInJvbGUiOiJST0xFX0FHRU5DWV9WQUxVQVRPUiIsInVzZXJJZCI6IlZBTFUxUVFTMUlPUCIsImlhdCI6MTc2NTg3OTk5OCwiZXhwIjoxNzY1OTY2Mzk4fQ.FLI-C5r90ua-henpk9oE5hLbLK-0lqEtjRm2_hpH87I",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"valuatorId\": \"VALERPPP0JXH\",\n  \"remarks\": \"Assigning to valuator for site inspection\"\n}\n"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/agency/valuators/assignedApplications",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"agency",
+								"valuators",
+								"assignedApplications"
 							]
 						}
 					},
@@ -1446,7 +1627,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBZ2VudDFAYWdlbmN5LmNvbSIsInJvbGUiOiJST0xFX0FHRU5DWV9WQUxVQVRPUiIsInVzZXJJZCI6IlZBTFUxUVFTMUlPUCIsImlhdCI6MTc2NTYyMjAyMSwiZXhwIjoxNzY1NzA4NDIxfQ.NWRmmsYB1TGdje4mn7NNGWT7TjHueOIMlTNRENZ_F4Y",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBZ2VudDFAYWdlbmN5LmNvbSIsInJvbGUiOiJST0xFX0FHRU5DWV9WQUxVQVRPUiIsInVzZXJJZCI6IlZBTFUxUVFTMUlPUCIsImlhdCI6MTc2NTc3NzY2MSwiZXhwIjoxNzY1ODY0MDYxfQ.8-rkEu9sK5pOG--snuCMiT7Q6b8M_rlC9nnQfMOCYDY",
 									"type": "string"
 								}
 							]
@@ -1473,6 +1654,257 @@
 								"{{applicationId}}",
 								"site-visit",
 								"technical"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "site visit property-value-assessment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBZ2VudDFAYWdlbmN5LmNvbSIsInJvbGUiOiJST0xFX0FHRU5DWV9WQUxVQVRPUiIsInVzZXJJZCI6IlZBTFUxUVFTMUlPUCIsImlhdCI6MTc2NTc3NzY2MSwiZXhwIjoxNzY1ODY0MDYxfQ.8-rkEu9sK5pOG--snuCMiT7Q6b8M_rlC9nnQfMOCYDY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"landAreaAsPerActual\": 2400,\n  \"landAreaAsPerDocument\": 2500,\n  \"landAreaAsPerLayout\": 2600,\n\n  \"governmentPricePerSqFt\": 1800,\n  \"considerationPricePerSqFt\": 2200,\n\n  \"govtValueAsPerActual\": 4320000,\n  \"govtValueAsPerDocument\": 4500000,\n  \"govtValueAsPerLayout\": 4680000,\n\n  \"considerationValueAsPerActual\": 5280000,\n  \"considerationValueAsPerDocument\": 5500000,\n  \"considerationValueAsPerLayout\": 5720000,\n\n  \"fairMarketValueAsPerActual\": 6000000,\n  \"fairMarketValueAsPerDocument\": 6200000,\n  \"fairMarketValueAsPerLayout\": 6500000,\n\n  \"amenityCategory\": \"Swimming Pool\",\n  \"amenityRating\": \"3 Star\",\n  \"amenityImpact\": \"Low\",\n  \"amenitiesTotalValue\": 250000,\n\n  \"fmvDateAsPerActual\": 6000000,\n  \"fmvDateAsPerDocument\": 6200000,\n  \"fmvDateAsPerLayout\": 6500000,\n\n  \"fmvCompletionAsPerActual\": 6800000,\n  \"fmvCompletionAsPerDocument\": 7000000,\n  \"fmvCompletionAsPerLayout\": 7300000,\n\n  \"distressedValueAsPerActual\": 4800000,\n  \"distressedValueAsPerDocument\": 5000000,\n  \"distressedValueAsPerLayout\": 5200000,\n\n  \"guidelineValueAsPerActual\": 4500000,\n  \"guidelineValueAsPerDocument\": 4700000,\n  \"guidelineValueAsPerLayout\": 4900000,\n\n  \"insuranceValueAsPerActual\": 4000000,\n  \"insuranceValueAsPerDocument\": 4200000,\n  \"insuranceValueAsPerLayout\": 4400000,\n\n  \"finalValueToBeConsidered\": 6500000,\n\n  \"buildingTotalValue\": 3800000,\n  \"buildingConsideredValue\": 3600000,\n  \"amenitiesConsideredValue\": 250000,\n  \"grandFinalValue\": 4050000\n}\n"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/applications/{{applicationId}}/site-visit/property-value-assessment",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{applicationId}}",
+								"site-visit",
+								"property-value-assessment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Site Visit Valuer Details",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBZ2VudDFAYWdlbmN5LmNvbSIsInJvbGUiOiJST0xFX0FHRU5DWV9WQUxVQVRPUiIsInVzZXJJZCI6IlZBTFUxUVFTMUlPUCIsImlhdCI6MTc2NTc3NzY2MSwiZXhwIjoxNzY1ODY0MDYxfQ.8-rkEu9sK5pOG--snuCMiT7Q6b8M_rlC9nnQfMOCYDY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "organisationSeal   ",
+									"type": "file",
+									"src": "/D:/loanapp_full/uploads/3df9d87d-0641-4335-8559-cd464fbe07df-Screenshot of scoreboard.png"
+								},
+								{
+									"key": "valuerSignature    ",
+									"type": "file",
+									"src": "/D:/loanapp_full/uploads/9530577c-22d1-4a7a-be51-ce57cd692fb0-Screenshot 2025-09-24 165638.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/applications/{{applicationId}}/site-visit/valuer-details",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{applicationId}}",
+								"site-visit",
+								"valuer-details"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Site Visit Images",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBZ2VudDFAYWdlbmN5LmNvbSIsInJvbGUiOiJST0xFX0FHRU5DWV9WQUxVQVRPUiIsInVzZXJJZCI6IlZBTFUxUVFTMUlPUCIsImlhdCI6MTc2NTc3NzY2MSwiZXhwIjoxNzY1ODY0MDYxfQ.8-rkEu9sK5pOG--snuCMiT7Q6b8M_rlC9nnQfMOCYDY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "propertySpecificImages ",
+									"type": "file",
+									"src": "/D:/loanapp_full/uploads/2edbd4ab-b33a-4c2b-b622-fdcfc06df6bd-Screenshot 2025-09-24 153750.png"
+								},
+								{
+									"key": "unitSpecificImages",
+									"type": "file",
+									"src": "/D:/loanapp_full/uploads/8b9a7109-9d0f-42a7-96bf-1896d112c893-Screenshot 2025-09-16 161519.png"
+								},
+								{
+									"key": "comparisonImages",
+									"type": "file",
+									"src": "/D:/loanapp_full/uploads/2edbd4ab-b33a-4c2b-b622-fdcfc06df6bd-Screenshot 2025-09-24 153750.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/applications/{{applicationId}}/site-visit/images",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{applicationId}}",
+								"site-visit",
+								"images"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get saved site visit images",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBZ2VudDFAYWdlbmN5LmNvbSIsInJvbGUiOiJST0xFX0FHRU5DWV9WQUxVQVRPUiIsInVzZXJJZCI6IlZBTFUxUVFTMUlPUCIsImlhdCI6MTc2NTc3NzY2MSwiZXhwIjoxNzY1ODY0MDYxfQ.8-rkEu9sK5pOG--snuCMiT7Q6b8M_rlC9nnQfMOCYDY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "propertySpecificImages ",
+									"type": "file",
+									"src": "/D:/loanapp_full/uploads/2edbd4ab-b33a-4c2b-b622-fdcfc06df6bd-Screenshot 2025-09-24 153750.png"
+								},
+								{
+									"key": "unitSpecificImages",
+									"type": "file",
+									"src": "/D:/loanapp_full/uploads/8b9a7109-9d0f-42a7-96bf-1896d112c893-Screenshot 2025-09-16 161519.png"
+								},
+								{
+									"key": "comparisonImages",
+									"type": "file",
+									"src": "/D:/loanapp_full/uploads/2edbd4ab-b33a-4c2b-b622-fdcfc06df6bd-Screenshot 2025-09-24 153750.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/applications/{{applicationId}}/site-visit/images",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{applicationId}}",
+								"site-visit",
+								"images"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "save site visit valuer remarks",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBZ2VudDFAYWdlbmN5LmNvbSIsInJvbGUiOiJST0xFX0FHRU5DWV9WQUxVQVRPUiIsInVzZXJJZCI6IlZBTFUxUVFTMUlPUCIsImlhdCI6MTc2NTc5NTQ3MCwiZXhwIjoxNzY1ODgxODcwfQ.LmZTYBbNY_YShn8P6x4dlKRBn7KlZuK0CtRrMZM_49w",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"generalRemarks\": \"The property is located in a well-developed residential area with good road connectivity.\",\r\n  \"criticalAndActionableRemarks\": \"Minor structural cracks observed on the north-facing wall. Immediate repair is recommended.\",\r\n  \"insights\": \"Considering the location and future infrastructure plans, the property value is expected to appreciate.\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/applications/{{applicationId}}/site-visit/valuer-remarks",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"applications",
+								"{{applicationId}}",
+								"site-visit",
+								"valuer-remarks"
 							]
 						}
 					},

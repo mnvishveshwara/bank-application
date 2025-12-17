@@ -60,10 +60,6 @@ public class AssignValuatorServiceImpl implements AssignValuatorService {
         if (!logged.getAgencyId().equals(app.getAssignedTo().getAgencyId()))
             throw new RuntimeException("You cannot assign valuators for another agency's application.");
 
-        // Load valuator
-//        AdminUser valuator = adminRepo.findById(req.getValuatorId())
-//                .orElseThrow(() -> new ResourceNotFoundException("AdminUser", "id", req.getValuatorId()));
-
         AdminUser valuator = adminRepo.findById(req.getValuatorId())
                 .orElseThrow(() -> new ResourceNotFoundException("Valuator", "valuatorId", req.getValuatorId()));
 

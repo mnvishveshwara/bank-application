@@ -38,39 +38,6 @@ public class SiteVisitValuerRemarksServiceImpl
                 .orElseThrow(() -> new IllegalArgumentException("Invalid admin user"));
     }
 
-//    @Override
-//    public SiteVisitValuerRemarksResponse saveOrUpdate(
-//            String applicationId,
-//            SiteVisitValuerRemarksRequest request) {
-//
-//        LoanApplication application = loanApplicationRepository.findById(applicationId)
-//                .orElseThrow(() -> new IllegalArgumentException("Invalid application id"));
-//
-//        String adminId = (String) org.springframework.security.core.context
-//                .SecurityContextHolder.getContext()
-//                .getAuthentication()
-//                .getPrincipal();
-//
-//        AdminUser admin = getLoggedInAdmin(adminId);
-//
-//        SiteVisitValuerRemarks entity =
-//                repository.findByApplication_Id(applicationId)
-//                        .orElseGet(() -> {
-//                            SiteVisitValuerRemarks e = mapper.toEntity(request);
-//                            e.setApplication(application);
-//                            e.setCreatedDate(LocalDateTime.now());
-//                            e.setCreatedBy(admin);
-//                            return e;
-//                        });
-//
-//        mapper.updateEntity(request, entity);
-//
-//        entity.setUpdatedDate(LocalDateTime.now());
-//        entity.setUpdatedBy(admin);
-//
-//        return mapper.toResponse(repository.save(entity));
-//    }
-
     @Override
     public SiteVisitValuerRemarksResponse saveOrUpdate(
             String applicationId,

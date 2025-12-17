@@ -196,34 +196,6 @@ public class AgencyMasterServiceImpl implements AgencyMasterService {
 
         // 🔥 Fetch applications assigned to this agency
         List<LoanApplication> apps = loanApplicationRepository.findApplicationsByAgencyId(agencyId);
-
-//        return apps.stream()
-//                .map(app -> LoanApplicationResponse.builder()
-//                        .applicationId(app.getId())
-//                        .active(app.getActive())
-//
-//                        // Client details
-//                        .clientId(app.getClient() != null ? app.getClient().getId() : null)
-//                        .clientName(app.getClient() != null ? app.getClient().getFirstName() : null)
-//
-//                        // Created by admin
-//                        .createdByAdminId(app.getCreatedBy() != null ? app.getCreatedBy().getId() : null)
-//                        .createdByName(app.getCreatedBy() != null
-//                                ? app.getCreatedBy().getFirstName() + " " + app.getCreatedBy().getLastName()
-//                                : null)
-//
-//                        // Assigned to admin
-//                        .assignedToAdminId(app.getAssignedTo() != null ? app.getAssignedTo().getId() : null)
-//                        .assignedToName(app.getAssignedTo() != null
-//                                ? app.getAssignedTo().getFirstName() + " " + app.getAssignedTo().getLastName()
-//                                : null)
-//
-//                        .associatedBank(app.getAssociatedBank())
-//                        .createdDate(app.getCreatedDate())
-//                        .updatedDate(app.getUpdatedDate())
-//                        .build()
-//                ).toList();
-
         return apps.stream()
                 .map(app -> {
 
