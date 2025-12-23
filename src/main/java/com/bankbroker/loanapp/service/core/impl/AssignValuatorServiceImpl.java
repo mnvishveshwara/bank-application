@@ -17,6 +17,7 @@ import com.bankbroker.loanapp.repository.core.LoanApplicationRepository;
 import com.bankbroker.loanapp.repository.valuator.AssignValuatorRepository;
 import com.bankbroker.loanapp.service.core.api.AssignValuatorService;
 import com.bankbroker.loanapp.service.core.api.ApplicationStageService;
+import com.bankbroker.loanapp.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -35,19 +36,20 @@ public class AssignValuatorServiceImpl implements AssignValuatorService {
     private final AssignValuatorRepository repo;
     private final ApplicationStageService stageService;
     private final AssignValuatorMapper mapper;
+    private final SecurityUtil securityUtil;
 
     /** Logged-in user */
-    private AdminUser getLoggedIn() {
-        String id = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return adminRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Invalid logged-in user."));
-    }
+//    private AdminUser getLoggedIn() {
+//        String id = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        return adminRepo.findById(id)
+//                .orElseThrow(() -> new RuntimeException("Invalid logged-in user."));
+//    }
 
     @Override
     @Transactional
     public AssignValuatorResponse assignValuator(String applicationId, AssignValuatorRequest req) {
 
-        AdminUser logged = getLoggedIn();
+        AdminUser logged = securityUtil.getLoggedInAdmin();
 
         if (logged.getRole() != Role.AGENCY)
             throw new RuntimeException("Only agency admins can assign valuators.");
@@ -117,7 +119,7 @@ public class AssignValuatorServiceImpl implements AssignValuatorService {
     @Transactional
     public ApplicationHistoryResponse scheduleSiteVisit(String applicationId, SiteVisitRequest req) {
 
-        AdminUser logged = getLoggedIn();
+        AdminUser logged = securityUtil.getLoggedInAdmin();
 
         if (logged.getRole() != Role.AGENCY_VALUATOR)
             throw new RuntimeException("Only valuators can update site visit status.");

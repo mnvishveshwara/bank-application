@@ -19,6 +19,7 @@ import com.bankbroker.loanapp.repository.core.LoanApplicationRepository;
 import com.bankbroker.loanapp.service.core.api.AgencyMasterService;
 import com.bankbroker.loanapp.service.core.api.ApplicationStageService;
 import com.bankbroker.loanapp.util.IdGenerator;
+import com.bankbroker.loanapp.util.SecurityUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +41,7 @@ public class AgencyMasterServiceImpl implements AgencyMasterService {
     private final PasswordEncoder passwordEncoder;
     private final ApplicationStageHistoryRepository applicationStageHistoryRepository;
     private final ApplicationStageService applicationStageService;
+    private final SecurityUtil securityUtil;
 
     @Override
     @Transactional
@@ -53,12 +55,10 @@ public class AgencyMasterServiceImpl implements AgencyMasterService {
             throw new IllegalArgumentException("Email already exists: " + req.getEmail());
         }
 
-        String adminId = getLoggedInAdminId();
+        AdminUser loggedInAdmin = securityUtil.getLoggedInAdmin();
 
-        AdminUser loggedInAdmin = adminUserRepository.findById(adminId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid admin ID: " + adminId));
 
-        log.info("Creating agency. Requested by Admin: {}", adminId);
+        log.info("Creating agency | requestedBy={}", loggedInAdmin.getId());
 
         AgencyMaster agency = AgencyMaster.builder()
                 .agencyName(req.getAgencyName())
@@ -108,10 +108,8 @@ public class AgencyMasterServiceImpl implements AgencyMasterService {
         AgencyMaster agency = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("AgencyMaster", "id", id));
 
-        String adminId = getLoggedInAdminId();
+        AdminUser loggedInAdmin = securityUtil.getLoggedInAdmin();
 
-        AdminUser loggedInAdmin = adminUserRepository.findById(adminId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid admin ID: " + adminId));
 
         agency.setAgencyName(req.getAgencyName());
         agency.setContactName(req.getContactName());
@@ -183,10 +181,8 @@ public class AgencyMasterServiceImpl implements AgencyMasterService {
     @Override
     public List<LoanApplicationResponse> getApplicationsForLoggedInAgency() {
 
-        String adminId = getLoggedInAdminId();
+        AdminUser loggedUser = securityUtil.getLoggedInAdmin();
 
-        AdminUser loggedUser = adminUserRepository.findById(adminId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid user"));
 
         if (loggedUser.getRole() != Role.AGENCY) {
             throw new IllegalArgumentException("Only agency users can access this");
@@ -234,9 +230,9 @@ public class AgencyMasterServiceImpl implements AgencyMasterService {
 
     }
 
-    private String getLoggedInAdminId() {
-        return SecurityContextHolder.getContext().getAuthentication().getName();
-    }
+//    private String getLoggedInAdminId() {
+//        return SecurityContextHolder.getContext().getAuthentication().getName();
+//    }
 
 
     @Override
@@ -245,10 +241,7 @@ public class AgencyMasterServiceImpl implements AgencyMasterService {
             String applicationId,
             ApplicationDecisionRequest request) {
 
-        String adminId = getLoggedInAdminId();
-
-        AdminUser loggedUser = adminUserRepository.findById(adminId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid user"));
+        AdminUser loggedUser = securityUtil.getLoggedInAdmin();
 
         if (loggedUser.getRole() != Role.AGENCY) {
             throw new IllegalArgumentException("Only agency admins can update application status");

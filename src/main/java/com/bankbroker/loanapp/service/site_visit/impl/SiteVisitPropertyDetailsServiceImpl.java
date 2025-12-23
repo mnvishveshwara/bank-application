@@ -9,15 +9,14 @@ import com.bankbroker.loanapp.entity.core.LoanApplication;
 import com.bankbroker.loanapp.entity.site_visit.SiteVisitPropertyBoundaryDetails;
 import com.bankbroker.loanapp.entity.site_visit.SiteVisitPropertyDetails;
 import com.bankbroker.loanapp.mapper.site_visit.SiteVisitPropertyDetailsMapper;
-import com.bankbroker.loanapp.repository.core.AdminUserRepository;
 import com.bankbroker.loanapp.repository.core.LoanApplicationRepository;
 import com.bankbroker.loanapp.repository.site_visit.SiteVisitPropertyBoundaryDetailsRepository;
 import com.bankbroker.loanapp.repository.site_visit.SiteVisitPropertyDetailsRepository;
 import com.bankbroker.loanapp.service.site_visit.api.SiteVisitPropertyDetailsService;
+import com.bankbroker.loanapp.util.SecurityUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -32,28 +31,27 @@ public class SiteVisitPropertyDetailsServiceImpl
     private final SiteVisitPropertyDetailsRepository detailsRepo;
     private final SiteVisitPropertyBoundaryDetailsRepository boundaryRepo;
     private final SiteVisitPropertyDetailsMapper mapper;
-    private final AdminUserRepository adminRepo;
-
-    private AdminUser loggedIn() {
-        String id = (String) SecurityContextHolder.getContext()
-                .getAuthentication().getPrincipal();
-        return adminRepo.findById(id).orElseThrow();
-    }
+    private final SecurityUtil securityUtil;
 
     @Override
     public SiteVisitPropertyDetailsResponse savePropertyDetails(
             String applicationId,
             SiteVisitPropertyDetailsRequest request) {
 
-        LoanApplication app = loanRepo.findById(applicationId).orElseThrow();
-        AdminUser user = loggedIn();
+        LoanApplication app = loanRepo.findById(applicationId)
+                .orElseThrow();
 
-        SiteVisitPropertyDetails entity = detailsRepo.findByApplication(app)
-                .orElseGet(() -> mapper.toEntity(request, app, user));
+        AdminUser user = securityUtil.getLoggedInAdmin();
+
+        SiteVisitPropertyDetails entity =
+                detailsRepo.findByApplication(app)
+                        .orElseGet(() ->
+                                mapper.toEntity(request, app, user));
 
         if (entity.getId() != null) {
             mapper.updateEntity(request, entity);
             entity.setUpdatedBy(user);
+            entity.setUpdatedDate(LocalDateTime.now());
         }
 
         return mapper.toResponse(detailsRepo.save(entity));
@@ -64,8 +62,10 @@ public class SiteVisitPropertyDetailsServiceImpl
             String applicationId,
             SiteVisitPropertyBoundaryDetailsRequest request) {
 
-        LoanApplication app = loanRepo.findById(applicationId).orElseThrow();
-        AdminUser user = loggedIn();
+        LoanApplication app = loanRepo.findById(applicationId)
+                .orElseThrow();
+
+        AdminUser user = securityUtil.getLoggedInAdmin();
 
         SiteVisitPropertyBoundaryDetails entity =
                 boundaryRepo.findByApplication(app)
@@ -76,7 +76,11 @@ public class SiteVisitPropertyDetailsServiceImpl
                                         .createdDate(LocalDateTime.now())
                                         .build());
 
-        BeanUtils.copyProperties(request, entity, "id", "application", "createdBy", "createdDate");
+        BeanUtils.copyProperties(
+                request,
+                entity,
+                "id", "application", "createdBy", "createdDate"
+        );
 
         entity.setUpdatedBy(user);
         entity.setUpdatedDate(LocalDateTime.now());

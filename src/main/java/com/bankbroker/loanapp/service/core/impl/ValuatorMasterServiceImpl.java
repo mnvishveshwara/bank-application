@@ -14,6 +14,7 @@ import com.bankbroker.loanapp.repository.core.*;
 import com.bankbroker.loanapp.repository.valuator.ValuatorMasterRepository;
 import com.bankbroker.loanapp.service.core.api.ValuatorMasterService;
 import com.bankbroker.loanapp.util.IdGenerator;
+import com.bankbroker.loanapp.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,21 +35,8 @@ public class ValuatorMasterServiceImpl implements ValuatorMasterService {
     private final PasswordEncoder passwordEncoder;
     private final ValuatorMapper mapper;
     private final LoanApplicationRepository loanApplicationRepository;
-    private final AdminUserRepository adminUserRepository;
-    private final ApplicationStageCurrentRepository applicationStageCurrentRepository;
     private final ApplicationStageHistoryRepository applicationStageHistoryRepository;
-
-
-    private String getLoggedInAdminId() {
-        return (String) org.springframework.security.core.context.SecurityContextHolder.getContext()
-                .getAuthentication().getPrincipal();
-    }
-    private AdminUser getLoggedInAdmin() {
-        String id = (String) org.springframework.security.core.context.SecurityContextHolder.getContext()
-                .getAuthentication().getPrincipal();
-        return adminUserRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Invalid logged-in admin id"));
-    }
+    private final SecurityUtil securityUtil;
 
     // -------------------------------------------------------------------------
     // 1️⃣ CREATE VALUATOR
@@ -57,45 +45,48 @@ public class ValuatorMasterServiceImpl implements ValuatorMasterService {
     @Transactional
     public ValuatorResponse createValuator(ValuatorRequest request) {
 
+        AdminUser loggedIn = securityUtil.getLoggedInAdmin();
 
-
-        AdminUser loggedIn = getLoggedInAdmin();
         if (loggedIn.getRole() != Role.AGENCY) {
             throw new RuntimeException("Only agency admins can create valuators");
         }
-        Long agencyId = loggedIn.getAgencyId();
-        log.info("agencyId: {}", agencyId);
-        AgencyMaster agency = agencyRepo.findById(agencyId)
-                .orElseThrow(() -> new ResourceNotFoundException("AgencyMaster", "id", agencyId));
 
-        AdminUser creator = getLoggedInAdmin();
+        Long agencyId = loggedIn.getAgencyId();
+
+        AgencyMaster agency = agencyRepo.findById(agencyId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("AgencyMaster", "id", agencyId));
 
         // 1️⃣ Create login user for valuator
         AdminUser valuatorLogin = AdminUser.builder()
                 .id(IdGenerator.generateId("VAL"))
                 .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))   // default password
+                .password(passwordEncoder.encode(request.getPassword()))
                 .firstName(request.getName())
-                .lastName(request.getLastName())                   // optional
+                .lastName(request.getLastName())
                 .phoneNumber(request.getPhone())
                 .role(Role.AGENCY_VALUATOR)
                 .agencyId(agencyId)
-                .bank(agency.getBank())         // ⭐ SAME BANK AS AGENCY
+                .bank(agency.getBank())
                 .createdDate(LocalDateTime.now())
                 .build();
 
         valuatorLogin = adminUserRepo.save(valuatorLogin);
 
         // 2️⃣ Create valuator profile
-        ValuatorMaster valuator = mapper.toEntity(request, agency, creator, valuatorLogin);
+        ValuatorMaster valuator =
+                mapper.toEntity(request, agency, loggedIn, valuatorLogin);
 
         valuator = valuatorRepo.save(valuator);
 
-        log.info("Valuator created: {}, Login User ID: {}", valuator.getId(), valuatorLogin.getId());
+        log.info(
+                "Valuator created | valuatorId={} | loginId={}",
+                valuator.getId(),
+                valuatorLogin.getId()
+        );
 
         return mapper.toResponse(valuator);
     }
-
 
     // -------------------------------------------------------------------------
     // 2️⃣ UPDATE VALUATOR
@@ -105,15 +96,14 @@ public class ValuatorMasterServiceImpl implements ValuatorMasterService {
     public ValuatorResponse updateValuator(Long valuatorId, ValuatorRequest request) {
 
         ValuatorMaster valuator = valuatorRepo.findById(valuatorId)
-                .orElseThrow(() -> new ResourceNotFoundException("ValuatorMaster", "id", valuatorId));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("ValuatorMaster", "id", valuatorId));
 
-        AdminUser updater = getLoggedInAdmin();
+        AdminUser updater = securityUtil.getLoggedInAdmin();
 
         mapper.updateEntity(request, valuator, updater);
 
-        valuator = valuatorRepo.save(valuator);
-
-        return mapper.toResponse(valuator);
+        return mapper.toResponse(valuatorRepo.save(valuator));
     }
 
     // -------------------------------------------------------------------------
@@ -123,7 +113,8 @@ public class ValuatorMasterServiceImpl implements ValuatorMasterService {
     public ValuatorResponse getValuator(Long valuatorId) {
 
         ValuatorMaster valuator = valuatorRepo.findById(valuatorId)
-                .orElseThrow(() -> new ResourceNotFoundException("ValuatorMaster", "id", valuatorId));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("ValuatorMaster", "id", valuatorId));
 
         return mapper.toResponse(valuator);
     }
@@ -134,15 +125,17 @@ public class ValuatorMasterServiceImpl implements ValuatorMasterService {
     @Override
     public List<ValuatorResponse> getAllValuators() {
 
-        AdminUser loggedIn = getLoggedInAdmin();
+        AdminUser loggedIn = securityUtil.getLoggedInAdmin();
+
         if (loggedIn.getRole() != Role.AGENCY) {
-            throw new RuntimeException("Only agency admins can create valuators");
+            throw new RuntimeException("Only agency admins can view valuators");
         }
+
         Long agencyId = loggedIn.getAgencyId();
-        log.info("agencyId: {}", agencyId);
 
         AgencyMaster agency = agencyRepo.findById(agencyId)
-                .orElseThrow(() -> new ResourceNotFoundException("AgencyMaster", "id", agencyId));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("AgencyMaster", "id", agencyId));
 
         return valuatorRepo.findByAgency(agency)
                 .stream()
@@ -158,34 +151,39 @@ public class ValuatorMasterServiceImpl implements ValuatorMasterService {
     public void deleteValuator(Long valuatorId) {
 
         ValuatorMaster valuator = valuatorRepo.findById(valuatorId)
-                .orElseThrow(() -> new ResourceNotFoundException("ValuatorMaster", "id", valuatorId));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("ValuatorMaster", "id", valuatorId));
 
-        // delete login account as well
         if (valuator.getLoginAccount() != null) {
             adminUserRepo.delete(valuator.getLoginAccount());
         }
 
         valuatorRepo.delete(valuator);
 
-        log.info("Deleted valuator {} and login user {}", valuatorId, valuator.getLoginAccount().getId());
+        log.info(
+                "Deleted valuator | valuatorId={} | loginId={}",
+                valuatorId,
+                valuator.getLoginAccount() != null
+                        ? valuator.getLoginAccount().getId()
+                        : null
+        );
     }
 
+    // -------------------------------------------------------------------------
+    // 6️⃣ GET APPLICATIONS FOR LOGGED-IN VALUATOR
+    // -------------------------------------------------------------------------
     @Override
     public List<LoanApplicationResponse> getApplicationsForLoggedInValuator() {
 
-        String adminId = getLoggedInAdminId();
+        AdminUser loggedUser = securityUtil.getLoggedInAdmin();
 
-        AdminUser loggedUser = adminUserRepository.findById(adminId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid user"));
-
-        // 🔐 ROLE CHECK
         if (loggedUser.getRole() != Role.AGENCY_VALUATOR) {
-            throw new IllegalArgumentException("Only agency valuators can access this");
+            throw new RuntimeException("Only agency valuators can access this");
         }
 
-        // 🔥 Fetch applications assigned to this valuator
         List<LoanApplication> apps =
-                loanApplicationRepository.findApplicationsByValuatorId(adminId);
+                loanApplicationRepository
+                        .findApplicationsByValuatorId(loggedUser.getId());
 
         return apps.stream()
                 .map(app -> {
@@ -200,22 +198,26 @@ public class ValuatorMasterServiceImpl implements ValuatorMasterService {
                             .active(app.getActive())
                             .status(status)
 
-                            // Client details
                             .clientId(app.getClient() != null ? app.getClient().getId() : null)
                             .clientName(app.getClient() != null
-                                    ? app.getClient().getFirstName() + " " + app.getClient().getLastName()
+                                    ? app.getClient().getFirstName() + " " +
+                                    app.getClient().getLastName()
                                     : null)
 
-                            // Created by admin
-                            .createdByAdminId(app.getCreatedBy() != null ? app.getCreatedBy().getId() : null)
+                            .createdByAdminId(app.getCreatedBy() != null
+                                    ? app.getCreatedBy().getId()
+                                    : null)
                             .createdByName(app.getCreatedBy() != null
-                                    ? app.getCreatedBy().getFirstName() + " " + app.getCreatedBy().getLastName()
+                                    ? app.getCreatedBy().getFirstName() + " " +
+                                    app.getCreatedBy().getLastName()
                                     : null)
 
-                            // Assigned valuator
-                            .assignedToAdminId(app.getAssignedTo() != null ? app.getAssignedTo().getId() : null)
+                            .assignedToAdminId(app.getAssignedTo() != null
+                                    ? app.getAssignedTo().getId()
+                                    : null)
                             .assignedToName(app.getAssignedTo() != null
-                                    ? app.getAssignedTo().getFirstName() + " " + app.getAssignedTo().getLastName()
+                                    ? app.getAssignedTo().getFirstName() + " " +
+                                    app.getAssignedTo().getLastName()
                                     : null)
 
                             .associatedBank(app.getAssociatedBank())

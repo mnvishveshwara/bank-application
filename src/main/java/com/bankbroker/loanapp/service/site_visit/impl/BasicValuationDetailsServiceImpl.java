@@ -12,15 +12,14 @@ import com.bankbroker.loanapp.entity.site_visit.BasicValuationDetails;
 import com.bankbroker.loanapp.entity.stage.ApplicationCustomerDetails;
 import com.bankbroker.loanapp.exception.ResourceNotFoundException;
 import com.bankbroker.loanapp.mapper.site_visit.BasicValuationDetailsMapper;
-import com.bankbroker.loanapp.repository.core.AdminUserRepository;
 import com.bankbroker.loanapp.repository.core.LoanApplicationRepository;
 import com.bankbroker.loanapp.repository.site_visit.BasicValuationDetailsRepository;
 import com.bankbroker.loanapp.repository.stage.ApplicationCustomerDetailsRepository;
 import com.bankbroker.loanapp.service.core.api.ApplicationStageService;
 import com.bankbroker.loanapp.service.site_visit.api.BasicValuationDetailsService;
+import com.bankbroker.loanapp.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,18 +32,18 @@ public class BasicValuationDetailsServiceImpl
         implements BasicValuationDetailsService {
 
     private final LoanApplicationRepository loanRepo;
-    private final AdminUserRepository adminRepo;
     private final BasicValuationDetailsRepository repo;
     private final ApplicationCustomerDetailsRepository applicationCustomerDetailsRepo;
     private final BasicValuationDetailsMapper mapper;
     private final ApplicationStageService stageService;
+    private final SecurityUtil securityUtil;
 
-    private AdminUser getLoggedIn() {
-        String id = (String) SecurityContextHolder.getContext()
-                .getAuthentication().getPrincipal();
-        return adminRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Invalid logged-in user"));
-    }
+//    private AdminUser getLoggedIn() {
+//        String id = (String) SecurityContextHolder.getContext()
+//                .getAuthentication().getPrincipal();
+//        return adminRepo.findById(id)
+//                .orElseThrow(() -> new RuntimeException("Invalid logged-in user"));
+//    }
 
     // -------------------------------------------------------
     // SAVE BASIC VALUATION
@@ -55,7 +54,7 @@ public class BasicValuationDetailsServiceImpl
             String applicationId,
             BasicValuationDetailsRequest request) {
 
-        AdminUser logged = getLoggedIn();
+        AdminUser logged = securityUtil.getLoggedInAdmin();
 
         if (logged.getRole() != Role.AGENCY_VALUATOR) {
             throw new RuntimeException("Only valuators can submit site visit details");

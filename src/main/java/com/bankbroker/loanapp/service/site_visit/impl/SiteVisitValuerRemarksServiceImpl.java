@@ -1,6 +1,5 @@
 package com.bankbroker.loanapp.service.site_visit.impl;
 
-
 import com.bankbroker.loanapp.dto.site_visit.SiteVisitValuerRemarksRequest;
 import com.bankbroker.loanapp.dto.site_visit.SiteVisitValuerRemarksResponse;
 import com.bankbroker.loanapp.dto.stage.ApplicationHistoryRequest;
@@ -9,11 +8,11 @@ import com.bankbroker.loanapp.entity.core.LoanApplication;
 import com.bankbroker.loanapp.entity.enums.ApplicationHistoryStatus;
 import com.bankbroker.loanapp.entity.site_visit.SiteVisitValuerRemarks;
 import com.bankbroker.loanapp.mapper.site_visit.SiteVisitValuerRemarksMapper;
-import com.bankbroker.loanapp.repository.core.AdminUserRepository;
 import com.bankbroker.loanapp.repository.core.LoanApplicationRepository;
 import com.bankbroker.loanapp.repository.site_visit.SiteVisitValuerRemarksRepository;
 import com.bankbroker.loanapp.service.core.api.ApplicationStageService;
 import com.bankbroker.loanapp.service.site_visit.api.SiteVisitValuerRemarksService;
+import com.bankbroker.loanapp.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,15 +27,9 @@ public class SiteVisitValuerRemarksServiceImpl
 
     private final SiteVisitValuerRemarksRepository repository;
     private final LoanApplicationRepository loanApplicationRepository;
-    private final AdminUserRepository adminUserRepository;
     private final SiteVisitValuerRemarksMapper mapper;
     private final ApplicationStageService applicationStageService;
-
-
-    private AdminUser getLoggedInAdmin(String adminId) {
-        return adminUserRepository.findById(adminId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid admin user"));
-    }
+    private final SecurityUtil securityUtil;
 
     @Override
     public SiteVisitValuerRemarksResponse saveOrUpdate(
@@ -44,18 +37,10 @@ public class SiteVisitValuerRemarksServiceImpl
             SiteVisitValuerRemarksRequest request) {
 
         LoanApplication application = loanApplicationRepository.findById(applicationId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid application id"));
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Invalid application id"));
 
-        Object principal = org.springframework.security.core.context
-                .SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal();
-
-        String adminId = principal instanceof String
-                ? (String) principal
-                : ((org.springframework.security.core.userdetails.UserDetails) principal).getUsername();
-
-        AdminUser admin = getLoggedInAdmin(adminId);
+        AdminUser admin = securityUtil.getLoggedInAdmin();
 
         // ---------------- UPSERT REMARKS ----------------
         SiteVisitValuerRemarks entity =
@@ -88,13 +73,14 @@ public class SiteVisitValuerRemarksServiceImpl
         return mapper.toResponse(saved);
     }
 
-
     @Override
     @Transactional(readOnly = true)
     public SiteVisitValuerRemarksResponse getByApplicationId(String applicationId) {
 
-        SiteVisitValuerRemarks entity = repository.findByApplication_Id(applicationId)
-                .orElseThrow(() -> new IllegalArgumentException("Valuer remarks not found"));
+        SiteVisitValuerRemarks entity =
+                repository.findByApplication_Id(applicationId)
+                        .orElseThrow(() ->
+                                new IllegalArgumentException("Valuer remarks not found"));
 
         return mapper.toResponse(entity);
     }

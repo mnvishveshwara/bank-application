@@ -1,0 +1,213 @@
+Testing Order:
+1. Technical → Plot
+2. Technical → Land (+ images)
+3. Technical → BUA
+4. Technical → SBUA
+5. Technical → Additional
+6. Property Value → Land
+7. Property Value → Amenities
+8. Property Value → Final Valuation
+
+
+
+1. Technical → Plot
+
+POST /api/applications/{applicationId}/site-visit/technical/plot
+GET  /api/applications/{applicationId}/site-visit/technical/plot
+
+Body:
+{
+  "propertyType": "Residential",
+  "eastAsPerSiteVisit": "Road",
+  "eastAsPerDocument": "Road",
+  "southAsPerSiteVisit": "House",
+  "southAsPerDocument": "House",
+  "westAsPerSiteVisit": "Open Plot",
+  "westAsPerDocument": "Open Plot",
+  "northAsPerSiteVisit": "Park",
+  "northAsPerDocument": "Park"
+}
+
+
+
+2. Technical → Land
+
+POST /api/applications/{applicationId}/site-visit/technical/land
+GET  /api/applications/{applicationId}/site-visit/technical/land
+
+Body:
+{
+  "landAreaAsPerActual": 1200,
+  "landAreaAsPerDocument": 1200,
+  "landAreaAsPerLayoutPlan": 1200,
+  "holdingType": "Freehold"
+}
+
+
+POST /api/applications/{applicationId}/site-visit/technical/land/images
+
+Body:
+| Key   | Type | Value     |
+| ----- | ---- | --------- |
+| files | File | land1.jpg |
+| files | File | land2.png |
+
+
+3. Technical → BUA (Dynamic Floors)
+
+POST /api/applications/{applicationId}/site-visit/technical/bua
+GET  /api/applications/{applicationId}/site-visit/technical/bua
+
+Body:
+{
+  "basements": 1,
+  "floors": 3,
+  "nonRcc": 1,
+  "levels": [
+    {
+      "levelType": "BASEMENT",
+      "levelOrder": 0,
+      "areaActual": 1200,
+      "areaDocument": 1200,
+      "areaApproved": 1200
+    },
+    {
+      "levelType": "GROUND_FLOOR",
+      "levelOrder": 1,
+      "areaActual": 1100,
+      "areaDocument": 1100,
+      "areaApproved": 1100
+    },
+    {
+      "levelType": "FIRST_FLOOR",
+      "levelOrder": 2,
+      "areaActual": 1000,
+      "areaDocument": 1000,
+      "areaApproved": 1000
+    },
+    {
+      "levelType": "NON_RCC",
+      "levelOrder": 3,
+      "areaActual": 400,
+      "areaDocument": 400,
+      "areaApproved": 400
+    }
+  ]
+}
+
+
+4. Technical → SBUA
+
+POST /api/applications/{applicationId}/site-visit/technical/sbua
+GET  /api/applications/{applicationId}/site-visit/technical/sbua
+
+Body:
+{
+  "sbuaAsPerActual": 2500,
+  "sbuaAsPerDocument": 2500,
+  "sbuaAsPerApprovedPlan": 2500
+}
+
+
+5. Technical → Additional
+
+POST /api/applications/{applicationId}/site-visit/technical/additional
+GET  /api/applications/{applicationId}/site-visit/technical/additional
+
+Body:
+{
+  "riskOfDemolition": "NO",
+  "constructionProgressPercent": 60,
+  "constructionProgressRemarks": "Second floor slab completed",
+  "recommendedFundingPercent": 70,
+  "ageOfProperty": 5,
+  "residualAgeOfProperty": 45,
+  "documentType": "Sale Deed",
+  "inFavourOf": "Applicant Name",
+  "documentExecutedOn": "2020-06-15",
+  "documentNumber": "SD-2020-9988",
+  "reraDetails": "RERA123",
+  "marketFeedback": "Good demand",
+  "developmentInVicinityPercent": 80,
+  "earlierValuationDone": true,
+  "negativeAreaAsPerLocalNorms": false,
+  "demolitionNotification": false,
+  "communitySensitivity": "Low",
+  "municipalNotification": "None"
+}
+
+
+6. Property Value → Land
+
+POST /api/applications/{applicationId}/property-valuation/land
+GET  /api/applications/{applicationId}/property-valuation/land
+
+Body:
+{
+  "landAreaAsPerActual": 1200,
+  "landAreaAsPerDocument": 1150,
+  "landAreaAsPerLayoutPlan": 1180,
+  "governmentRatePerSqFt": 3500,
+  "considerationRatePerSqFt": 4200,
+  "fairMarketValueActual": 5200000,
+  "fairMarketValueDocument": 5000000,
+  "fairMarketValueLayout": 5100000
+}
+
+7. Property Value → Amenities
+
+POST /api/applications/{applicationId}/property-valuation/amenities
+GET  /api/applications/{applicationId}/property-valuation/amenities
+
+
+POST Body:
+{
+  "items": [
+    {
+      "amenityCategory": "Swimming Pool",
+      "amenityRating": "3 Star",
+      "amenityImpact": "Low",
+      "amenityValue": 150000
+    },
+    {
+      "amenityCategory": "Gym",
+      "amenityRating": "4 Star",
+      "amenityImpact": "Medium",
+      "amenityValue": 250000
+    }
+  ]
+}
+
+
+8. Property Value → Final Valuation
+
+
+POST /api/applications/{applicationId}/property-valuation/final
+GET  /api/applications/{applicationId}/property-valuation/final
+
+
+POST Body:
+
+{
+  "fmvOnDateActual": 8500000,
+  "fmvOnDateDocument": 8300000,
+  "fmvOnDateLayout": 8400000,
+
+  "fmvOnCompletionActual": 9200000,
+  "fmvOnCompletionDocument": 9000000,
+  "fmvOnCompletionLayout": 9100000,
+
+  "distressedValueActual": 7000000,
+  "distressedValueDocument": 6900000,
+  "distressedValueLayout": 6950000,
+
+  "guidelineValueActual": 7800000,
+  "guidelineValueDocument": 7700000,
+  "guidelineValueLayout": 7750000,
+
+  "insuranceValueActual": 6000000,
+  "insuranceValueDocument": 6000000,
+  "insuranceValueLayout": 6000000,
+
+  "finalValueConsidered": 7800000
+}
