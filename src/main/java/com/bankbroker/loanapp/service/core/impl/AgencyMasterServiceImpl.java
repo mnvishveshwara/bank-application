@@ -230,11 +230,6 @@ public class AgencyMasterServiceImpl implements AgencyMasterService {
 
     }
 
-//    private String getLoggedInAdminId() {
-//        return SecurityContextHolder.getContext().getAuthentication().getName();
-//    }
-
-
     @Override
     @Transactional
     public ApplicationHistoryResponse updateApplicationStatus(
@@ -269,7 +264,7 @@ public class AgencyMasterServiceImpl implements AgencyMasterService {
         if (currentStatus != ApplicationHistoryStatus.SITE_VISIT_COMPLETED
                 && currentStatus != ApplicationHistoryStatus.REVIEWING_APPLICATION) {
             throw new IllegalStateException(
-                    "Application must be in SITE_VISIT_COMPLETED or REVIEWING state");
+                    "Application must be in Site Visit Completed or REVIEWING state");
         }
 
         // 🚫 Prevent invalid final transitions

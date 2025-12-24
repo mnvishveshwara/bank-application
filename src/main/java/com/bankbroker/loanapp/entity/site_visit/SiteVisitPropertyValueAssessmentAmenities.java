@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -48,7 +49,8 @@ public class SiteVisitPropertyValueAssessmentAmenities {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private List<SiteVisitPropertyValueAssessmentAmenityItem> items;
+    @Builder.Default
+    private List<SiteVisitPropertyValueAssessmentAmenityItem> items= new ArrayList<>();
 
     // -------------------------------------------------
     // 🧾 AUDIT

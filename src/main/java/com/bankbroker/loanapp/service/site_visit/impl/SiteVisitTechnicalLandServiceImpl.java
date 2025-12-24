@@ -110,7 +110,7 @@ public class SiteVisitTechnicalLandServiceImpl
             String filePath = fileStorageService.store(
                     file,
                     applicationId,
-                    "TECHNICAL_LAND",
+                    "site-visit/techinical-land",
                     fileName
             );
 
