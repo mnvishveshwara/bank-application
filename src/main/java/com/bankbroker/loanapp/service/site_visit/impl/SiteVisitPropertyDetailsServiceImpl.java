@@ -58,6 +58,50 @@ public class SiteVisitPropertyDetailsServiceImpl
     }
 
     @Override
+    public SiteVisitPropertyDetailsResponse getPropertyDetails(String applicationId) {
+
+        LoanApplication application = loanRepo.findById(applicationId)
+                .orElseThrow(() -> new RuntimeException("Application not found"));
+
+        SiteVisitPropertyDetails entity =
+                detailsRepo.findByApplication(application)
+                        .orElseThrow(() -> new RuntimeException("Property details not found"));
+        return SiteVisitPropertyDetailsResponse.builder()
+                .applicationId(application.getId())
+
+                // Postal Address
+                .postalDoorNo(entity.getPostalDoorNo())
+                .postalBuildingName(entity.getPostalBuildingName())
+                .postalStreetLine1(entity.getPostalStreetLine1())
+                .postalStreetLine2(entity.getPostalStreetLine2())
+                .postalPinCode(entity.getPostalPinCode())
+                .postalCity(entity.getPostalCity())
+                .postalState(entity.getPostalState())
+
+                // Document Address
+                .documentDoorNo(entity.getDocumentDoorNo())
+                .documentBuildingName(entity.getDocumentBuildingName())
+                .documentStreetLine1(entity.getDocumentStreetLine1())
+                .documentStreetLine2(entity.getDocumentStreetLine2())
+                .documentPinCode(entity.getDocumentPinCode())
+                .documentCity(entity.getDocumentCity())
+                .documentState(entity.getDocumentState())
+
+                // Geo Details
+                .latitude(entity.getLatitude())
+                .longitude(entity.getLongitude())
+                .distanceFromCityCentre(entity.getDistanceFromCityCentre())
+
+                // Property Info
+                .propertyType(entity.getPropertyType())
+                .propertySubType(entity.getPropertySubType())
+                .jurisdiction(entity.getJurisdiction())
+                .nearbyLandmark(entity.getNearbyLandmark())
+
+                .build();
+    }
+
+    @Override
     public SiteVisitPropertyBoundaryDetailsResponse savePropertyBoundaryDetails(
             String applicationId,
             SiteVisitPropertyBoundaryDetailsRequest request) {
@@ -96,5 +140,43 @@ public class SiteVisitPropertyDetailsServiceImpl
                 .currentZoning(entity.getCurrentZoning())
                 .build();
     }
+
+    @Override
+    public SiteVisitPropertyBoundaryDetailsResponse getPropertyBoundaryDetails(String applicationId) {
+
+        LoanApplication application = loanRepo.findById(applicationId)
+                .orElseThrow(() -> new RuntimeException("Application not found"));
+
+        SiteVisitPropertyBoundaryDetails entity =
+                boundaryRepo.findByApplication(application)
+                        .orElseThrow(() -> new RuntimeException("Property boundary details not found"));
+
+        return SiteVisitPropertyBoundaryDetailsResponse.builder()
+                .applicationId(application.getId())
+                .propertyFacing(entity.getPropertyFacing())
+
+                .eastAsPerSiteVisit(entity.getEastAsPerSiteVisit())
+                .eastAsPerLegalDocument(entity.getEastAsPerLegalDocument())
+                .eastMatch(entity.getEastMatch())
+
+                .southAsPerSiteVisit(entity.getSouthAsPerSiteVisit())
+                .southAsPerLegalDocument(entity.getSouthAsPerLegalDocument())
+                .southMatch(entity.getSouthMatch())
+
+                .westAsPerSiteVisit(entity.getWestAsPerSiteVisit())
+                .westAsPerLegalDocument(entity.getWestAsPerLegalDocument())
+                .westMatch(entity.getWestMatch())
+
+                .northAsPerSiteVisit(entity.getNorthAsPerSiteVisit())
+                .northAsPerLegalDocument(entity.getNorthAsPerLegalDocument())
+                .northMatch(entity.getNorthMatch())
+
+                .boundaryMatching(entity.getBoundaryMatching())
+                .earthquakeResistant(entity.getEarthquakeResistant())
+                .propertyIdentification(entity.getPropertyIdentification())
+                .currentZoning(entity.getCurrentZoning())
+                .build();
+    }
+
 }
 

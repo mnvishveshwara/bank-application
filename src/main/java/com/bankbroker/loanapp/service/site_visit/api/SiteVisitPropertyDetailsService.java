@@ -12,8 +12,14 @@ public interface SiteVisitPropertyDetailsService {
             SiteVisitPropertyDetailsRequest request
     );
 
+    SiteVisitPropertyDetailsResponse getPropertyDetails(
+            String applicationId
+    );
+
     SiteVisitPropertyBoundaryDetailsResponse savePropertyBoundaryDetails(
             String applicationId,
             SiteVisitPropertyBoundaryDetailsRequest request
     );
+
+    SiteVisitPropertyBoundaryDetailsResponse getPropertyBoundaryDetails(String applicationId);
 }

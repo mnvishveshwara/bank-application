@@ -1,6 +1,7 @@
 
 package com.bankbroker.loanapp.controller.core.api;
 
+import com.bankbroker.loanapp.dto.master.AgencyMasterResponse;
 import com.bankbroker.loanapp.dto.stage.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,7 +53,7 @@ public interface ApplicationStageControllerApi {
             @RequestBody ApplicationAgencyAssignmentRequest request);
 
     @GetMapping("/{applicationId}/agency-assignment")
-    ResponseEntity<ApplicationAgencyAssignmentResponse> getAgencyAssignment(
+    ResponseEntity<AgencyMasterResponse> getAgencyAssignment(
             @PathVariable String applicationId);
 
     // 🔹 Summary

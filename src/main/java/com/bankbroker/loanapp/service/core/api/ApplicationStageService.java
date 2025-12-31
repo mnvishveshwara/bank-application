@@ -1,5 +1,6 @@
 package com.bankbroker.loanapp.service.core.api;
 
+import com.bankbroker.loanapp.dto.master.AgencyMasterResponse;
 import com.bankbroker.loanapp.dto.stage.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,7 +31,7 @@ ApplicationDocumentDetailsResponse uploadDocuments(
 
     ApplicationAgencyAssignmentResponse saveAgencyAssignment(String applicationId,
                                                              ApplicationAgencyAssignmentRequest request);
-    ApplicationAgencyAssignmentResponse getAgencyAssignment(String applicationId);
+    AgencyMasterResponse getAgencyAssignment(String applicationId);
 
     ApplicationSummaryResponse saveSummary(String applicationId,
                                            ApplicationSummaryRequest request);

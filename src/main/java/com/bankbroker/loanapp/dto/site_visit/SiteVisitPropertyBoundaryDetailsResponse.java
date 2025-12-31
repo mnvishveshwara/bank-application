@@ -5,7 +5,25 @@ import lombok.*;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class SiteVisitPropertyBoundaryDetailsResponse {
     private String applicationId;
+
     private String propertyFacing;
+
+    private String eastAsPerSiteVisit;
+    private String eastAsPerLegalDocument;
+    private Boolean eastMatch;
+
+    private String southAsPerSiteVisit;
+    private String southAsPerLegalDocument;
+    private Boolean southMatch;
+
+    private String westAsPerSiteVisit;
+    private String westAsPerLegalDocument;
+    private Boolean westMatch;
+
+    private String northAsPerSiteVisit;
+    private String northAsPerLegalDocument;
+    private Boolean northMatch;
+
     private Boolean boundaryMatching;
     private Boolean earthquakeResistant;
     private Boolean propertyIdentification;

@@ -1,0 +1,4 @@
+1st Step of Application
+Get Assign Agency Details API
+GET {{baseUrl}}/api/applications/{{applicationId}}/site-visit/property-details
+GET {{baseUrl}}/api/applications/{{applicationId}}/site-visit/property-boundary-details

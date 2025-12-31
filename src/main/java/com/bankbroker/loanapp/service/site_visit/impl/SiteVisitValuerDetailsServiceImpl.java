@@ -10,10 +10,12 @@ import com.bankbroker.loanapp.repository.site_visit.SiteVisitValuerDetailsReposi
 import com.bankbroker.loanapp.service.site_visit.api.SiteVisitValuerDetailsService;
 import com.bankbroker.loanapp.service.storage.FileStorageService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -40,10 +42,10 @@ public class SiteVisitValuerDetailsServiceImpl
 
         // ---------------- Organisation Seal ----------------
         MultipartFile seal = request.getOrganisationSeal();
+        log.info("Uploading site visit valuer details for application id {}", seal.getOriginalFilename());
         if (seal != null && !seal.isEmpty()) {
 
-            String sealFileName = "organisation-seal"
-                    + fileStorageService.getExtension(seal.getOriginalFilename());
+            String sealFileName = seal.getOriginalFilename();
 
             String sealPath = fileStorageService.store(
                     seal,
@@ -62,8 +64,8 @@ public class SiteVisitValuerDetailsServiceImpl
         MultipartFile signature = request.getValuerSignature();
         if (signature != null && !signature.isEmpty()) {
 
-            String signatureFileName = "valuer-signature"
-                    + fileStorageService.getExtension(signature.getOriginalFilename());
+            log.info("Storing valuer signature for application idcdecec {}", signature.getOriginalFilename());
+            String signatureFileName = signature.getOriginalFilename();
 
             String signaturePath = fileStorageService.store(
                     signature,

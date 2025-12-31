@@ -6,10 +6,7 @@ import com.bankbroker.loanapp.dto.site_visit.SiteVisitPropertyDetailsRequest;
 import com.bankbroker.loanapp.dto.site_visit.SiteVisitPropertyDetailsResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/api/applications")
 public interface SiteVisitPropertyDetailsControllerApi {
@@ -22,9 +19,21 @@ public interface SiteVisitPropertyDetailsControllerApi {
     );
 
     @PreAuthorize("hasRole('AGENCY_VALUATOR')")
+    @GetMapping("/{applicationId}/site-visit/property-details")
+    ResponseEntity<SiteVisitPropertyDetailsResponse> getPropertyDetails(
+            @PathVariable String applicationId
+    );
+
+    @PreAuthorize("hasRole('AGENCY_VALUATOR')")
     @PostMapping("/{applicationId}/site-visit/property-boundary-details")
     ResponseEntity<SiteVisitPropertyBoundaryDetailsResponse> savePropertyBoundaryDetails(
             @PathVariable String applicationId,
             @RequestBody SiteVisitPropertyBoundaryDetailsRequest request
+    );
+
+    @PreAuthorize("hasRole('AGENCY_VALUATOR')")
+    @GetMapping ("/{applicationId}/site-visit/property-boundary-details")
+    ResponseEntity<SiteVisitPropertyBoundaryDetailsResponse> getPropertyBoundaryDetails(
+            @PathVariable String applicationId
     );
 }

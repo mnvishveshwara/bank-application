@@ -28,12 +28,26 @@ public class SiteVisitPropertyDetailsControllerImpl
     }
 
     @Override
+    public ResponseEntity<SiteVisitPropertyDetailsResponse> getPropertyDetails(String applicationId) {
+        return ResponseEntity.ok(
+                service.getPropertyDetails(applicationId)
+        );
+    }
+
+    @Override
     public ResponseEntity<SiteVisitPropertyBoundaryDetailsResponse> savePropertyBoundaryDetails(
             String applicationId,
             SiteVisitPropertyBoundaryDetailsRequest request) {
 
         return ResponseEntity.ok(
                 service.savePropertyBoundaryDetails(applicationId, request)
+        );
+    }
+
+    @Override
+    public ResponseEntity<SiteVisitPropertyBoundaryDetailsResponse> getPropertyBoundaryDetails(String applicationId) {
+        return ResponseEntity.ok(
+                service.getPropertyBoundaryDetails(applicationId)
         );
     }
 }

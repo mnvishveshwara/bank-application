@@ -1,6 +1,7 @@
 package com.bankbroker.loanapp.controller.core.impl;
 
 import com.bankbroker.loanapp.controller.core.api.ApplicationStageControllerApi;
+import com.bankbroker.loanapp.dto.master.AgencyMasterResponse;
 import com.bankbroker.loanapp.dto.stage.*;
 import com.bankbroker.loanapp.service.core.api.ApplicationStageService;
 import lombok.RequiredArgsConstructor;
@@ -90,7 +91,7 @@ public class ApplicationStageController implements ApplicationStageControllerApi
     }
 
     @Override
-    public ResponseEntity<ApplicationAgencyAssignmentResponse> getAgencyAssignment(
+    public ResponseEntity<AgencyMasterResponse> getAgencyAssignment(
             @PathVariable String applicationId) {
 
         return ResponseEntity.ok(applicationStageService.getAgencyAssignment(applicationId));
