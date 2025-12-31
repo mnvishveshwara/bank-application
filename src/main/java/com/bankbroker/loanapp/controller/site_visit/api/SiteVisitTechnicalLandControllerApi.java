@@ -23,7 +23,7 @@ public interface SiteVisitTechnicalLandControllerApi {
     );
 
     @PostMapping(value = "/images", consumes = "multipart/form-data")
-    ResponseEntity<Void> uploadImages(
+    ResponseEntity<String> uploadImages(
             @PathVariable String applicationId,
             @RequestPart("files") List<MultipartFile> files
     );

@@ -28,8 +28,68 @@ public class SiteVisitPropertyValueAssessmentAmenitiesServiceImpl
     private final SiteVisitPropertyValueAssessmentAmenityItemMapper itemMapper;
     private final SiteVisitPropertyValueAssessmentAmenitiesMapper mapper;
     private final SecurityUtil securityUtil;
+//
+//    @Override
+//    public SiteVisitPropertyValueAssessmentAmenitiesResponse save(
+//            String applicationId,
+//            SiteVisitPropertyValueAssessmentAmenitiesRequest request) {
+//
+//        AdminUser user = securityUtil.getLoggedInAdmin();
+//
+//        LoanApplication app = loanRepo.findById(applicationId)
+//                .orElseThrow(() -> new RuntimeException("Application not found"));
+//
+//        SiteVisitPropertyValueAssessmentAmenities amenities =
+//                amenitiesRepo.findByApplication(app)
+//                        .orElseGet(() ->
+//                                SiteVisitPropertyValueAssessmentAmenities.builder()
+//                                        .application(app)
+//                                        .createdBy(user)
+//                                        .createdDate(LocalDateTime.now())
+//                                        .build()
+//                        );
+//
+//        amenities.setUpdatedBy(user);
+//        amenities.setUpdatedDate(LocalDateTime.now());
+//
+//        // 🔁 Rebuild dynamic items
+//        amenities.getItems().clear();
+//
+//        List<SiteVisitPropertyValueAssessmentAmenityItem> items = new ArrayList<>();
+//        double total = 0;
+//
+//        for (SiteVisitPropertyValueAssessmentAmenityItemRequest ir : request.getItems()) {
+//
+//            SiteVisitPropertyValueAssessmentAmenityItem item =
+//                    itemMapper.toEntity(ir);
+//
+//            item.setAmenities(amenities);
+//            total += ir.getAmenityValue() == null ? 0 : ir.getAmenityValue();
+//
+//            items.add(item);
+//        }
+//
+//        amenities.setItems(items);
+//        amenities.setTotalAmenitiesValue(total);
+//
+//        SiteVisitPropertyValueAssessmentAmenities saved =
+//                amenitiesRepo.save(amenities);
+//
+//        SiteVisitPropertyValueAssessmentAmenitiesResponse response =
+//                mapper.toResponse(saved);
+//
+//        response.setItems(
+//                saved.getItems()
+//                        .stream()
+//                        .map(itemMapper::toResponse)
+//                        .toList()
+//        );
+//
+//        return response;
+//    }
 
     @Override
+    @Transactional
     public SiteVisitPropertyValueAssessmentAmenitiesResponse save(
             String applicationId,
             SiteVisitPropertyValueAssessmentAmenitiesRequest request) {
@@ -46,16 +106,16 @@ public class SiteVisitPropertyValueAssessmentAmenitiesServiceImpl
                                         .application(app)
                                         .createdBy(user)
                                         .createdDate(LocalDateTime.now())
+                                        .items(new ArrayList<>()) // IMPORTANT
                                         .build()
                         );
 
         amenities.setUpdatedBy(user);
         amenities.setUpdatedDate(LocalDateTime.now());
 
-        // 🔁 Rebuild dynamic items
+        // 🔁 Clear existing collection (DO NOT replace it)
         amenities.getItems().clear();
 
-        List<SiteVisitPropertyValueAssessmentAmenityItem> items = new ArrayList<>();
         double total = 0;
 
         for (SiteVisitPropertyValueAssessmentAmenityItemRequest ir : request.getItems()) {
@@ -63,13 +123,15 @@ public class SiteVisitPropertyValueAssessmentAmenitiesServiceImpl
             SiteVisitPropertyValueAssessmentAmenityItem item =
                     itemMapper.toEntity(ir);
 
+            // Owning side MUST be set
             item.setAmenities(amenities);
+
             total += ir.getAmenityValue() == null ? 0 : ir.getAmenityValue();
 
-            items.add(item);
+            // Add to managed collection
+            amenities.getItems().add(item);
         }
 
-        amenities.setItems(items);
         amenities.setTotalAmenitiesValue(total);
 
         SiteVisitPropertyValueAssessmentAmenities saved =
@@ -87,6 +149,7 @@ public class SiteVisitPropertyValueAssessmentAmenitiesServiceImpl
 
         return response;
     }
+
 
     @Override
     @Transactional(readOnly = true)

@@ -15,6 +15,8 @@ import com.bankbroker.loanapp.service.site_visit.api.SiteVisitTechnicalLandServi
 import com.bankbroker.loanapp.service.storage.FileStorageService;
 import com.bankbroker.loanapp.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -82,10 +85,10 @@ public class SiteVisitTechnicalLandServiceImpl
     }
 
     @Override
-    public void uploadImages(String applicationId, List<MultipartFile> files) {
+    public ResponseEntity<String> uploadImages(String applicationId, List<MultipartFile> files) {
 
         if (files == null || files.isEmpty()) {
-            return;
+            return ResponseEntity.badRequest().body("No files to upload");
         }
 
         AdminUser user = securityUtil.getLoggedInAdmin();
@@ -103,8 +106,10 @@ public class SiteVisitTechnicalLandServiceImpl
             if (file == null || file.isEmpty()) continue;
 
             // 🔹 Generate unique filename
-            String extension = fileStorageService.getExtension(file.getOriginalFilename());
-            String fileName = System.currentTimeMillis() + extension;
+//            String extension = fileStorageService.getExtension(file.getOriginalFilename());
+
+
+            String fileName = file.getOriginalFilename();
 
             // 🔹 Store file using common service
             String filePath = fileStorageService.store(
@@ -128,6 +133,7 @@ public class SiteVisitTechnicalLandServiceImpl
 
             imageRepo.save(image);
         }
+        return ResponseEntity.ok("Images uploaded successfully");
     }
 
     private SiteVisitTechnicalLandDetailsResponse buildResponse(

@@ -4,12 +4,14 @@ import com.bankbroker.loanapp.dto.site_visit.SiteVisitTechnicalLandDetailsRespon
 import com.bankbroker.loanapp.dto.site_visit.SiteVisitTechnicalLandRequest;
 import com.bankbroker.loanapp.service.site_visit.api.SiteVisitTechnicalLandService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class SiteVisitTechnicalLandControllerImpl
@@ -33,11 +35,20 @@ public class SiteVisitTechnicalLandControllerImpl
     }
 
     @Override
-    public ResponseEntity<Void> uploadImages(
+    public ResponseEntity<String> uploadImages(
             String applicationId,
             List<MultipartFile> files) {
 
+        if (files == null || files.isEmpty()) {
+            return ResponseEntity.badRequest()
+                    .body("No files provided for upload");
+        }
+
+        log.info("Uploading {} files for applicationId: {}", files.size(), applicationId);
+
         service.uploadImages(applicationId, files);
-        return ResponseEntity.ok().build();
+
+        return ResponseEntity.ok("Images uploaded successfully");
     }
+
 }
