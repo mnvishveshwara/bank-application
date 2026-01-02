@@ -69,6 +69,8 @@ public class ApplicationCustomerDetails {
 
     private String remarks;
 
+    private String bank;
+
     @CreatedDate
     @Column(name = "created_date",  updatable = false)
     private LocalDateTime createdDate;

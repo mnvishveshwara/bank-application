@@ -314,7 +314,7 @@ public ApplicationAgencyAssignmentResponse saveAgencyAssignment(
 
         LoanApplication app = getApplicationOrThrow(applicationId);
 
-        // ✅ SINGLE source of truth for logged-in admin
+        //  SINGLE source of truth for logged-in admin
         AdminUser reviewer = securityUtil.getLoggedInAdmin();
 
         ApplicationSummary entity =
@@ -330,7 +330,7 @@ public ApplicationAgencyAssignmentResponse saveAgencyAssignment(
 
         summaryRepo.save(entity);
 
-        // ✅ Update stage using same logged-in admin
+        //  Update stage using same logged-in admin
         updateStage(app, ApplicationStageType.APPLICATION_APPLIED, reviewer);
 
         return mapSummaryToResponse(entity);
@@ -396,7 +396,7 @@ public ApplicationAgencyAssignmentResponse saveAgencyAssignment(
                 .propertyReferenceNo(e.getPropertyReferenceNo())
                 .propertyType(e.getPropertyType())
                 .propertySubType(e.getPropertySubType())
-
+                .bank(e.getBank())
                 .loanType(e.getLoanType())
                 .remarks(e.getRemarks())
                 .createdDate(e.getCreatedDate())
@@ -450,6 +450,10 @@ private void updateStage(LoanApplication app, ApplicationStageType stage, AdminU
     current.setUpdatedBy(admin);
     current.setRemark("Updated to: " + stage.name());
     current.setUpdatedDate(LocalDateTime.now());
+    if (current.getCreatedDate() == null) {
+        current.setCreatedDate(LocalDateTime.now());
+        current.setCreatedBy(admin);
+    }
 
     applicationStageCurrentRepository.save(current);
 
@@ -477,53 +481,96 @@ private void updateStage(LoanApplication app, ApplicationStageType stage, AdminU
             ApplicationCustomerDetailsRequest request) {
 
         AdminUser createdBy = securityUtil.getLoggedInAdmin();
+        LoanApplication application;
 
-        String applicationId = IdGenerator.generateId();
+        // ===============================
+        // 1️⃣ CREATE OR FETCH APPLICATION
+        // ===============================
+        if (request.getApplicationId() == null) {
 
-        LoanApplication app = LoanApplication.builder()
-                .id(applicationId)
-                .createdBy(createdBy)
-                .createdDate(LocalDateTime.now())
-                .updatedDate(LocalDateTime.now())
-                .active(true)
-                .associatedBank("HDFC")
-                .build();
+            application = LoanApplication.builder()
+                    .id(IdGenerator.generateId())
+                    .createdBy(createdBy)
+                    .createdDate(LocalDateTime.now())
+                    .updatedDate(LocalDateTime.now())
+                    .active(true)
+                    .associatedBank("HDFC")
+                    .build();
 
-        loanApplicationRepository.save(app);
+            application = loanApplicationRepository.save(application);
 
+        } else {
+
+            application = loanApplicationRepository.findById(request.getApplicationId())
+                    .orElseThrow(() ->
+                            new RuntimeException("Application not found: " + request.getApplicationId()));
+        }
+
+        // ===============================
+        // 2️⃣ CREATE OR UPDATE CUSTOMER
+        // ===============================
         Customer customer = customerRepo.findByEmail(request.getEmail())
                 .orElseGet(() -> {
-                    String rawPassword = generateCustomerPassword(
-                            request.getFirstName(),
-                            request.getPrimaryContactNumber());
-
-                    Customer c = Customer.builder()
+                    Customer newCustomer = Customer.builder()
                             .id(IdGenerator.generateId())
                             .email(request.getEmail())
-                            .password(passwordEncoder.encode(rawPassword))
+                            .password(passwordEncoder.encode(
+                                    generateCustomerPassword(
+                                            request.getFirstName(),
+                                            request.getPrimaryContactNumber())))
                             .firstName(request.getFirstName())
                             .lastName(request.getLastName())
                             .phoneNumber(request.getPrimaryContactNumber())
                             .role(Role.USER)
-                            .bank(request.getLeadSource())
+                            .bank(request.getBank())
                             .createdDate(LocalDateTime.now())
                             .build();
-
-                    return customerRepo.save(c);
+                    return customerRepo.save(newCustomer);
                 });
 
-        app.setClient(customer);
-        app.setAssociatedBank(customer.getBank());
-        loanApplicationRepository.save(app);
+        // Update existing customer fields
+        customer.setFirstName(request.getFirstName());
+        customer.setLastName(request.getLastName());
+        customer.setPhoneNumber(request.getPrimaryContactNumber());
+        customer.setBank(request.getBank());
+        customerRepo.save(customer);
 
-        ApplicationCustomerDetails details = customerMapper.toEntity(request);
-        details.setApplication(app);
+        // ===============================
+        // 3️⃣ LINK CUSTOMER TO APPLICATION
+        // ===============================
+        application.setClient(customer);
+        application.setUpdatedDate(LocalDateTime.now());
+        loanApplicationRepository.save(application);
+
+        // ===============================
+        // 4️⃣ SAVE CUSTOMER DETAILS
+        // ===============================
+        ApplicationCustomerDetails details =
+                customerDetailsRepo.findByApplication(application)
+                        .orElseGet(ApplicationCustomerDetails::new);
+
+        details.setApplication(application);
+        details.setFirstName(request.getFirstName());
+        details.setLastName(request.getLastName());
+        details.setPrimaryContactNumber(request.getPrimaryContactNumber());
+        details.setSecondaryContactNumber(request.getSecondaryContactNumber());
+        details.setEmail(request.getEmail());
+        details.setPropertyReferenceNo(request.getPropertyReferenceNo());
+        details.setPropertyType(request.getPropertyType());
+        details.setLoanType(request.getLoanType());
+        details.setRemarks(request.getRemarks());
 
         customerDetailsRepo.save(details);
-        updateStage(app, ApplicationStageType.CUSTOMER_DETAILS, createdBy);
+
+        // ===============================
+        // 5️⃣ UPDATE STAGE
+        // ===============================
+        updateStage(application, ApplicationStageType.CUSTOMER_DETAILS, createdBy);
 
         return customerMapper.toResponse(details);
     }
+
+
 
     private AgencyMasterResponse toResponse(AgencyMaster a) {
         return AgencyMasterResponse.builder()

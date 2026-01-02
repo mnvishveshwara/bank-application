@@ -11,6 +11,7 @@ public class ApplicationCustomerDetailsRequest {
 
     private String spockName;
     private String leadSource;
+    private  String applicationId;
 
     private String firstName;
     private String middleName;
@@ -22,7 +23,7 @@ public class ApplicationCustomerDetailsRequest {
     private String propertyReferenceNo;
     private String propertyType;
     private String propertySubType;
-
+    private String bank;
     private String loanType;
     private String remarks;
 }

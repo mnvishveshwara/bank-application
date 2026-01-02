@@ -27,6 +27,10 @@ public class ApplicationStageCurrent {
     @Column(name = "stage", nullable = false)
     private ApplicationStageType stage;
 
+
+    @Column(name = "created_date")
+    private LocalDateTime createdDate;
+
     @Column(name = "updated_date", nullable = false)
     private LocalDateTime updatedDate;
 
@@ -36,4 +40,8 @@ public class ApplicationStageCurrent {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "updated_by_id", nullable = false)
     private AdminUser updatedBy;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by_id")
+    private AdminUser createdBy;
 }

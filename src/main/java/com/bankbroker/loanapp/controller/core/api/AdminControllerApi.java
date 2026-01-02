@@ -2,6 +2,7 @@ package com.bankbroker.loanapp.controller.core.api;
 
 import com.bankbroker.loanapp.dto.admin.AdminRequest;
 import com.bankbroker.loanapp.dto.admin.AdminResponse;
+import com.bankbroker.loanapp.dto.application.LoanApplicationResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,4 +26,10 @@ public interface AdminControllerApi {
 
     @DeleteMapping("/{id}")
     ResponseEntity<Void> deleteAdmin(@PathVariable String id);
+
+    @GetMapping("/incomplete-applications")
+    ResponseEntity<List<LoanApplicationResponse>> getIncompleteApplication();
+
+    @GetMapping("/complete-applications")
+    ResponseEntity<List<LoanApplicationResponse>> getCompleteApplication();
 }

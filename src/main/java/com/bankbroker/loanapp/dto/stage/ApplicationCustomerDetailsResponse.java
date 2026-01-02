@@ -28,7 +28,7 @@ public class ApplicationCustomerDetailsResponse {
     private String propertyReferenceNo;
     private String propertyType;
     private String propertySubType;
-
+    private String bank;
     private String loanType;
     private String remarks;
     private LocalDateTime createdDate;

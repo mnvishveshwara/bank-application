@@ -3,6 +3,7 @@ package com.bankbroker.loanapp.controller.core.impl;
 import com.bankbroker.loanapp.controller.core.api.AdminControllerApi;
 import com.bankbroker.loanapp.dto.admin.AdminRequest;
 import com.bankbroker.loanapp.dto.admin.AdminResponse;
+import com.bankbroker.loanapp.dto.application.LoanApplicationResponse;
 import com.bankbroker.loanapp.service.core.api.AdminUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -40,5 +41,15 @@ public class AdminController implements AdminControllerApi {
     public ResponseEntity<Void> deleteAdmin(String id) {
         adminUserService.deleteAdmin(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    public ResponseEntity<List<LoanApplicationResponse>> getIncompleteApplication() {
+        return ResponseEntity.ok(adminUserService.getIncompleteApplication());
+    }
+
+    @Override
+    public ResponseEntity<List<LoanApplicationResponse>> getCompleteApplication() {
+        return ResponseEntity.ok(adminUserService.getCompleteApplication());
     }
 }
