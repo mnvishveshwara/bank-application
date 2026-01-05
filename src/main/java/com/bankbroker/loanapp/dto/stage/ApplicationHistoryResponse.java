@@ -14,6 +14,5 @@ public class ApplicationHistoryResponse {
     private String status;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
-    private String updatedByAdminId;
     private String remarks;
 }

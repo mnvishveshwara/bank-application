@@ -372,7 +372,6 @@ public ApplicationAgencyAssignmentResponse saveAgencyAssignment(
                 .status(history.getStatus().name())
                 .createdDate(history.getCreatedDate())
                 .updatedDate(history.getUpdatedDate())
-                .updatedByAdminId(history.getUpdatedBy() != null ? history.getUpdatedBy().getId() : null)
                 .remarks(history.getRemarks())
                 .build();
     }

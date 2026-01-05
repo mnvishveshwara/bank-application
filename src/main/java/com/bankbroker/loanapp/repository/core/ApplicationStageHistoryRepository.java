@@ -8,7 +8,5 @@ import java.util.Optional;
 
 public interface ApplicationStageHistoryRepository extends JpaRepository<ApplicationStageHistory, Long> {
     Optional<ApplicationStageHistory> findByApplication(LoanApplication application);
-    Optional<ApplicationStageHistory> findTopByApplicationOrderByCreatedDateDesc(
-            LoanApplication application
-    );
+
 }
