@@ -28,6 +28,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.AbstractMap;
 import java.util.List;
 
 @Slf4j
@@ -181,22 +182,30 @@ public class AgencyMasterServiceImpl implements AgencyMasterService {
 
         AdminUser loggedUser = securityUtil.getLoggedInAdmin();
 
-
         if (loggedUser.getRole() != Role.AGENCY) {
             throw new IllegalArgumentException("Only agency users can access this");
         }
 
         Long agencyId = loggedUser.getAgencyId();
 
-        // 🔥 Fetch applications assigned to this agency
-        List<LoanApplication> apps = loanApplicationRepository.findApplicationsByAgencyId(agencyId);
+        List<LoanApplication> apps =
+                loanApplicationRepository.findApplicationsByAgencyId(agencyId);
+
         return apps.stream()
                 .map(app -> {
-
                     String status = applicationStageHistoryRepository
                             .findByApplication(app)
                             .map(h -> h.getStatus().name())
                             .orElse("NOT_STARTED");
+
+                    return new AbstractMap.SimpleEntry<>(app, status);
+                })
+                // Exclude IN_PROGRESS applications
+                .filter(entry -> !ApplicationHistoryStatus.IN_PROGRESS.name()
+                        .equals(entry.getValue()))
+                .map(entry -> {
+                    LoanApplication app = entry.getKey();
+                    String status = entry.getValue();
 
                     return LoanApplicationResponse.builder()
                             .applicationId(app.getId())
@@ -243,7 +252,7 @@ public class AgencyMasterServiceImpl implements AgencyMasterService {
         LoanApplication app = loanApplicationRepository.findById(applicationId)
                 .orElseThrow(() -> new ResourceNotFoundException("LoanApplication", "id", applicationId));
 
-        // 🔐 Agency ownership check
+        //  Agency ownership check
         if (!loggedUser.getAgencyId().equals(app.getAssignedTo().getAgencyId())) {
             throw new IllegalArgumentException("You cannot update another agency's application");
         }
@@ -251,7 +260,7 @@ public class AgencyMasterServiceImpl implements AgencyMasterService {
         ApplicationHistoryStatus newStatus =
                 ApplicationHistoryStatus.valueOf(request.getStatus().toUpperCase());
 
-        // 🔒 VALID TRANSITIONS
+        //  VALID TRANSITIONS
         ApplicationHistoryStatus currentStatus =
                 applicationStageHistoryRepository
                         .findByApplication(app)
@@ -265,13 +274,13 @@ public class AgencyMasterServiceImpl implements AgencyMasterService {
                     "Application must be in Site Visit Completed or REVIEWING state");
         }
 
-        // 🚫 Prevent invalid final transitions
+        //  Prevent invalid final transitions
         if (currentStatus == ApplicationHistoryStatus.SITE_VISIT_COMPLETED
                 && newStatus != ApplicationHistoryStatus.REVIEWING_APPLICATION) {
             throw new IllegalStateException("First move application to REVIEWING");
         }
 
-        // ✅ UPSERT status
+        //  UPSERT status
         return applicationStageService.addHistory(
                 applicationId,
                 new ApplicationHistoryRequest(

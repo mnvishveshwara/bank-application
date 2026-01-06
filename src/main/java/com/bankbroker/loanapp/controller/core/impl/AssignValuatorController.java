@@ -53,7 +53,7 @@ public class AssignValuatorController implements AssignValuatorControllerApi {
     }
 
     @Override
-    @PreAuthorize("hasRole('AGENCY_VALUATOR')")
+    @PreAuthorize("hasAnyRole('AGENCY','AGENCY_VALUATOR')")
     public ResponseEntity<?> scheduleSiteVisit(
             String applicationId,
             @Valid SiteVisitRequest request

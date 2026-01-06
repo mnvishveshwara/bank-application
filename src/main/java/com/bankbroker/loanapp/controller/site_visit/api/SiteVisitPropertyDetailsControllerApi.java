@@ -11,27 +11,27 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/applications")
 public interface SiteVisitPropertyDetailsControllerApi {
 
-    @PreAuthorize("hasRole('AGENCY_VALUATOR')")
+    @PreAuthorize("hasAnyRole('AGENCY','AGENCY_VALUATOR')")
     @PostMapping("/{applicationId}/site-visit/property-details")
     ResponseEntity<SiteVisitPropertyDetailsResponse> savePropertyDetails(
             @PathVariable String applicationId,
             @RequestBody SiteVisitPropertyDetailsRequest request
     );
 
-    @PreAuthorize("hasRole('AGENCY_VALUATOR')")
+    @PreAuthorize("hasAnyRole('AGENCY','AGENCY_VALUATOR')")
     @GetMapping("/{applicationId}/site-visit/property-details")
     ResponseEntity<SiteVisitPropertyDetailsResponse> getPropertyDetails(
             @PathVariable String applicationId
     );
 
-    @PreAuthorize("hasRole('AGENCY_VALUATOR')")
+    @PreAuthorize("hasAnyRole('AGENCY','AGENCY_VALUATOR')")
     @PostMapping("/{applicationId}/site-visit/property-boundary-details")
     ResponseEntity<SiteVisitPropertyBoundaryDetailsResponse> savePropertyBoundaryDetails(
             @PathVariable String applicationId,
             @RequestBody SiteVisitPropertyBoundaryDetailsRequest request
     );
 
-    @PreAuthorize("hasRole('AGENCY_VALUATOR')")
+    @PreAuthorize("hasAnyRole('AGENCY','AGENCY_VALUATOR')")
     @GetMapping ("/{applicationId}/site-visit/property-boundary-details")
     ResponseEntity<SiteVisitPropertyBoundaryDetailsResponse> getPropertyBoundaryDetails(
             @PathVariable String applicationId

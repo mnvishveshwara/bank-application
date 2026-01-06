@@ -14,7 +14,7 @@ public interface BasicValuationDetailsControllerApi {
     /**
      * Valuator fills Step-1: Basic Valuation Details
      */
-    @PreAuthorize("hasRole('AGENCY_VALUATOR')")
+    @PreAuthorize("hasAnyRole('AGENCY,'AGENCY_VALUATOR')")
     @PostMapping("/{applicationId}/site-visit/basic-valuation")
     ResponseEntity<BasicValuationDetailsResponse> saveBasicValuation(
             @PathVariable String applicationId,
