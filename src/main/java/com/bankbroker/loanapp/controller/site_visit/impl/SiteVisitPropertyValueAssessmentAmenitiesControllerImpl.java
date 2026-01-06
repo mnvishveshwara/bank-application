@@ -16,21 +16,21 @@ public class SiteVisitPropertyValueAssessmentAmenitiesControllerImpl
     private final SiteVisitPropertyValueAssessmentAmenitiesService service;
 
     @Override
-    public ResponseEntity<SiteVisitPropertyValueAssessmentAmenitiesResponse> save(
+    public ResponseEntity<SiteVisitPropertyValueAssessmentAmenitiesResponse> saveSiteVisitAmenities(
             String applicationId,
             SiteVisitPropertyValueAssessmentAmenitiesRequest request) {
 
         return ResponseEntity.ok(
-                service.save(applicationId, request)
+                service.saveSiteVisitAmenities(applicationId, request)
         );
     }
 
     @Override
-    public ResponseEntity<SiteVisitPropertyValueAssessmentAmenitiesResponse> get(
+    public ResponseEntity<SiteVisitPropertyValueAssessmentAmenitiesResponse> getSiteVisitAmenities(
             String applicationId) {
 
         return ResponseEntity.ok(
-                service.get(applicationId)
+                service.getSiteVisitAmenities(applicationId)
         );
     }
 }

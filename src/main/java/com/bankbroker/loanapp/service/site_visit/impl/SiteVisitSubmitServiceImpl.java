@@ -40,7 +40,7 @@ public class SiteVisitSubmitServiceImpl
                 );
 
 
-        // 🔒 Validate current status (single source of truth)
+        // Validate current status (single source of truth)
         ApplicationHistoryStatus currentStatus =
                 applicationStageHistoryRepository
                         .findByApplication(application)
@@ -57,7 +57,7 @@ public class SiteVisitSubmitServiceImpl
             );
         }
 
-        // ✅ UPSERT: update existing history row (no new row created)
+        // UPSERT: update existing history row (no new row created)
         applicationStageService.addHistory(
                 applicationId,
                 ApplicationHistoryRequest.builder()

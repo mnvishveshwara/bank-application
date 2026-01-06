@@ -5,10 +5,10 @@ import com.bankbroker.loanapp.dto.site_visit.SiteVisitTechnicalBuaResponse;
 
 public interface SiteVisitTechnicalBuaService {
 
-    SiteVisitTechnicalBuaResponse save(
+    SiteVisitTechnicalBuaResponse saveTechnicalBua(
             String applicationId,
             SiteVisitTechnicalBuaRequest request
     );
 
-    SiteVisitTechnicalBuaResponse get(String applicationId);
+    SiteVisitTechnicalBuaResponse getTechnicalBua(String applicationId);
 }

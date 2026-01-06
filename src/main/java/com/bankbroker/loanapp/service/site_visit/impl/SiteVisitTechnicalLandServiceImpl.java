@@ -105,13 +105,10 @@ public class SiteVisitTechnicalLandServiceImpl
 
             if (file == null || file.isEmpty()) continue;
 
-            // 🔹 Generate unique filename
-//            String extension = fileStorageService.getExtension(file.getOriginalFilename());
-
 
             String fileName = file.getOriginalFilename();
 
-            // 🔹 Store file using common service
+            //  Store file using common service
             String filePath = fileStorageService.store(
                     file,
                     applicationId,
@@ -119,7 +116,7 @@ public class SiteVisitTechnicalLandServiceImpl
                     fileName
             );
 
-            // 🔹 Persist DB record
+            //  Persist DB record
             SiteVisitTechnicalLandImage image =
                     SiteVisitTechnicalLandImage.builder()
                             .technicalLand(land)

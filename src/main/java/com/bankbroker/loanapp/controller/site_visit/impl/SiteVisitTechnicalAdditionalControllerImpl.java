@@ -16,21 +16,21 @@ public class SiteVisitTechnicalAdditionalControllerImpl
     private final SiteVisitTechnicalAdditionalService service;
 
     @Override
-    public ResponseEntity<SiteVisitTechnicalAdditionalResponse> save(
+    public ResponseEntity<SiteVisitTechnicalAdditionalResponse> saveTechnicalAdditional(
             String applicationId,
             SiteVisitTechnicalAdditionalRequest request) {
 
         return ResponseEntity.ok(
-                service.save(applicationId, request)
+                service.saveTechnicalAdditional(applicationId, request)
         );
     }
 
     @Override
-    public ResponseEntity<SiteVisitTechnicalAdditionalResponse> get(
+    public ResponseEntity<SiteVisitTechnicalAdditionalResponse> getTechnicalAdditional(
             String applicationId) {
 
         return ResponseEntity.ok(
-                service.get(applicationId)
+                service.getTechnicalAdditional(applicationId)
         );
     }
 }

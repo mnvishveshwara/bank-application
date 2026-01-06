@@ -16,21 +16,21 @@ public class SiteVisitPropertyValueAssessmentFinalValuationControllerImpl
     private final SiteVisitPropertyValueAssessmentFinalValuationService service;
 
     @Override
-    public ResponseEntity<SiteVisitPropertyValueAssessmentFinalValuationResponse> save(
+    public ResponseEntity<SiteVisitPropertyValueAssessmentFinalValuationResponse> saveFinalValuation(
             String applicationId,
             SiteVisitPropertyValueAssessmentFinalValuationRequest request) {
 
         return ResponseEntity.ok(
-                service.save(applicationId, request)
+                service.saveFinalValuation(applicationId, request)
         );
     }
 
     @Override
-    public ResponseEntity<SiteVisitPropertyValueAssessmentFinalValuationResponse> get(
+    public ResponseEntity<SiteVisitPropertyValueAssessmentFinalValuationResponse> getFinalValuation(
             String applicationId) {
 
         return ResponseEntity.ok(
-                service.get(applicationId)
+                service.getFinalValuation(applicationId)
         );
     }
 }

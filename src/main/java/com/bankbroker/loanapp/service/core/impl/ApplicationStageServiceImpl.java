@@ -102,32 +102,7 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
 
 
 
-    @Override
-    @Transactional
-    public ApplicationCustomerDetailsResponse saveCustomerDetails(
-            String applicationId,
-            ApplicationCustomerDetailsRequest request) {
 
-        LoanApplication app = getApplication(applicationId);
-        AdminUser admin = securityUtil.getLoggedInAdmin();
-
-        ApplicationCustomerDetails entity =
-                customerDetailsRepo.findByApplication(app)
-                        .map(existing -> {
-                            customerMapper.updateEntityFromRequest(request, existing);
-                            return existing;
-                        })
-                        .orElseGet(() -> {
-                            ApplicationCustomerDetails e = customerMapper.toEntity(request);
-                            e.setApplication(app);
-                            return e;
-                        });
-
-        customerDetailsRepo.save(entity);
-        updateStage(app, ApplicationStageType.CUSTOMER_DETAILS, admin);
-
-        return customerMapper.toResponse(entity);
-    }
 
 
     @Override
@@ -184,57 +159,57 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
         return propertyMapper.toResponse(entity);
     }
 
-@Override
-@Transactional
-public ApplicationDocumentDetailsResponse uploadDocuments(
-        String applicationId,
-        List<MultipartFile> files,
-        List<String> types) {
+    @Override
+    @Transactional
+    public ApplicationDocumentDetailsResponse uploadDocuments(
+            String applicationId,
+            List<MultipartFile> files,
+            List<String> types) {
 
-    LoanApplication app = getApplication(applicationId);
-    AdminUser admin = securityUtil.getLoggedInAdmin();
+        LoanApplication app = getApplication(applicationId);
+        AdminUser admin = securityUtil.getLoggedInAdmin();
 
-    if (files.size() != types.size()) {
-        throw new IllegalArgumentException("Each file must match a document type");
+        if (files.size() != types.size()) {
+            throw new IllegalArgumentException("Each file must match a document type");
+        }
+
+        ApplicationDocumentDetails docDetails =
+                documentRepo.findByApplication(app)
+                        .orElseGet(() -> {
+                            ApplicationDocumentDetails d = new ApplicationDocumentDetails();
+                            d.setApplication(app);
+                            d.setDocuments(new ArrayList<>());
+                            return d;
+                        });
+
+        docDetails.getDocuments().clear();
+
+        for (int i = 0; i < files.size(); i++) {
+            MultipartFile file = files.get(i);
+
+            ApplicationUploadedDocument doc =
+                    ApplicationUploadedDocument.builder()
+                            .documentDetails(docDetails)
+                            .fileName(file.getOriginalFilename())
+                            .fileType(file.getContentType())
+                            .fileSizeKB(file.getSize() / 1024)
+                            .documentType(types.get(i))
+                            .fileUrl(fileStorageService.store(
+                                    file,
+                                    applicationId,
+                                    "application-documents",
+                                    types.get(i) +
+                                            fileStorageService.getExtension(file.getOriginalFilename())))
+                            .build();
+
+            docDetails.getDocuments().add(doc);
+        }
+
+        documentRepo.save(docDetails);
+        updateStage(app, ApplicationStageType.DOCUMENTS_UPLOADED, admin);
+
+        return documentMapper.toResponse(docDetails);
     }
-
-    ApplicationDocumentDetails docDetails =
-            documentRepo.findByApplication(app)
-                    .orElseGet(() -> {
-                        ApplicationDocumentDetails d = new ApplicationDocumentDetails();
-                        d.setApplication(app);
-                        d.setDocuments(new ArrayList<>());
-                        return d;
-                    });
-
-    docDetails.getDocuments().clear();
-
-    for (int i = 0; i < files.size(); i++) {
-        MultipartFile file = files.get(i);
-
-        ApplicationUploadedDocument doc =
-                ApplicationUploadedDocument.builder()
-                        .documentDetails(docDetails)
-                        .fileName(file.getOriginalFilename())
-                        .fileType(file.getContentType())
-                        .fileSizeKB(file.getSize() / 1024)
-                        .documentType(types.get(i))
-                        .fileUrl(fileStorageService.store(
-                                file,
-                                applicationId,
-                                "application-documents",
-                                types.get(i) +
-                                        fileStorageService.getExtension(file.getOriginalFilename())))
-                        .build();
-
-        docDetails.getDocuments().add(doc);
-    }
-
-    documentRepo.save(docDetails);
-    updateStage(app, ApplicationStageType.DOCUMENTS_UPLOADED, admin);
-
-    return documentMapper.toResponse(docDetails);
-}
 
     @Override
     public ApplicationDocumentDetailsResponse getDocumentDetails(String applicationId) {
@@ -247,45 +222,45 @@ public ApplicationDocumentDetailsResponse uploadDocuments(
         return mapDocumentDetailsToResponse(entity);
     }
 
-@Override
-@Transactional
-public ApplicationAgencyAssignmentResponse saveAgencyAssignment(
-        String applicationId,
-        ApplicationAgencyAssignmentRequest request) {
+    @Override
+    @Transactional
+    public ApplicationAgencyAssignmentResponse saveAgencyAssignment(
+            String applicationId,
+            ApplicationAgencyAssignmentRequest request) {
 
-    LoanApplication app = getApplication(applicationId);
-    AdminUser admin = securityUtil.getLoggedInAdmin();
+        LoanApplication app = getApplication(applicationId);
+        AdminUser admin = securityUtil.getLoggedInAdmin();
 
-    AgencyMaster agency = agencyRepo.findById(request.getAgencyId())
-            .orElseThrow(() ->
-                    new ResourceNotFoundException("AgencyMaster", "id", request.getAgencyId()));
+        AgencyMaster agency = agencyRepo.findById(request.getAgencyId())
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("AgencyMaster", "id", request.getAgencyId()));
 
-    ApplicationAgencyAssignment entity =
-            agencyAssignmentRepo.findByApplication(app)
-                    .orElseGet(() -> ApplicationAgencyAssignment.builder()
-                            .application(app)
-                            .createdBy(admin)
-                            .build());
+        ApplicationAgencyAssignment entity =
+                agencyAssignmentRepo.findByApplication(app)
+                        .orElseGet(() -> ApplicationAgencyAssignment.builder()
+                                .application(app)
+                                .createdBy(admin)
+                                .build());
 
-    entity.setAgency(agency);
-    entity.setUpdatedBy(admin);
-    entity.setRemarks(request.getRemarks());
+        entity.setAgency(agency);
+        entity.setUpdatedBy(admin);
+        entity.setRemarks(request.getRemarks());
 
-    agencyAssignmentRepo.save(entity);
+        agencyAssignmentRepo.save(entity);
 
-    AdminUser agencyAdmin =
-            adminUserRepository.findByAgencyIdAndRole(agency.getId(), Role.AGENCY)
-                    .orElseThrow(() ->
-                            new IllegalArgumentException("No agency admin found"));
+        AdminUser agencyAdmin =
+                adminUserRepository.findByAgencyIdAndRole(agency.getId(), Role.AGENCY)
+                        .orElseThrow(() ->
+                                new IllegalArgumentException("No agency admin found"));
 
-    app.setAssignedTo(agencyAdmin);
-    app.setUpdatedDate(LocalDateTime.now());
-    loanApplicationRepository.save(app);
+        app.setAssignedTo(agencyAdmin);
+        app.setUpdatedDate(LocalDateTime.now());
+        loanApplicationRepository.save(app);
 
-    updateStage(app, ApplicationStageType.ASSIGN_AGENCY, admin);
+        updateStage(app, ApplicationStageType.ASSIGN_AGENCY, admin);
 
-    return agencyMapper.toResponse(entity);
-}
+        return agencyMapper.toResponse(entity);
+    }
 
 
 
@@ -336,15 +311,7 @@ public ApplicationAgencyAssignmentResponse saveAgencyAssignment(
         return mapSummaryToResponse(entity);
     }
 
-    private ApplicationSummaryResponse mapSummary(ApplicationSummary e) {
-        return ApplicationSummaryResponse.builder()
-                .id(e.getId())
-                .applicationId(e.getApplication().getId())
-                .summaryText(e.getSummaryText())
-                .reviewedByAdminId(e.getReviewedBy() != null ? e.getReviewedBy().getId() : null)
-                .reviewedDate(e.getReviewedDate())
-                .build();
-    }
+
 
     @Override
     public ApplicationSummaryResponse getSummary(String applicationId) {
@@ -483,7 +450,7 @@ private void updateStage(LoanApplication app, ApplicationStageType stage, AdminU
         LoanApplication application;
 
         // ===============================
-        // 1️⃣ CREATE OR FETCH APPLICATION
+        //  CREATE OR FETCH APPLICATION
         // ===============================
         if (request.getApplicationId() == null) {
 
@@ -493,7 +460,7 @@ private void updateStage(LoanApplication app, ApplicationStageType stage, AdminU
                     .createdDate(LocalDateTime.now())
                     .updatedDate(LocalDateTime.now())
                     .active(true)
-                    .associatedBank("HDFC")
+                    .associatedBank(request.getBank())
                     .build();
 
             application = loanApplicationRepository.save(application);
@@ -506,7 +473,7 @@ private void updateStage(LoanApplication app, ApplicationStageType stage, AdminU
         }
 
         // ===============================
-        // 2️⃣ CREATE OR UPDATE CUSTOMER
+        //  CREATE OR UPDATE CUSTOMER
         // ===============================
         Customer customer = customerRepo.findByEmail(request.getEmail())
                 .orElseGet(() -> {
@@ -535,14 +502,14 @@ private void updateStage(LoanApplication app, ApplicationStageType stage, AdminU
         customerRepo.save(customer);
 
         // ===============================
-        // 3️⃣ LINK CUSTOMER TO APPLICATION
+        // LINK CUSTOMER TO APPLICATION
         // ===============================
         application.setClient(customer);
         application.setUpdatedDate(LocalDateTime.now());
         loanApplicationRepository.save(application);
 
         // ===============================
-        // 4️⃣ SAVE CUSTOMER DETAILS
+        // SAVE CUSTOMER DETAILS
         // ===============================
         ApplicationCustomerDetails details =
                 customerDetailsRepo.findByApplication(application)
@@ -562,7 +529,7 @@ private void updateStage(LoanApplication app, ApplicationStageType stage, AdminU
         customerDetailsRepo.save(details);
 
         // ===============================
-        // 5️⃣ UPDATE STAGE
+        // UPDATE STAGE
         // ===============================
         updateStage(application, ApplicationStageType.CUSTOMER_DETAILS, createdBy);
 

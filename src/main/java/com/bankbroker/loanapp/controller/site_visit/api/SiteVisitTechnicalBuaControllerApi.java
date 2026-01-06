@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.*;
 public interface SiteVisitTechnicalBuaControllerApi {
 
     @PostMapping
-    ResponseEntity<SiteVisitTechnicalBuaResponse> save(
+    ResponseEntity<SiteVisitTechnicalBuaResponse> saveTechnicalBua(
             @PathVariable String applicationId,
             @RequestBody SiteVisitTechnicalBuaRequest request
     );
 
     @GetMapping
-    ResponseEntity<SiteVisitTechnicalBuaResponse> get(
+    ResponseEntity<SiteVisitTechnicalBuaResponse> getTechnicalBua(
             @PathVariable String applicationId
     );
 }

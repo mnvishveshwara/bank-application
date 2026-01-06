@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.*;
 public interface SiteVisitPropertyValueAssessmentLandControllerApi {
 
     @PostMapping
-    ResponseEntity<SiteVisitPropertyValueAssessmentLandResponse> save(
+    ResponseEntity<SiteVisitPropertyValueAssessmentLandResponse> saveLand(
             @PathVariable String applicationId,
             @RequestBody SiteVisitPropertyValueAssessmentLandRequest request
     );
 
     @GetMapping
-    ResponseEntity<SiteVisitPropertyValueAssessmentLandResponse> get(
+    ResponseEntity<SiteVisitPropertyValueAssessmentLandResponse> getLand(
             @PathVariable String applicationId
     );
 }

@@ -38,12 +38,6 @@ public class AssignValuatorServiceImpl implements AssignValuatorService {
     private final AssignValuatorMapper mapper;
     private final SecurityUtil securityUtil;
 
-    /** Logged-in user */
-//    private AdminUser getLoggedIn() {
-//        String id = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        return adminRepo.findById(id)
-//                .orElseThrow(() -> new RuntimeException("Invalid logged-in user."));
-//    }
 
     @Override
     @Transactional
@@ -97,7 +91,6 @@ public class AssignValuatorServiceImpl implements AssignValuatorService {
                 )
         );
 
-        log.info("Application {} assigned to valuator {}", applicationId, valuator.getId());
 
         // Convert to response
         return mapper.toResponse(assign);

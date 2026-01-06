@@ -10,7 +10,6 @@ import java.nio.file.*;
 public class FileStorageService {
 
     private static final String BASE_DIR = "C:/app/uploads";
-    // use /var/app/uploads for Linux
 
     public String store(
             MultipartFile file,

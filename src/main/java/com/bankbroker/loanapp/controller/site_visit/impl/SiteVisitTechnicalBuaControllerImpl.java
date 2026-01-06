@@ -16,21 +16,21 @@ public class SiteVisitTechnicalBuaControllerImpl
     private final SiteVisitTechnicalBuaService service;
 
     @Override
-    public ResponseEntity<SiteVisitTechnicalBuaResponse> save(
+    public ResponseEntity<SiteVisitTechnicalBuaResponse> saveTechnicalBua(
             String applicationId,
             SiteVisitTechnicalBuaRequest request) {
 
         return ResponseEntity.ok(
-                service.save(applicationId, request)
+                service.saveTechnicalBua(applicationId, request)
         );
     }
 
     @Override
-    public ResponseEntity<SiteVisitTechnicalBuaResponse> get(
+    public ResponseEntity<SiteVisitTechnicalBuaResponse> getTechnicalBua(
             String applicationId) {
 
         return ResponseEntity.ok(
-                service.get(applicationId)
+                service.getTechnicalBua(applicationId)
         );
     }
 }

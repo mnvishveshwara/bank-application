@@ -18,21 +18,21 @@ public class SiteVisitPropertyValueAssessmentLandControllerImpl
     private final SiteVisitPropertyValueAssessmentLandService service;
 
     @Override
-    public ResponseEntity<SiteVisitPropertyValueAssessmentLandResponse> save(
+    public ResponseEntity<SiteVisitPropertyValueAssessmentLandResponse> saveLand(
             String applicationId,
             SiteVisitPropertyValueAssessmentLandRequest request) {
 
         return ResponseEntity.ok(
-                service.save(applicationId, request)
+                service.saveLand(applicationId, request)
         );
     }
 
     @Override
-    public ResponseEntity<SiteVisitPropertyValueAssessmentLandResponse> get(
+    public ResponseEntity<SiteVisitPropertyValueAssessmentLandResponse> getLand(
             String applicationId) {
 
         return ResponseEntity.ok(
-                service.get(applicationId)
+                service.getLand(applicationId)
         );
     }
 }

@@ -5,10 +5,10 @@ import com.bankbroker.loanapp.dto.site_visit.SiteVisitTechnicalAdditionalRespons
 
 public interface SiteVisitTechnicalAdditionalService {
 
-    SiteVisitTechnicalAdditionalResponse save(
+    SiteVisitTechnicalAdditionalResponse saveTechnicalAdditional(
             String applicationId,
             SiteVisitTechnicalAdditionalRequest request
     );
 
-    SiteVisitTechnicalAdditionalResponse get(String applicationId);
+    SiteVisitTechnicalAdditionalResponse getTechnicalAdditional(String applicationId);
 }

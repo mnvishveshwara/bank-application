@@ -38,12 +38,6 @@ public class BasicValuationDetailsServiceImpl
     private final ApplicationStageService stageService;
     private final SecurityUtil securityUtil;
 
-//    private AdminUser getLoggedIn() {
-//        String id = (String) SecurityContextHolder.getContext()
-//                .getAuthentication().getPrincipal();
-//        return adminRepo.findById(id)
-//                .orElseThrow(() -> new RuntimeException("Invalid logged-in user"));
-//    }
 
     // -------------------------------------------------------
     // SAVE BASIC VALUATION
@@ -71,7 +65,7 @@ public class BasicValuationDetailsServiceImpl
         BasicValuationDetails entity = repo.findByApplication(app)
                 .orElseGet(() -> {
                     BasicValuationDetails e = mapper.toEntity(request, app, logged);
-                    e.setUpdatedBy(logged);               // ✅ FIX
+                    e.setUpdatedBy(logged);
                     e.setUpdatedDate(LocalDateTime.now());
                     return e;
                 });
@@ -94,7 +88,6 @@ public class BasicValuationDetailsServiceImpl
                 )
         );
 
-        log.info("Basic valuation saved for application {}", applicationId);
 
         return mapper.toResponse(entity);
     }

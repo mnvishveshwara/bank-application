@@ -5,12 +5,12 @@ import com.bankbroker.loanapp.dto.site_visit.SiteVisitPropertyValueAssessmentFin
 
 public interface SiteVisitPropertyValueAssessmentFinalValuationService {
 
-    SiteVisitPropertyValueAssessmentFinalValuationResponse save(
+    SiteVisitPropertyValueAssessmentFinalValuationResponse saveFinalValuation(
             String applicationId,
             SiteVisitPropertyValueAssessmentFinalValuationRequest request
     );
 
-    SiteVisitPropertyValueAssessmentFinalValuationResponse get(
+    SiteVisitPropertyValueAssessmentFinalValuationResponse getFinalValuation(
             String applicationId
     );
 }

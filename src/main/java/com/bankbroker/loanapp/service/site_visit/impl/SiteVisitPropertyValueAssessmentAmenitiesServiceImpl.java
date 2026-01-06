@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -28,69 +27,10 @@ public class SiteVisitPropertyValueAssessmentAmenitiesServiceImpl
     private final SiteVisitPropertyValueAssessmentAmenityItemMapper itemMapper;
     private final SiteVisitPropertyValueAssessmentAmenitiesMapper mapper;
     private final SecurityUtil securityUtil;
-//
-//    @Override
-//    public SiteVisitPropertyValueAssessmentAmenitiesResponse save(
-//            String applicationId,
-//            SiteVisitPropertyValueAssessmentAmenitiesRequest request) {
-//
-//        AdminUser user = securityUtil.getLoggedInAdmin();
-//
-//        LoanApplication app = loanRepo.findById(applicationId)
-//                .orElseThrow(() -> new RuntimeException("Application not found"));
-//
-//        SiteVisitPropertyValueAssessmentAmenities amenities =
-//                amenitiesRepo.findByApplication(app)
-//                        .orElseGet(() ->
-//                                SiteVisitPropertyValueAssessmentAmenities.builder()
-//                                        .application(app)
-//                                        .createdBy(user)
-//                                        .createdDate(LocalDateTime.now())
-//                                        .build()
-//                        );
-//
-//        amenities.setUpdatedBy(user);
-//        amenities.setUpdatedDate(LocalDateTime.now());
-//
-//        // 🔁 Rebuild dynamic items
-//        amenities.getItems().clear();
-//
-//        List<SiteVisitPropertyValueAssessmentAmenityItem> items = new ArrayList<>();
-//        double total = 0;
-//
-//        for (SiteVisitPropertyValueAssessmentAmenityItemRequest ir : request.getItems()) {
-//
-//            SiteVisitPropertyValueAssessmentAmenityItem item =
-//                    itemMapper.toEntity(ir);
-//
-//            item.setAmenities(amenities);
-//            total += ir.getAmenityValue() == null ? 0 : ir.getAmenityValue();
-//
-//            items.add(item);
-//        }
-//
-//        amenities.setItems(items);
-//        amenities.setTotalAmenitiesValue(total);
-//
-//        SiteVisitPropertyValueAssessmentAmenities saved =
-//                amenitiesRepo.save(amenities);
-//
-//        SiteVisitPropertyValueAssessmentAmenitiesResponse response =
-//                mapper.toResponse(saved);
-//
-//        response.setItems(
-//                saved.getItems()
-//                        .stream()
-//                        .map(itemMapper::toResponse)
-//                        .toList()
-//        );
-//
-//        return response;
-//    }
 
     @Override
     @Transactional
-    public SiteVisitPropertyValueAssessmentAmenitiesResponse save(
+    public SiteVisitPropertyValueAssessmentAmenitiesResponse saveSiteVisitAmenities(
             String applicationId,
             SiteVisitPropertyValueAssessmentAmenitiesRequest request) {
 
@@ -113,7 +53,7 @@ public class SiteVisitPropertyValueAssessmentAmenitiesServiceImpl
         amenities.setUpdatedBy(user);
         amenities.setUpdatedDate(LocalDateTime.now());
 
-        // 🔁 Clear existing collection (DO NOT replace it)
+        // Clear existing collection (DO NOT replace it)
         amenities.getItems().clear();
 
         double total = 0;
@@ -153,7 +93,7 @@ public class SiteVisitPropertyValueAssessmentAmenitiesServiceImpl
 
     @Override
     @Transactional(readOnly = true)
-    public SiteVisitPropertyValueAssessmentAmenitiesResponse get(
+    public SiteVisitPropertyValueAssessmentAmenitiesResponse getSiteVisitAmenities(
             String applicationId) {
 
         LoanApplication app = loanRepo.findById(applicationId)

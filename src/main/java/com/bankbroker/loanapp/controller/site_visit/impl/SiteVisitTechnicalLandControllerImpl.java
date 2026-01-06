@@ -44,7 +44,6 @@ public class SiteVisitTechnicalLandControllerImpl
                     .body("No files provided for upload");
         }
 
-        log.info("Uploading {} files for applicationId: {}", files.size(), applicationId);
 
         service.uploadImages(applicationId, files);
 

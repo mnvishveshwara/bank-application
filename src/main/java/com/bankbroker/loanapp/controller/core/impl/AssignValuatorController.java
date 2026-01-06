@@ -29,7 +29,6 @@ public class AssignValuatorController implements AssignValuatorControllerApi {
             String applicationId,
             @Valid AssignValuatorRequest request
     ) {
-        log.info("Assigning valuator {} to application {}", request.getValuatorId(), applicationId);
 
         AssignValuatorResponse response = assignValuatorService.assignValuator(applicationId, request);
 
@@ -47,7 +46,6 @@ public class AssignValuatorController implements AssignValuatorControllerApi {
     @PreAuthorize("hasAnyRole('AGENCY','AGENCY_VALUATOR','ADMIN')")   // you may adjust
     public ResponseEntity<AssignValuatorResponse> getValuatorAssignment(String applicationId) {
 
-        log.info("Fetching valuator assignment for application {}", applicationId);
 
         AssignValuatorResponse response = assignValuatorService.getValuatorAssignment(applicationId);
 
@@ -60,7 +58,6 @@ public class AssignValuatorController implements AssignValuatorControllerApi {
             String applicationId,
             @Valid SiteVisitRequest request
     ) {
-        log.info("Scheduling site visit for application {} by valuator", applicationId);
         return ResponseEntity.ok(assignValuatorService.scheduleSiteVisit(applicationId, request));
     }
 

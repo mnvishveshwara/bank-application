@@ -42,7 +42,6 @@ public class SiteVisitValuerDetailsServiceImpl
 
         // ---------------- Organisation Seal ----------------
         MultipartFile seal = request.getOrganisationSeal();
-        log.info("Uploading site visit valuer details for application id {}", seal.getOriginalFilename());
         if (seal != null && !seal.isEmpty()) {
 
             String sealFileName = seal.getOriginalFilename();
@@ -64,7 +63,6 @@ public class SiteVisitValuerDetailsServiceImpl
         MultipartFile signature = request.getValuerSignature();
         if (signature != null && !signature.isEmpty()) {
 
-            log.info("Storing valuer signature for application idcdecec {}", signature.getOriginalFilename());
             String signatureFileName = signature.getOriginalFilename();
 
             String signaturePath = fileStorageService.store(

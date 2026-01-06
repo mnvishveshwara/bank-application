@@ -4,10 +4,10 @@ import com.bankbroker.loanapp.dto.site_visit.SiteVisitPropertyValueAssessmentLan
 import com.bankbroker.loanapp.dto.site_visit.SiteVisitPropertyValueAssessmentLandResponse;
 
 public interface SiteVisitPropertyValueAssessmentLandService {
-    SiteVisitPropertyValueAssessmentLandResponse save(
+    SiteVisitPropertyValueAssessmentLandResponse saveLand(
             String applicationId,
             SiteVisitPropertyValueAssessmentLandRequest request
     );
 
-    SiteVisitPropertyValueAssessmentLandResponse get(String applicationId);
+    SiteVisitPropertyValueAssessmentLandResponse getLand(String applicationId);
 }

@@ -25,14 +25,12 @@ public class SiteVisitValuerDetailsController
             MultipartFile organisationSeal,
             MultipartFile valuerSignature) {
 
-        log.info("inside upload site visit valuer details controller");
 
         SiteVisitValuerDetailsRequest request =
                 SiteVisitValuerDetailsRequest.builder()
                         .organisationSeal(organisationSeal)
                         .valuerSignature(valuerSignature)
                         .build();
-        log.info("upload site visit valuer details request {}", request);
 
         return ResponseEntity.ok(
                 service.upload(applicationId, request)

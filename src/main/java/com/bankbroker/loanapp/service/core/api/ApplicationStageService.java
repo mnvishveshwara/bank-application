@@ -14,8 +14,6 @@ public interface ApplicationStageService {
                                           ApplicationHistoryRequest request);
     List<ApplicationHistoryResponse> getHistory(String applicationId);
 
-    ApplicationCustomerDetailsResponse saveCustomerDetails(String applicationId,
-                                                           ApplicationCustomerDetailsRequest request);
     ApplicationCustomerDetailsResponse getCustomerDetails(String applicationId);
 
     ApplicationPropertyDetailsResponse savePropertyDetails(String applicationId,

@@ -5,12 +5,12 @@ import com.bankbroker.loanapp.dto.site_visit.SiteVisitPropertyValueAssessmentAme
 
 public interface SiteVisitPropertyValueAssessmentAmenitiesService {
 
-    SiteVisitPropertyValueAssessmentAmenitiesResponse save(
+    SiteVisitPropertyValueAssessmentAmenitiesResponse saveSiteVisitAmenities(
             String applicationId,
             SiteVisitPropertyValueAssessmentAmenitiesRequest request
     );
 
-    SiteVisitPropertyValueAssessmentAmenitiesResponse get(
+    SiteVisitPropertyValueAssessmentAmenitiesResponse getSiteVisitAmenities(
             String applicationId
     );
 }

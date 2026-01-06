@@ -51,7 +51,6 @@ public class AuthController {
                 role
         );
 
-        log.info("Login successful | userId={} | role={}", userId, role);
 
         return ResponseEntity.ok(
                 AuthResponse.builder()

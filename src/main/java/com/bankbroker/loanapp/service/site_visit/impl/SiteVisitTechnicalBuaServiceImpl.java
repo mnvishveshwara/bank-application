@@ -30,65 +30,8 @@ public class SiteVisitTechnicalBuaServiceImpl
     private final SecurityUtil securityUtil;
 
     @Override
-//    public SiteVisitTechnicalBuaResponse save(
-//            String applicationId,
-//            SiteVisitTechnicalBuaRequest request) {
-//
-//        AdminUser user = securityUtil.getLoggedInAdmin();
-//
-//        LoanApplication app = loanRepo.findById(applicationId)
-//                .orElseThrow(() -> new RuntimeException("Application not found"));
-//
-//        SiteVisitTechnicalBua bua = buaRepo.findByApplication(app)
-//                .orElseGet(() -> SiteVisitTechnicalBua.builder()
-//                        .application(app)
-//                        .createdBy(user)
-//                        .createdDate(LocalDateTime.now())
-//                        .build());
-//
-//        bua.setBasements(request.getBasements());
-//        bua.setFloors(request.getFloors());
-//        bua.setNonRcc(request.getNonRcc());
-//        bua.setUpdatedBy(user);
-//        bua.setUpdatedDate(LocalDateTime.now());
-//
-//        // 🔁 Clear & rebuild dynamic levels
-//        bua.getLevels().clear();
-//
-//        List<SiteVisitTechnicalBuaLevel> levels = new ArrayList<>();
-//        double totalActual = 0, totalDoc = 0, totalApproved = 0;
-//
-//        for (SiteVisitTechnicalBuaLevelRequest lr : request.getLevels()) {
-//
-//            SiteVisitTechnicalBuaLevel level = levelMapper.toEntity(lr);
-//            level.setBua(bua);
-//
-//            totalActual += lr.getAreaActual() == null ? 0 : lr.getAreaActual();
-//            totalDoc += lr.getAreaDocument() == null ? 0 : lr.getAreaDocument();
-//            totalApproved += lr.getAreaApproved() == null ? 0 : lr.getAreaApproved();
-//
-//            levels.add(level);
-//        }
-//
-//        bua.setLevels(levels);
-//        bua.setTotalBuaActual(totalActual);
-//        bua.setTotalBuaDocument(totalDoc);
-//        bua.setTotalBuaApproved(totalApproved);
-//
-//        SiteVisitTechnicalBua saved = buaRepo.save(bua);
-//
-//        SiteVisitTechnicalBuaResponse response = buaMapper.toResponse(saved);
-//        response.setLevels(
-//                saved.getLevels()
-//                        .stream()
-//                        .map(levelMapper::toResponse)
-//                        .toList()
-//        );
-//
-//        return response;
-//    }
     @Transactional
-    public SiteVisitTechnicalBuaResponse save(
+    public SiteVisitTechnicalBuaResponse saveTechnicalBua(
             String applicationId,
             SiteVisitTechnicalBuaRequest request) {
 
@@ -113,7 +56,7 @@ public class SiteVisitTechnicalBuaServiceImpl
         bua.setUpdatedBy(user);
         bua.setUpdatedDate(LocalDateTime.now());
 
-        // 🔥 IMPORTANT PART
+        // IMPORTANT PART
         bua.getLevels().clear();  // DO NOT replace the list
 
         double totalActual = 0;
@@ -129,9 +72,9 @@ public class SiteVisitTechnicalBuaServiceImpl
             level.setAreaDocument(levelReq.getAreaDocument());
             level.setAreaApproved(levelReq.getAreaApproved());
 
-            totalActual += safe(levelReq.getAreaActual());
-            totalDocument += safe(levelReq.getAreaDocument());
-            totalApproved += safe(levelReq.getAreaApproved());
+            totalActual += safeTechnicalBua(levelReq.getAreaActual());
+            totalDocument += safeTechnicalBua(levelReq.getAreaDocument());
+            totalApproved += safeTechnicalBua(levelReq.getAreaApproved());
 
             bua.getLevels().add(level);
         }
@@ -148,7 +91,7 @@ public class SiteVisitTechnicalBuaServiceImpl
 
     @Override
     @Transactional(readOnly = true)
-    public SiteVisitTechnicalBuaResponse get(String applicationId) {
+    public SiteVisitTechnicalBuaResponse getTechnicalBua(String applicationId) {
 
         LoanApplication app = loanRepo.findById(applicationId)
                 .orElseThrow(() -> new RuntimeException("Application not found"));
@@ -167,7 +110,7 @@ public class SiteVisitTechnicalBuaServiceImpl
         return response;
     }
 
-    private double safe(Double value) {
+    private double safeTechnicalBua(Double value) {
         return value == null ? 0.0 : value;
     }
 

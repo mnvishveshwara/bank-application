@@ -37,7 +37,6 @@ public class ValuatorMasterController implements ValuatorMasterControllerApi {
 
     @Override
     public ResponseEntity<List<ValuatorResponse>> getAllValuators() {
-        log.info("getAllValuators");
         return ResponseEntity.ok(valuatorService.getAllValuators());
     }
 

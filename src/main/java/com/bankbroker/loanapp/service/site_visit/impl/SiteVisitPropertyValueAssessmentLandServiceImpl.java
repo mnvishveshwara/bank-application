@@ -27,7 +27,7 @@ public class SiteVisitPropertyValueAssessmentLandServiceImpl
     private final SecurityUtil securityUtil;
 
     @Override
-    public SiteVisitPropertyValueAssessmentLandResponse save(
+    public SiteVisitPropertyValueAssessmentLandResponse saveLand(
             String applicationId,
             SiteVisitPropertyValueAssessmentLandRequest request) {
 
@@ -81,7 +81,7 @@ public class SiteVisitPropertyValueAssessmentLandServiceImpl
 
     @Override
     @Transactional(readOnly = true)
-    public SiteVisitPropertyValueAssessmentLandResponse get(
+    public SiteVisitPropertyValueAssessmentLandResponse getLand(
             String applicationId) {
 
         LoanApplication app = loanRepo.findById(applicationId)

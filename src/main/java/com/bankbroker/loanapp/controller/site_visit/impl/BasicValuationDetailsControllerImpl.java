@@ -25,7 +25,6 @@ public class BasicValuationDetailsControllerImpl
             String applicationId,
             BasicValuationDetailsRequest request) {
 
-        log.info("Valuator submitting basic valuation for application {}", applicationId);
 
         return ResponseEntity.ok(
                 service.saveBasicValuation(applicationId, request)
@@ -36,7 +35,6 @@ public class BasicValuationDetailsControllerImpl
     public ResponseEntity<BasicValuationDetailsResponse> getBasicValuation(
             String applicationId) {
 
-        log.info("Fetching basic valuation for application {}", applicationId);
 
         return ResponseEntity.ok(
                 service.getBasicValuation(applicationId)

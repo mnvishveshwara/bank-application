@@ -45,7 +45,7 @@ public class SiteVisitTechnicalPlotServiceImpl
             entity.setUpdatedBy(loggedIn);
         }
 
-        // ✅ MATCH LOGIC
+        // MATCH LOGIC
         entity.setEastMatch(match(entity.getEastAsPerSiteVisit(), entity.getEastAsPerLegalDocument()));
         entity.setWestMatch(match(entity.getWestAsPerSiteVisit(), entity.getWestAsPerLegalDocument()));
         entity.setNorthMatch(match(entity.getNorthAsPerSiteVisit(), entity.getNorthAsPerLegalDocument()));

@@ -21,7 +21,6 @@ public class PropertyOwnerDetailsControllerImpl
     public ResponseEntity<PropertyOwnerDetailsResponse> getPropertyOwnerDetails(
             String applicationId) {
 
-        log.info("Fetching property owner details for application {}", applicationId);
 
         return ResponseEntity.ok(
                 service.getPropertyOwnerDetails(applicationId)

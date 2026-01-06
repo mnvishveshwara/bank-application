@@ -39,7 +39,7 @@ public class ValuatorMasterServiceImpl implements ValuatorMasterService {
     private final SecurityUtil securityUtil;
 
     // -------------------------------------------------------------------------
-    // 1️⃣ CREATE VALUATOR
+    // CREATE VALUATOR
     // -------------------------------------------------------------------------
     @Override
     @Transactional
@@ -57,7 +57,7 @@ public class ValuatorMasterServiceImpl implements ValuatorMasterService {
                 .orElseThrow(() ->
                         new ResourceNotFoundException("AgencyMaster", "id", agencyId));
 
-        // 1️⃣ Create login user for valuator
+        //  Create login user for valuator
         AdminUser valuatorLogin = AdminUser.builder()
                 .id(IdGenerator.generateId("VAL"))
                 .email(request.getEmail())
@@ -73,23 +73,19 @@ public class ValuatorMasterServiceImpl implements ValuatorMasterService {
 
         valuatorLogin = adminUserRepo.save(valuatorLogin);
 
-        // 2️⃣ Create valuator profile
+        //  Create valuator profile
         ValuatorMaster valuator =
                 mapper.toEntity(request, agency, loggedIn, valuatorLogin);
 
         valuator = valuatorRepo.save(valuator);
 
-        log.info(
-                "Valuator created | valuatorId={} | loginId={}",
-                valuator.getId(),
-                valuatorLogin.getId()
-        );
+
 
         return mapper.toResponse(valuator);
     }
 
     // -------------------------------------------------------------------------
-    // 2️⃣ UPDATE VALUATOR
+    //  UPDATE VALUATOR
     // -------------------------------------------------------------------------
     @Override
     @Transactional
@@ -107,7 +103,7 @@ public class ValuatorMasterServiceImpl implements ValuatorMasterService {
     }
 
     // -------------------------------------------------------------------------
-    // 3️⃣ GET VALUATOR BY ID
+    //  GET VALUATOR BY ID
     // -------------------------------------------------------------------------
     @Override
     public ValuatorResponse getValuator(Long valuatorId) {
@@ -120,7 +116,7 @@ public class ValuatorMasterServiceImpl implements ValuatorMasterService {
     }
 
     // -------------------------------------------------------------------------
-    // 4️⃣ GET ALL VALUATORS OF AN AGENCY
+    //  GET ALL VALUATORS OF AN AGENCY
     // -------------------------------------------------------------------------
     @Override
     public List<ValuatorResponse> getAllValuators() {
@@ -144,7 +140,7 @@ public class ValuatorMasterServiceImpl implements ValuatorMasterService {
     }
 
     // -------------------------------------------------------------------------
-    // 5️⃣ DELETE VALUATOR
+    //  DELETE VALUATOR
     // -------------------------------------------------------------------------
     @Override
     @Transactional
@@ -160,17 +156,11 @@ public class ValuatorMasterServiceImpl implements ValuatorMasterService {
 
         valuatorRepo.delete(valuator);
 
-        log.info(
-                "Deleted valuator | valuatorId={} | loginId={}",
-                valuatorId,
-                valuator.getLoginAccount() != null
-                        ? valuator.getLoginAccount().getId()
-                        : null
-        );
+
     }
 
     // -------------------------------------------------------------------------
-    // 6️⃣ GET APPLICATIONS FOR LOGGED-IN VALUATOR
+    //  GET APPLICATIONS FOR LOGGED-IN VALUATOR
     // -------------------------------------------------------------------------
     @Override
     public List<LoanApplicationResponse> getApplicationsForLoggedInValuator() {

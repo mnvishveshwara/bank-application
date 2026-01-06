@@ -26,7 +26,7 @@ public class SiteVisitTechnicalAdditionalServiceImpl
     private final SecurityUtil securityUtil;
 
     @Override
-    public SiteVisitTechnicalAdditionalResponse save(
+    public SiteVisitTechnicalAdditionalResponse saveTechnicalAdditional(
             String applicationId,
             SiteVisitTechnicalAdditionalRequest request) {
 
@@ -54,7 +54,7 @@ public class SiteVisitTechnicalAdditionalServiceImpl
 
     @Override
     @Transactional(readOnly = true)
-    public SiteVisitTechnicalAdditionalResponse get(
+    public SiteVisitTechnicalAdditionalResponse getTechnicalAdditional(
             String applicationId) {
 
         LoanApplication app = loanRepo.findById(applicationId)

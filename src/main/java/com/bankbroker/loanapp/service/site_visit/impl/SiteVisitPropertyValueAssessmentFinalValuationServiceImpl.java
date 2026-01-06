@@ -25,7 +25,7 @@ public class SiteVisitPropertyValueAssessmentFinalValuationServiceImpl
     private final SecurityUtil securityUtil;
 
     @Override
-    public SiteVisitPropertyValueAssessmentFinalValuationResponse save(
+    public SiteVisitPropertyValueAssessmentFinalValuationResponse saveFinalValuation(
             String applicationId,
             SiteVisitPropertyValueAssessmentFinalValuationRequest request) {
 
@@ -53,7 +53,7 @@ public class SiteVisitPropertyValueAssessmentFinalValuationServiceImpl
 
     @Override
     @Transactional(readOnly = true)
-    public SiteVisitPropertyValueAssessmentFinalValuationResponse get(
+    public SiteVisitPropertyValueAssessmentFinalValuationResponse getFinalValuation(
             String applicationId) {
 
         LoanApplication app = loanRepo.findById(applicationId)

@@ -58,7 +58,6 @@ public class AgencyMasterServiceImpl implements AgencyMasterService {
         AdminUser loggedInAdmin = securityUtil.getLoggedInAdmin();
 
 
-        log.info("Creating agency | requestedBy={}", loggedInAdmin.getId());
 
         AgencyMaster agency = AgencyMaster.builder()
                 .agencyName(req.getAgencyName())
@@ -98,7 +97,6 @@ public class AgencyMasterServiceImpl implements AgencyMasterService {
 
         adminUserRepository.save(agencyAdmin);
 
-        log.info("Agency created with ID: {} and Login ID: {}", agency.getId(), agencyAdmin.getId());
 
         return toResponse(agency);
     }

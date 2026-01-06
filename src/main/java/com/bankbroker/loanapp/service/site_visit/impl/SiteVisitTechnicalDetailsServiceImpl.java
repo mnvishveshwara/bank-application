@@ -146,7 +146,7 @@ public class SiteVisitTechnicalDetailsServiceImpl
             mapper.updateEntity(request, entity);
         }
 
-        // 🔢 AUTO CALCULATION
+        //  AUTO CALCULATION
         double actual = sum(
                 entity.getFirstBasementActual(),
                 entity.getGroundFloorActual(),

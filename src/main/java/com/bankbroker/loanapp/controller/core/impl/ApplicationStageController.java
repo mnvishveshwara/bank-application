@@ -70,7 +70,6 @@ public class ApplicationStageController implements ApplicationStageControllerApi
             @RequestPart("files") List<MultipartFile> files,
             @RequestParam("documentTypes") List<String> documentTypes
     ) {
-        log.info("Uploading documents");
         return ResponseEntity.ok(
                 applicationStageService.uploadDocuments(applicationId, files, documentTypes)
         );
