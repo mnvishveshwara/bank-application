@@ -16,6 +16,12 @@ public interface AssignValuatorControllerApi {
             @Valid @RequestBody AssignValuatorRequest request
     );
 
+    @PostMapping("/{applicationId}/re-assign-valuator")
+    ResponseEntity<AssignValuatorResponse> reAssignValuator(
+            @PathVariable("applicationId") String applicationId,
+            @Valid @RequestBody AssignValuatorRequest request
+    );
+
     @GetMapping("/{applicationId}/assigned-valuator")
     ResponseEntity<AssignValuatorResponse> getValuatorAssignment(
             @PathVariable("applicationId") String applicationId
@@ -24,6 +30,12 @@ public interface AssignValuatorControllerApi {
 
     @PostMapping("/{applicationId}/site-visit")
     ResponseEntity<?> scheduleSiteVisit(
+            @PathVariable("applicationId") String applicationId,
+            @Valid @RequestBody SiteVisitRequest request
+    );
+
+    @PostMapping("/{applicationId}/reschedule-site-visit")
+    ResponseEntity<?> rescheduleSiteVisit(
             @PathVariable("applicationId") String applicationId,
             @Valid @RequestBody SiteVisitRequest request
     );

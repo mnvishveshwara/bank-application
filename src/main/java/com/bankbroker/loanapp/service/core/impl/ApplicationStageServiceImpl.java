@@ -429,7 +429,14 @@ private void updateStage(LoanApplication app, ApplicationStageType stage, AdminU
             .orElse(new ApplicationStageHistory());
 
     history.setApplication(app);
-    history.setStatus(ApplicationHistoryStatus.IN_PROGRESS);
+    log.info("stage details : {}", stage.name());
+
+    if (stage == ApplicationStageType.APPLICATION_APPLIED) {
+        history.setStatus(ApplicationHistoryStatus.APPLICATION_APPLIED);
+    } else {
+        history.setStatus(ApplicationHistoryStatus.IN_PROGRESS);
+    }
+
     history.setUpdatedBy(admin);
     history.setUpdatedDate(LocalDateTime.now());
     history.setRemarks("Stage updated to: " + stage.name());

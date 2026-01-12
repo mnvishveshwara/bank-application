@@ -43,7 +43,7 @@ public class AgencyStatusServiceImpl implements AgencyStatusService {
         // Update status
         history.setStatus(request.getStatus());
         history.setUpdatedBy(securityUtil.getLoggedInAdmin());
-        history.setRemarks("Applications status updated to " + request.getStatus().name());
+        history.setRemarks(request.getRemarks());
 
         // Save
         historyRepository.save(history);

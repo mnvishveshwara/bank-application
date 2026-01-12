@@ -91,6 +91,7 @@ public class CustomerServiceImpl implements CustomerService {
 
                     String status = stageHistoryRepository
                             .findByApplication(app)
+
                             .map(h -> h.getStatus().name())
                             .orElse("NOT_STARTED");
 

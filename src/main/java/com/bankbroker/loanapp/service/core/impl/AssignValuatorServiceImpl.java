@@ -97,6 +97,64 @@ public class AssignValuatorServiceImpl implements AssignValuatorService {
     }
 
     @Override
+    @Transactional
+    public AssignValuatorResponse reAssignValuator(String applicationId, AssignValuatorRequest req) {
+
+        AdminUser logged = securityUtil.getLoggedInAdmin();
+
+        if (logged.getRole() != Role.AGENCY)
+            throw new RuntimeException("Only agency admins can assign valuators.");
+
+        // Load application
+        LoanApplication app = loanRepo.findById(applicationId)
+                .orElseThrow(() -> new ResourceNotFoundException("LoanApplication", "id", applicationId));
+
+        // Validate agency ownership
+        if (!logged.getAgencyId().equals(app.getAssignedTo().getAgencyId()))
+            throw new RuntimeException("You cannot assign valuators for another agency's application.");
+
+        AdminUser valuator = adminRepo.findById(req.getValuatorId())
+                .orElseThrow(() -> new ResourceNotFoundException("Valuator", "valuatorId", req.getValuatorId()));
+
+        if (valuator.getRole() != Role.AGENCY_VALUATOR)
+            throw new RuntimeException("Selected user is not a valuator.");
+
+        if (!valuator.getAgencyId().equals(logged.getAgencyId()))
+            throw new RuntimeException("Valuator does not belong to your agency.");
+
+        // Check if assignment already exists
+        AssignValuator assign = repo.findByApplication(app)
+                .orElseGet(() -> mapper.toEntity(req, app, valuator, logged));
+
+        // If exists, update using MapStruct
+        if (assign.getId() != null) {
+            mapper.updateEntity(req, assign);
+        }
+
+        assign = repo.save(assign);
+
+        // Update LoanApplication entity
+        app.setRe_assigned_valuator(valuator);
+        app.setUpdatedDate(LocalDateTime.now());
+        app.setAgencyRemarks(req.getRemarks());
+        loanRepo.save(app);
+
+        // Add stage history
+        stageService.addHistory(
+                applicationId,
+                new ApplicationHistoryRequest(
+                        ApplicationHistoryStatus.VALUATOR_REASSIGNED.name(),
+                        req.getRemarks(),
+                        logged.getId()
+                )
+        );
+
+
+        // Convert to response
+        return mapper.toResponse(assign);
+    }
+
+    @Override
     public AssignValuatorResponse getValuatorAssignment(String applicationId) {
         LoanApplication app = loanRepo.findById(applicationId)
                 .orElseThrow(() -> new ResourceNotFoundException("LoanApplication", "id", applicationId));
@@ -135,6 +193,41 @@ public class AssignValuatorServiceImpl implements AssignValuatorService {
                 new ApplicationHistoryRequest(
                         ApplicationHistoryStatus.SITE_VISIT_SCHEDULED.name(),
                         req.getRemarks() != null ? req.getRemarks() : "Site visit scheduled",
+                        logged.getId()
+                )
+        );
+
+        // return the DTO directly
+        return history;
+    }
+
+    @Override
+    @Transactional
+    public ApplicationHistoryResponse reScheduleSiteVisit(String applicationId, SiteVisitRequest req) {
+
+        AdminUser logged = securityUtil.getLoggedInAdmin();
+
+        if (logged.getRole() != Role.AGENCY_VALUATOR)
+            throw new RuntimeException("Only valuators can update site visit status.");
+
+        LoanApplication app = loanRepo.findById(applicationId)
+                .orElseThrow(() -> new ResourceNotFoundException("LoanApplication", "id", applicationId));
+
+        // Ensure same valuator
+        if (!app.getValuator().getId().equals(logged.getId()))
+            throw new RuntimeException("You are not assigned to this application.");
+
+        // Update planned visit date
+        app.setReschedSiteVisitDate(req.getSiteVisitDate());
+        app.setUpdatedDate(LocalDateTime.now());
+        loanRepo.save(app);
+
+        // Save stage history (returns DTO)
+        ApplicationHistoryResponse history = stageService.addHistory(
+                applicationId,
+                new ApplicationHistoryRequest(
+                        ApplicationHistoryStatus.SITE_VISIT_RESCHEDULED.name(),
+                        req.getRemarks() != null ? req.getRemarks() : "Site visit re-scheduled",
                         logged.getId()
                 )
         );

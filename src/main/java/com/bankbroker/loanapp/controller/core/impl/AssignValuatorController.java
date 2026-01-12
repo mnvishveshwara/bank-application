@@ -61,4 +61,29 @@ public class AssignValuatorController implements AssignValuatorControllerApi {
         return ResponseEntity.ok(assignValuatorService.scheduleSiteVisit(applicationId, request));
     }
 
+    @Override
+    public ResponseEntity<?> rescheduleSiteVisit(String applicationId, @Valid SiteVisitRequest request) {
+        return ResponseEntity.ok(assignValuatorService.reScheduleSiteVisit(applicationId, request));
+    }
+
+
+    @Override
+    @PreAuthorize("hasRole('AGENCY')")   // ⭐ Only AGENCY users can assign valuators
+    public ResponseEntity<AssignValuatorResponse> reAssignValuator(
+            String applicationId,
+            @Valid AssignValuatorRequest request
+    ) {
+
+        AssignValuatorResponse response = assignValuatorService.reAssignValuator(applicationId, request);
+
+        // Build 201 Created Location URL
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .replacePath("/api/applications/{id}/re-assigned-valuator")
+                .buildAndExpand(applicationId)
+                .toUri();
+
+        return ResponseEntity.created(location).body(response);
+    }
+
 }

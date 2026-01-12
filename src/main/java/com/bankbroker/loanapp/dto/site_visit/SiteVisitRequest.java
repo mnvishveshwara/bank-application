@@ -13,6 +13,5 @@ import java.time.LocalDate;
 public class SiteVisitRequest {
     @NotNull(message = "Site visit date is required")
     private LocalDate siteVisitDate;
-
     private String remarks;
 }

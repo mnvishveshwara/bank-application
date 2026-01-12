@@ -50,4 +50,14 @@ public class LoanApplication {
     @Column(name = "planned_site_visit_date")
     private LocalDate plannedSiteVisitDate;
 
+    @Column(name = "resched_site_visit_date")
+    private LocalDate reschedSiteVisitDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reassigned_valuator_id")
+    private AdminUser re_assigned_valuator;
+
+    @Column(name = "agency_remarks", length = 1000)
+    private String agencyRemarks;
+
 }

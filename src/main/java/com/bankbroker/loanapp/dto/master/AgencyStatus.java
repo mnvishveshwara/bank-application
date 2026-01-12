@@ -9,4 +9,5 @@ import lombok.*;
 @Data
 public class AgencyStatus {
     private ApplicationHistoryStatus status;
+    private String remarks;
 }

@@ -187,7 +187,7 @@ public class AgencyMasterServiceImpl implements AgencyMasterService {
         }
 
         Long agencyId = loggedUser.getAgencyId();
-
+        log.info("agency Id : {}", agencyId);
         List<LoanApplication> apps =
                 loanApplicationRepository.findApplicationsByAgencyId(agencyId);
 

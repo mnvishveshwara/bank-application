@@ -10,8 +10,14 @@ public interface AssignValuatorService {
 
     AssignValuatorResponse assignValuator(String applicationId, AssignValuatorRequest request);
 
+    AssignValuatorResponse reAssignValuator(String applicationId, AssignValuatorRequest request);
+
+
     AssignValuatorResponse getValuatorAssignment(String applicationId);
 
     @Transactional
     ApplicationHistoryResponse scheduleSiteVisit(String applicationId, SiteVisitRequest req);
+
+    @Transactional
+    ApplicationHistoryResponse reScheduleSiteVisit(String applicationId, SiteVisitRequest req);
 }
