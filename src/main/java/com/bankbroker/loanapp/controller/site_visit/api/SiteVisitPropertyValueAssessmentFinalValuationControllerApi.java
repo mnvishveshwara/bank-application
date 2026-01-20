@@ -5,7 +5,7 @@ import com.bankbroker.loanapp.dto.site_visit.SiteVisitPropertyValueAssessmentFin
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/api/applications/{applicationId}/property-valuation/final")
+@RequestMapping("/api/applications/{applicationId}/site-visit/property-valuation/final")
 public interface SiteVisitPropertyValueAssessmentFinalValuationControllerApi {
 
     @PostMapping
@@ -19,3 +19,4 @@ public interface SiteVisitPropertyValueAssessmentFinalValuationControllerApi {
             @PathVariable String applicationId
     );
 }
+

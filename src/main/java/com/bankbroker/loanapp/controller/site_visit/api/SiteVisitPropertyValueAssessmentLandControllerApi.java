@@ -7,7 +7,7 @@ import com.bankbroker.loanapp.dto.site_visit.SiteVisitPropertyValueAssessmentLan
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/api/applications/{applicationId}/property-valuation/land")
+@RequestMapping("/api/applications/{applicationId}/site-visit/property-valuation/land")
 public interface SiteVisitPropertyValueAssessmentLandControllerApi {
 
     @PostMapping
