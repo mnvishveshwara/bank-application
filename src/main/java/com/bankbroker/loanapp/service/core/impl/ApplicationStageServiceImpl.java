@@ -523,15 +523,21 @@ private void updateStage(LoanApplication app, ApplicationStageType stage, AdminU
                         .orElseGet(ApplicationCustomerDetails::new);
 
         details.setApplication(application);
+        details.setEmail(request.getEmail());
         details.setFirstName(request.getFirstName());
+        details.setMiddleName(request.getMiddleName());
         details.setLastName(request.getLastName());
+        details.setLeadSource(request.getLeadSource());
         details.setPrimaryContactNumber(request.getPrimaryContactNumber());
         details.setSecondaryContactNumber(request.getSecondaryContactNumber());
-        details.setEmail(request.getEmail());
         details.setPropertyReferenceNo(request.getPropertyReferenceNo());
+        details.setPropertySubType(request.getPropertySubType());
         details.setPropertyType(request.getPropertyType());
-        details.setLoanType(request.getLoanType());
         details.setRemarks(request.getRemarks());
+        details.setSpockName(request.getSpockName());
+        details.setLoanType(request.getLoanType());
+        details.setBank(request.getBank());
+
 
         customerDetailsRepo.save(details);
 
