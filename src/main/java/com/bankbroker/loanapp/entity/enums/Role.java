@@ -8,5 +8,6 @@ public enum Role {
     EMPLOYEE,
     ADMIN,
     AGENCY,
-    AGENCY_VALUATOR
+    AGENCY_VALUATOR,
+
 }

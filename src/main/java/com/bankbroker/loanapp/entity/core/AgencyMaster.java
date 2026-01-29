@@ -3,6 +3,8 @@ package com.bankbroker.loanapp.entity.core;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(
@@ -54,8 +56,14 @@ public class AgencyMaster {
     @Column(name = "map_url")
     private String mapURL;
 
-    @Column(name = "bank", nullable = false)
-    private String bank;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "agency_bank_mapping",
+            joinColumns = @JoinColumn(name = "agency_id"),
+            inverseJoinColumns = @JoinColumn(name = "bank_id")
+    )
+    private Set<BankMaster> banks = new HashSet<>();
+
 
      // ---------------- AUDIT FIELDS ----------------
 

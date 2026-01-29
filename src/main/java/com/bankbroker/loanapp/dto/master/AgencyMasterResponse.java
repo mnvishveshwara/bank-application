@@ -3,6 +3,7 @@ package com.bankbroker.loanapp.dto.master;
 
 import lombok.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -23,7 +24,8 @@ public class AgencyMasterResponse {
     private Double latitude;
     private Double longitude;
     private String mapURL;
-
+    private Set<BankSummary> banks;
+    private String remarks;
     private String createdBy;
     private String updatedBy;
     private LocalDateTime createdAt;

@@ -1,5 +1,6 @@
 package com.bankbroker.loanapp.entity.core;
 
+import com.bankbroker.loanapp.entity.enums.ApplicationStageType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -40,8 +41,15 @@ public class LoanApplication {
     @JoinColumn(name = "assigned_to_id")
     private AdminUser assignedTo;
 
-    @Column(name = "associated_bank")
-    private String associatedBank;
+    // ========= BANK LINK =========
+
+    @Column(name = "bank_id", nullable = false)
+    private Long bankId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bank_id", insertable = false, updatable = false)
+    private BankMaster bank;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "valuator_id")
@@ -59,5 +67,10 @@ public class LoanApplication {
 
     @Column(name = "agency_remarks", length = 1000)
     private String agencyRemarks;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private ApplicationStageType status;
+
 
 }

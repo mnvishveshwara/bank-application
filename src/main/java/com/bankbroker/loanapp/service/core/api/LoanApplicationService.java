@@ -14,4 +14,6 @@ public interface LoanApplicationService {
     List<LoanApplicationResponse> getApplicationsByClientId(String clientId);
     LoanApplicationResponse assignApplication(String applicationId, LoanApplicationAssignRequest request);
     LoanApplicationResponse updateApplicationStatus(String applicationId, boolean active);
+
+    List<LoanApplicationResponse> getApplicationsForMyBanks();
 }

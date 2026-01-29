@@ -23,7 +23,7 @@ public class ApplicationCustomerDetailsRequest {
     private String propertyReferenceNo;
     private String propertyType;
     private String propertySubType;
-    private String bank;
+    private Long bankId;
     private String loanType;
     private String remarks;
 }

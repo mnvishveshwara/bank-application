@@ -1,6 +1,9 @@
 package com.bankbroker.loanapp.dto.admin;
 
+import com.bankbroker.loanapp.entity.core.BankMaster;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -13,6 +16,6 @@ public class AdminRequest {
     private String firstName;
     private String lastName;
     private String phoneNumber;
-    private String bank;
+    private List<Long> bankIds;
     private String role;
 }

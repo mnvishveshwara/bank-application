@@ -17,7 +17,7 @@ public interface AgencyMasterService {
 
     AgencyMasterResponse getAgency(Long id);
 
-    List<AgencyMasterResponse> getAllAgencies();
+    List<AgencyMasterResponse> getAllAgencies(String applicationId);
 
     void deleteAgency(Long id);
 

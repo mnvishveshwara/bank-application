@@ -41,6 +41,11 @@ public class Customer {
     @Column(name = "created_date", nullable = false)
     private LocalDateTime createdDate;
 
-    @Column(name = "bank", nullable = false)
-    private String bank;
+    @Column(name="bank_id")
+    private Long bankId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="bank_id", insertable=false, updatable=false)
+    private BankMaster bank;
+
 }

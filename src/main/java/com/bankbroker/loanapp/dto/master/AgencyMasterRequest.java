@@ -1,7 +1,10 @@
 package com.bankbroker.loanapp.dto.master;
 
 
+import com.bankbroker.loanapp.entity.core.BankMaster;
 import lombok.*;
+
+import java.util.Set;
 
 @Getter
 @Setter
@@ -25,5 +28,5 @@ public class AgencyMasterRequest {
     // Login details for agency admin
     private String email;
     private String password;
-    private String bank;
+    private Set<Long> bankIds;
 }

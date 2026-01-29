@@ -17,7 +17,8 @@ public class LoanApplicationResponse {
     private String createdByName;
     private String assignedToAdminId;
     private String assignedToName;
-    private String associatedBank;
+    private Long bankId;
+    private String bankName;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
     private String status;

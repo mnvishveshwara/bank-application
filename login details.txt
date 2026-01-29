@@ -1,0 +1,40 @@
+// ADMIN DETAILS
+
+admin1@gmail.com
+Admin@123
+
+
+
+// BANK
+
+{
+  "email": "sbi.manager@gmail.com",
+  "password": "Sbi@123",
+  "firstName": "SBI",
+  "lastName": "Manager",
+  "phoneNumber": "9999999999",
+  "role": "BANK",
+  "bankIds": [3]
+}
+
+
+// SUPER ADMIN
+
+{
+  "email": "superadmin@gmail.com",
+  "password": "Super@123",
+  "firstName": "Super",
+  "lastName": "Admin",
+  "phoneNumber": "8888888888",
+  "role": "ADMIN",
+  "bankIds": [1, 2, 3, 4]
+}
+
+
+
+// AGENCY DETAILS
+
+primeagency@gmail.com
+Agency@123
+
+//

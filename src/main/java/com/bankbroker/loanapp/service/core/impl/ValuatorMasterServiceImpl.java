@@ -67,7 +67,7 @@ public class ValuatorMasterServiceImpl implements ValuatorMasterService {
                 .phoneNumber(request.getPhone())
                 .role(Role.AGENCY_VALUATOR)
                 .agencyId(agencyId)
-                .bank(agency.getBank())
+                .banks(agency.getBanks())
                 .createdDate(LocalDateTime.now())
                 .build();
 
@@ -210,7 +210,8 @@ public class ValuatorMasterServiceImpl implements ValuatorMasterService {
                                     app.getAssignedTo().getLastName()
                                     : null)
 
-                            .associatedBank(app.getAssociatedBank())
+                            .bankId(app.getBankId())
+                            .bankName(app.getBank() != null ? app.getBank().getBankName() : null)
                             .createdDate(app.getCreatedDate())
                             .updatedDate(app.getUpdatedDate())
                             .build();

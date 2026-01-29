@@ -118,12 +118,14 @@ import com.bankbroker.loanapp.dto.admin.AdminRequest;
 import com.bankbroker.loanapp.dto.admin.AdminResponse;
 import com.bankbroker.loanapp.dto.application.LoanApplicationResponse;
 import com.bankbroker.loanapp.entity.core.AdminUser;
+import com.bankbroker.loanapp.entity.core.BankMaster;
 import com.bankbroker.loanapp.entity.core.LoanApplication;
 import com.bankbroker.loanapp.entity.enums.ApplicationStageType;
 import com.bankbroker.loanapp.entity.enums.Role;
 import com.bankbroker.loanapp.exception.ResourceNotFoundException;
 import com.bankbroker.loanapp.repository.core.AdminUserRepository;
 import com.bankbroker.loanapp.repository.core.ApplicationStageCurrentRepository;
+import com.bankbroker.loanapp.repository.core.BankMasterRepository;
 import com.bankbroker.loanapp.service.core.api.AdminUserService;
 import com.bankbroker.loanapp.util.IdGenerator;
 import lombok.RequiredArgsConstructor;
@@ -132,6 +134,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -140,6 +144,7 @@ public class AdminUserServiceImpl implements AdminUserService {
     private final AdminUserRepository adminUserRepository;
     private final PasswordEncoder passwordEncoder;
     private final ApplicationStageCurrentRepository applicationStageCurrentRepository;
+    private final BankMasterRepository bankRepository;
 
     @Override
     public AdminResponse createAdmin(AdminRequest request) {
@@ -159,6 +164,10 @@ public class AdminUserServiceImpl implements AdminUserService {
         // generate id using role-based prefix
         String generatedId = generateRoleBasedId(role);
 
+        Set<BankMaster> banks = bankRepository.findAllById(request.getBankIds())
+                .stream()
+                .collect(Collectors.toSet());
+
         AdminUser admin = AdminUser.builder()
                 .id(generatedId)
                 .email(request.getEmail())
@@ -168,7 +177,7 @@ public class AdminUserServiceImpl implements AdminUserService {
                 .phoneNumber(request.getPhoneNumber())
                 .role(role)
                 .createdDate(LocalDateTime.now())
-                .bank(request.getBank())
+                .banks(banks)
                 .build();
 
         admin = adminUserRepository.save(admin);
@@ -198,7 +207,7 @@ public class AdminUserServiceImpl implements AdminUserService {
         admin.setFirstName(request.getFirstName());
         admin.setLastName(request.getLastName());
         admin.setPhoneNumber(request.getPhoneNumber());
-        admin.setBank(request.getBank());
+
 
         if (request.getRole() != null) {
             try {
@@ -206,6 +215,16 @@ public class AdminUserServiceImpl implements AdminUserService {
             } catch (IllegalArgumentException ex) {
                 throw new IllegalArgumentException("Invalid role: " + request.getRole());
             }
+        }
+
+        if (request.getBankIds() != null && !request.getBankIds().isEmpty()) {
+
+            Set<BankMaster> banks = bankRepository
+                    .findAllById(request.getBankIds())
+                    .stream()
+                    .collect(Collectors.toSet());
+
+            admin.setBanks(banks);
         }
 
         admin = adminUserRepository.save(admin);
@@ -245,7 +264,8 @@ public class AdminUserServiceImpl implements AdminUserService {
                             .assignedToName(app.getAssignedTo() != null
                                     ? app.getAssignedTo().getFirstName() + " " + app.getAssignedTo().getLastName()
                                     : null)
-                            .associatedBank(app.getAssociatedBank())
+                            .bankId(app.getBankId())
+                            .bankName(app.getBank() != null ? app.getBank().getBankName() : null)
                             .createdDate(app.getCreatedDate())
                             .updatedDate(app.getUpdatedDate())
                             .status(stage.getStage().name())
@@ -279,7 +299,8 @@ public class AdminUserServiceImpl implements AdminUserService {
                             .assignedToName(app.getAssignedTo() != null
                                     ? app.getAssignedTo().getFirstName() + " " + app.getAssignedTo().getLastName()
                                     : null)
-                            .associatedBank(app.getAssociatedBank())
+                            .bankId(app.getBankId())
+                            .bankName(app.getBank() != null ? app.getBank().getBankName() : null)
                             .createdDate(app.getCreatedDate())
                             .updatedDate(app.getUpdatedDate())
                             .status(stage.getStage().name())
@@ -296,7 +317,17 @@ public class AdminUserServiceImpl implements AdminUserService {
                 .firstName(admin.getFirstName())
                 .lastName(admin.getLastName())
                 .phoneNumber(admin.getPhoneNumber())
-                .bank(admin.getBank())
+                .bankIds(
+                        admin.getBanks().stream()
+                                .map(BankMaster::getId)
+                                .toList()
+                )
+                .bankNames(
+                        admin.getBanks().stream()
+                                .map(BankMaster::getBankName)
+                                .toList()
+                )
+
                 .role(admin.getRole().name())
                 .createdDate(admin.getCreatedDate())
                 .build();

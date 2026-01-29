@@ -4,6 +4,7 @@ import com.bankbroker.loanapp.dto.admin.BankMasterRequest;
 import com.bankbroker.loanapp.dto.admin.BankMasterResponse;
 import com.bankbroker.loanapp.entity.core.AdminUser;
 import com.bankbroker.loanapp.entity.core.BankMaster;
+import com.bankbroker.loanapp.entity.enums.Role;
 import com.bankbroker.loanapp.mapper.core.BankMasterMapper;
 import com.bankbroker.loanapp.repository.core.BankMasterRepository;
 import com.bankbroker.loanapp.service.core.api.BankMasterService;
@@ -21,6 +22,7 @@ public class BankMasterServiceImpl implements BankMasterService {
     private final BankMasterMapper mapper;
     private final SecurityUtil securityUtil;
 
+
     @Override
     public BankMasterResponse create(BankMasterRequest request) {
 
@@ -29,10 +31,8 @@ public class BankMasterServiceImpl implements BankMasterService {
                     throw new RuntimeException("Bank code already exists");
                 });
 
-        AdminUser user = securityUtil.getLoggedInAdmin();
 
         BankMaster bank = mapper.toEntity(request);
-        bank.setCreatedBy(user);
         bank.setCreatedDate(LocalDateTime.now());
 
         return mapper.toResponse(repo.save(bank));
@@ -49,7 +49,6 @@ public class BankMasterServiceImpl implements BankMasterService {
         // 🔥 MapStruct magic
         mapper.updateEntityFromRequest(request, bank);
 
-        bank.setUpdatedBy(user);
         bank.setUpdatedDate(LocalDateTime.now());
 
         return mapper.toResponse(repo.save(bank));
@@ -77,4 +76,20 @@ public class BankMasterServiceImpl implements BankMasterService {
                 .map(mapper::toResponse)
                 .toList();
     }
+
+    @Override
+    public List<BankMasterResponse> getBanksForLoggedInAdmin() {
+
+        AdminUser loggedIn = securityUtil.getLoggedInAdmin();
+
+        // Other users see only mapped banks
+        return loggedIn.getBanks()
+                .stream()
+                .map(mapper::toResponse)
+                .toList();
+    }
+
+
+
+
 }

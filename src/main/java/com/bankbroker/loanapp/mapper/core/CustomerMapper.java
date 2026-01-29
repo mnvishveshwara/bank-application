@@ -10,7 +10,10 @@ import java.time.LocalDateTime;
 
 public class CustomerMapper {
 
-    public static Customer toEntity(CustomerRequest request, String encodedPassword, String generatedId) {
+    public static Customer toEntity(CustomerRequest request,
+                                    String encodedPassword,
+                                    String generatedId) {
+
         return Customer.builder()
                 .id(generatedId)
                 .email(request.getEmail())
@@ -19,33 +22,50 @@ public class CustomerMapper {
                 .lastName(request.getLastName())
                 .phoneNumber(request.getPhoneNumber())
                 .role(Role.USER)
-                .bank(request.getBank())
+                .bankId(request.getBankId()) // ✅ Correct FK
                 .createdDate(LocalDateTime.now())
                 .build();
     }
 
+
     public static CustomerResponse toResponse(Customer entity) {
+
         return CustomerResponse.builder()
                 .id(entity.getId())
                 .email(entity.getEmail())
                 .firstName(entity.getFirstName())
                 .lastName(entity.getLastName())
                 .phoneNumber(entity.getPhoneNumber())
-                .bank(entity.getBank())
+
+                // ✅ Bank info
+                .bankId(entity.getBankId())
+                .bankName(entity.getBank() != null
+                        ? entity.getBank().getBankName()
+                        : null)
+
                 .createdDate(entity.getCreatedDate())
                 .build();
     }
 
+
     public static CustomerDTO toDTO(Customer entity) {
+
         return CustomerDTO.builder()
                 .id(entity.getId())
                 .email(entity.getEmail())
                 .firstName(entity.getFirstName())
                 .lastName(entity.getLastName())
                 .phoneNumber(entity.getPhoneNumber())
-                .bank(entity.getBank())
+
+                // ✅ Bank mapping
+                .bankId(entity.getBankId())
+                .bankName(entity.getBank() != null
+                        ? entity.getBank().getBankName()
+                        : null)
+
                 .role(entity.getRole().name())
                 .createdDate(entity.getCreatedDate())
                 .build();
     }
+
 }

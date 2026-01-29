@@ -16,5 +16,6 @@ public class CustomerDTO {
     private String phoneNumber;
     private String role;
     private LocalDateTime createdDate;
-    private String bank;
+    private Long bankId;
+    private String bankName;
 }

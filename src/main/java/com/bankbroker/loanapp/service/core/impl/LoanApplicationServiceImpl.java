@@ -4,14 +4,18 @@ import com.bankbroker.loanapp.dto.application.LoanApplicationAssignRequest;
 import com.bankbroker.loanapp.dto.application.LoanApplicationRequest;
 import com.bankbroker.loanapp.dto.application.LoanApplicationResponse;
 import com.bankbroker.loanapp.entity.core.AdminUser;
+import com.bankbroker.loanapp.entity.core.BankMaster;
 import com.bankbroker.loanapp.entity.core.Customer;
 import com.bankbroker.loanapp.entity.core.LoanApplication;
+import com.bankbroker.loanapp.entity.enums.ApplicationHistoryStatus;
 import com.bankbroker.loanapp.exception.ResourceNotFoundException;
 import com.bankbroker.loanapp.repository.core.AdminUserRepository;
+import com.bankbroker.loanapp.repository.core.ApplicationStageHistoryRepository;
 import com.bankbroker.loanapp.repository.core.CustomerRepository;
 import com.bankbroker.loanapp.repository.core.LoanApplicationRepository;
 import com.bankbroker.loanapp.service.core.api.LoanApplicationService;
 import com.bankbroker.loanapp.util.IdGenerator;
+import com.bankbroker.loanapp.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +29,9 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
     private final LoanApplicationRepository loanApplicationRepository;
     private final CustomerRepository customerRepository;
     private final AdminUserRepository adminUserRepository;
+    private final ApplicationStageHistoryRepository applicationHistoryRepository;
+
+    private final SecurityUtil securityUtil;
 
     @Override
     public LoanApplicationResponse createApplication(LoanApplicationRequest request) {
@@ -40,7 +47,7 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
                     .orElseThrow(() -> new ResourceNotFoundException("AdminUser", "id", request.getAssignedToAdminId()));
         }
 
-        String associatedBank = client.getBank();
+        Long bankId = client.getBankId();
 
         String id = IdGenerator.generateId();
         LoanApplication app = LoanApplication.builder()
@@ -51,7 +58,7 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
                 .assignedTo(assignedTo)
                 .active(true)
                 .updatedDate(LocalDateTime.now())
-                .associatedBank(associatedBank)
+                .bankId(bankId)
                 .build();
 
         app = loanApplicationRepository.save(app);
@@ -83,6 +90,27 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
                 .map(this::mapToResponse)
                 .toList();
     }
+
+
+    @Override
+    public List<LoanApplicationResponse> getApplicationsForMyBanks() {
+        AdminUser user = securityUtil.getLoggedInAdmin();
+
+        // Extract all bank IDs mapped to this admin
+        List<Long> bankIds = user.getBanks()
+                .stream()
+                .map(BankMaster::getId)
+                .toList();
+
+        // Fetch applications belonging to those banks
+        List<LoanApplication> apps =
+                loanApplicationRepository.findByBankIdIn(bankIds);
+
+        return apps.stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
+
 
     @Override
     public LoanApplicationResponse assignApplication(String applicationId, LoanApplicationAssignRequest request) {
@@ -122,6 +150,12 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
                   (app.getAssignedTo().getLastName() != null ? app.getAssignedTo().getLastName() : "")
                 : null;
 
+        String s= app.getId();
+
+        ApplicationHistoryStatus status=applicationHistoryRepository.findByApplication(app)
+                .map(history -> history.getStatus())
+                .orElse(null);
+
         return LoanApplicationResponse.builder()
                 .applicationId(app.getId())
                 .active(app.getActive())
@@ -131,9 +165,11 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
                 .createdByName(createdByName.trim())
                 .assignedToAdminId(assignedToId)
                 .assignedToName(assignedToName != null ? assignedToName.trim() : null)
-                .associatedBank(app.getAssociatedBank())
+                .bankId(app.getBankId())
+                .bankName(app.getBank() != null ? app.getBank().getBankName() : null)
                 .createdDate(app.getCreatedDate())
                 .updatedDate(app.getUpdatedDate())
+                .status(status.name())
                 .build();
     }
 }

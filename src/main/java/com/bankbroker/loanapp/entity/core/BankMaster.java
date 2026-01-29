@@ -48,15 +48,9 @@ public class BankMaster {
 
     private Boolean isActive;
 
-    @ManyToOne
-    @JoinColumn(name = "created_by")
-    private AdminUser createdBy;
-
     private LocalDateTime createdDate;
 
-    @ManyToOne
-    @JoinColumn(name = "updated_by")
-    private AdminUser updatedBy;
+
 
     private LocalDateTime updatedDate;
 }

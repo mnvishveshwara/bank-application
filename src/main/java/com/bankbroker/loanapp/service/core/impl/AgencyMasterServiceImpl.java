@@ -3,19 +3,18 @@ package com.bankbroker.loanapp.service.core.impl;
 import com.bankbroker.loanapp.dto.application.LoanApplicationResponse;
 import com.bankbroker.loanapp.dto.master.AgencyMasterRequest;
 import com.bankbroker.loanapp.dto.master.AgencyMasterResponse;
+import com.bankbroker.loanapp.dto.master.BankSummary;
 import com.bankbroker.loanapp.dto.stage.ApplicationDecisionRequest;
 import com.bankbroker.loanapp.dto.stage.ApplicationHistoryRequest;
 import com.bankbroker.loanapp.dto.stage.ApplicationHistoryResponse;
 import com.bankbroker.loanapp.entity.core.AdminUser;
 import com.bankbroker.loanapp.entity.core.AgencyMaster;
+import com.bankbroker.loanapp.entity.core.BankMaster;
 import com.bankbroker.loanapp.entity.core.LoanApplication;
 import com.bankbroker.loanapp.entity.enums.ApplicationHistoryStatus;
 import com.bankbroker.loanapp.entity.enums.Role;
 import com.bankbroker.loanapp.exception.ResourceNotFoundException;
-import com.bankbroker.loanapp.repository.core.AdminUserRepository;
-import com.bankbroker.loanapp.repository.core.AgencyMasterRepository;
-import com.bankbroker.loanapp.repository.core.ApplicationStageHistoryRepository;
-import com.bankbroker.loanapp.repository.core.LoanApplicationRepository;
+import com.bankbroker.loanapp.repository.core.*;
 import com.bankbroker.loanapp.service.core.api.AgencyMasterService;
 import com.bankbroker.loanapp.service.core.api.ApplicationStageService;
 import com.bankbroker.loanapp.util.IdGenerator;
@@ -29,7 +28,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.AbstractMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -43,6 +45,7 @@ public class AgencyMasterServiceImpl implements AgencyMasterService {
     private final ApplicationStageHistoryRepository applicationStageHistoryRepository;
     private final ApplicationStageService applicationStageService;
     private final SecurityUtil securityUtil;
+    private final BankMasterRepository bankRepository;
 
     @Override
     @Transactional
@@ -58,11 +61,18 @@ public class AgencyMasterServiceImpl implements AgencyMasterService {
 
         AdminUser loggedInAdmin = securityUtil.getLoggedInAdmin();
 
+        Set<BankMaster> banks =
+                new HashSet<>(bankRepository.findAllById(req.getBankIds()));
+
+        if (banks.size() != req.getBankIds().size()) {
+            throw new RuntimeException("Invalid bank id(s) provided");
+        }
 
 
         AgencyMaster agency = AgencyMaster.builder()
                 .agencyName(req.getAgencyName())
-                .bank(req.getBank())
+//                .bankId(req.getBank())
+                .banks(banks)
                 .contactName(req.getContactName())
                 .contactNumber(req.getContactNumber())
                 .streetLine1(req.getStreetLine1())
@@ -92,8 +102,8 @@ public class AgencyMasterServiceImpl implements AgencyMasterService {
                 .phoneNumber(req.getContactNumber())
                 .role(Role.AGENCY)
                 .agencyId(agency.getId())
-                .bank(req.getBank())
                 .createdDate(LocalDateTime.now())
+                .banks(banks)
                 .build();
 
         adminUserRepository.save(agencyAdmin);
@@ -136,9 +146,26 @@ public class AgencyMasterServiceImpl implements AgencyMasterService {
     }
 
     @Override
-    public List<AgencyMasterResponse> getAllAgencies() {
-        return repository.findAll()
-                .stream()
+    public List<AgencyMasterResponse> getAllAgencies(String applicationId) {
+
+        LoanApplication app= loanApplicationRepository.findById(applicationId).orElseThrow(() -> new ResourceNotFoundException("LoanApplication", "id", applicationId));
+
+        BankMaster bank = app.getBank();
+        log.info("bank fce {}",bank.getBankName());
+
+        if (bank == null) {
+            throw new IllegalStateException("No bank assigned to this application");
+        }
+
+        List<AgencyMaster> agencies =
+                repository.findByBanks_Id(bank.getId());
+
+        log.info("Found {} agencies for bank id {}", agencies.size(), bank.getId());
+
+
+
+
+        return agencies.stream()
                 .map(this::toResponse)
                 .toList();
     }
@@ -160,6 +187,11 @@ public class AgencyMasterServiceImpl implements AgencyMasterService {
                 .streetLine2(a.getStreetLine2())
                 .pinCode(a.getPinCode())
                 .city(a.getCity())
+                .banks(
+                        a.getBanks().stream()
+                                .map(b -> new BankSummary(b.getId(), b.getBankName()))
+                                .collect(Collectors.toSet())
+                )
                 .state(a.getState())
                 .latitude(a.getLatitude())
                 .longitude(a.getLongitude())
@@ -228,7 +260,8 @@ public class AgencyMasterServiceImpl implements AgencyMasterService {
                                     ? app.getAssignedTo().getFirstName() + " " + app.getAssignedTo().getLastName()
                                     : null)
 
-                            .associatedBank(app.getAssociatedBank())
+                            .bankId(app.getBankId())
+                            .bankName(app.getBank() != null ? app.getBank().getBankName() : null)
                             .createdDate(app.getCreatedDate())
                             .updatedDate(app.getUpdatedDate())
                             .build();

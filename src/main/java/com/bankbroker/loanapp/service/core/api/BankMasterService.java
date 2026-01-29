@@ -16,4 +16,7 @@ public interface BankMasterService {
     List<BankMasterResponse> getAll();
 
     List<BankMasterResponse> getActiveBanks();
+
+    List<BankMasterResponse> getBanksForLoggedInAdmin();
+
 }

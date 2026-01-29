@@ -15,6 +15,7 @@ import com.bankbroker.loanapp.mapper.core.ApplicationPropertyDetailsMapper;
 import com.bankbroker.loanapp.repository.core.*;
 import com.bankbroker.loanapp.repository.stage.*;
 import com.bankbroker.loanapp.service.core.api.ApplicationStageService;
+import com.bankbroker.loanapp.service.inbox.api.InboxService;
 import com.bankbroker.loanapp.service.storage.FileStorageService;
 import com.bankbroker.loanapp.util.IdGenerator;
 import com.bankbroker.loanapp.util.SecurityUtil;
@@ -52,6 +53,7 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
     private final ApplicationAgencyAssignmentRepository agencyAssignmentRepo;
     private final AgencyMasterRepository agencyRepo;
     private final SecurityUtil securityUtil;
+    private final InboxService inboxService;
 
 
     private LoanApplication getApplication(String id) {
@@ -184,8 +186,36 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
 
         docDetails.getDocuments().clear();
 
+//        for (int i = 0; i < files.size(); i++) {
+//            MultipartFile file = files.get(i);
+//
+//            ApplicationUploadedDocument doc =
+//                    ApplicationUploadedDocument.builder()
+//                            .documentDetails(docDetails)
+//                            .fileName(file.getOriginalFilename())
+//                            .fileType(file.getContentType())
+//                            .fileSizeKB(file.getSize() / 1024)
+//                            .documentType(types.get(i))
+//                            .fileUrl(fileStorageService.store(
+//                                    file,
+//                                    applicationId,
+//                                    "application-documents",
+//                                    types.get(i) +
+//                                            fileStorageService.getExtension(file.getOriginalFilename())))
+//                            .build();
+//
+//            docDetails.getDocuments().add(doc);
+//        }
+
         for (int i = 0; i < files.size(); i++) {
+
             MultipartFile file = files.get(i);
+
+            // ✅ Original type (for DB)
+            String docType = types.get(i);
+
+            // ✅ Safe type (for filename)
+            String safeDocType = docType.replaceAll("[\\\\/:*?\"<>|]", "_");
 
             ApplicationUploadedDocument doc =
                     ApplicationUploadedDocument.builder()
@@ -193,13 +223,16 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
                             .fileName(file.getOriginalFilename())
                             .fileType(file.getContentType())
                             .fileSizeKB(file.getSize() / 1024)
-                            .documentType(types.get(i))
+                            .documentType(docType) // keep original
                             .fileUrl(fileStorageService.store(
                                     file,
                                     applicationId,
                                     "application-documents",
-                                    types.get(i) +
-                                            fileStorageService.getExtension(file.getOriginalFilename())))
+
+                                    // ✅ use safeDocType for file saving
+                                    safeDocType +
+                                            fileStorageService.getExtension(file.getOriginalFilename())
+                            ))
                             .build();
 
             docDetails.getDocuments().add(doc);
@@ -259,6 +292,13 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
 
         updateStage(app, ApplicationStageType.ASSIGN_AGENCY, admin);
 
+
+        inboxService.createThreadForAssignment(
+                app.getId(),       // Application Id
+                app.getBankId(),        // Bank Id
+                agency.getId(),               // Agency Id
+                "New Application Assigned - " + app.getId()
+        );
         return agencyMapper.toResponse(entity);
     }
 
@@ -276,7 +316,8 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
 
         AgencyMaster agency = agencyRepo.findById(entity.getAgency().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("AgencyMaster", "id", entity.getAgency().getId()));
-        return toResponse(agency);
+
+        return toResponse(agency, entity);
     }
 
 
@@ -362,7 +403,8 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
                 .propertyReferenceNo(e.getPropertyReferenceNo())
                 .propertyType(e.getPropertyType())
                 .propertySubType(e.getPropertySubType())
-                .bank(e.getBank())
+                .bankId(e.getBankId())
+                .bankName(e.getBank() != null ? e.getBank().getBankName() : null)
                 .loanType(e.getLoanType())
                 .remarks(e.getRemarks())
                 .createdDate(e.getCreatedDate())
@@ -467,7 +509,7 @@ private void updateStage(LoanApplication app, ApplicationStageType stage, AdminU
                     .createdDate(LocalDateTime.now())
                     .updatedDate(LocalDateTime.now())
                     .active(true)
-                    .associatedBank(request.getBank())
+                    .bankId(request.getBankId())
                     .build();
 
             application = loanApplicationRepository.save(application);
@@ -495,7 +537,7 @@ private void updateStage(LoanApplication app, ApplicationStageType stage, AdminU
                             .lastName(request.getLastName())
                             .phoneNumber(request.getPrimaryContactNumber())
                             .role(Role.USER)
-                            .bank(request.getBank())
+                            .bankId(request.getBankId())
                             .createdDate(LocalDateTime.now())
                             .build();
                     return customerRepo.save(newCustomer);
@@ -505,7 +547,7 @@ private void updateStage(LoanApplication app, ApplicationStageType stage, AdminU
         customer.setFirstName(request.getFirstName());
         customer.setLastName(request.getLastName());
         customer.setPhoneNumber(request.getPrimaryContactNumber());
-        customer.setBank(request.getBank());
+        customer.setBankId(request.getBankId());
         customerRepo.save(customer);
 
         // ===============================
@@ -513,6 +555,7 @@ private void updateStage(LoanApplication app, ApplicationStageType stage, AdminU
         // ===============================
         application.setClient(customer);
         application.setUpdatedDate(LocalDateTime.now());
+        application.setBankId(request.getBankId());
         loanApplicationRepository.save(application);
 
         // ===============================
@@ -536,7 +579,7 @@ private void updateStage(LoanApplication app, ApplicationStageType stage, AdminU
         details.setRemarks(request.getRemarks());
         details.setSpockName(request.getSpockName());
         details.setLoanType(request.getLoanType());
-        details.setBank(request.getBank());
+        details.setBankId(request.getBankId());
 
 
         customerDetailsRepo.save(details);
@@ -551,7 +594,7 @@ private void updateStage(LoanApplication app, ApplicationStageType stage, AdminU
 
 
 
-    private AgencyMasterResponse toResponse(AgencyMaster a) {
+    private AgencyMasterResponse toResponse(AgencyMaster a, ApplicationAgencyAssignment assignment) {
         return AgencyMasterResponse.builder()
                 .id(a.getId())
                 .agencyName(a.getAgencyName())
@@ -569,6 +612,7 @@ private void updateStage(LoanApplication app, ApplicationStageType stage, AdminU
                 .updatedAt(a.getUpdatedAt())
                 .createdBy(a.getCreatedBy().getId())
                 .updatedBy(a.getUpdatedBy().getId())
+                .remarks(assignment.getRemarks())
                 .build();
     }
 
@@ -586,3 +630,4 @@ private void updateStage(LoanApplication app, ApplicationStageType stage, AdminU
     }
 
 }
+

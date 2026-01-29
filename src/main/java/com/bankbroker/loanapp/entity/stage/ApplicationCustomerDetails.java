@@ -1,6 +1,7 @@
 package com.bankbroker.loanapp.entity.stage;
 
 import com.bankbroker.loanapp.entity.core.AdminUser;
+import com.bankbroker.loanapp.entity.core.BankMaster;
 import com.bankbroker.loanapp.entity.core.LoanApplication;
 import jakarta.persistence.*;
 import lombok.*;
@@ -69,7 +70,13 @@ public class ApplicationCustomerDetails {
 
     private String remarks;
 
-    private String bank;
+    @Column(name = "bank_id", nullable = false)
+    private Long bankId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bank_id", insertable = false, updatable = false)
+    private BankMaster bank;
+
 
     @CreatedDate
     @Column(name = "created_date",  updatable = false)

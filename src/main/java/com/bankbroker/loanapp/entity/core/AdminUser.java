@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "admin_master")
@@ -41,8 +43,17 @@ public class AdminUser {
     @Column(name = "created_date", nullable = false)
     private LocalDateTime createdDate;
 
-    @Column(name = "bank", nullable = false)
-    private String bank;
+//    @Column(name = "bank", nullable = false)
+//    private String bank;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "admin_bank_mapping",
+            joinColumns = @JoinColumn(name = "admin_id"),
+            inverseJoinColumns = @JoinColumn(name = "bank_id")
+    )
+    private Set<BankMaster> banks = new HashSet<>();
+
 
     @Column(name = "agency_id")
     private Long agencyId;

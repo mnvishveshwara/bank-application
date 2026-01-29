@@ -30,8 +30,10 @@ public interface AgencyMasterControllerApi {
             @PathVariable Long id
     );
 
-    @GetMapping("/get-all-agency")
-    ResponseEntity<List<AgencyMasterResponse>> getAllAgencies();
+    @GetMapping("/get-all-agency/{applicationId}")
+    ResponseEntity<List<AgencyMasterResponse>> getAllAgencies(@PathVariable String applicationId);
+
+     @GetMapping
 
     @DeleteMapping("/{id}")
     ResponseEntity<Void> deleteAgency(

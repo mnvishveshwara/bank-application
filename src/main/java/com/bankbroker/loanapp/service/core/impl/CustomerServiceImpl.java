@@ -3,11 +3,13 @@ package com.bankbroker.loanapp.service.core.impl;
 import com.bankbroker.loanapp.dto.application.LoanApplicationResponse;
 import com.bankbroker.loanapp.dto.customer.CustomerRequest;
 import com.bankbroker.loanapp.dto.customer.CustomerResponse;
+import com.bankbroker.loanapp.entity.core.BankMaster;
 import com.bankbroker.loanapp.entity.core.Customer;
 import com.bankbroker.loanapp.entity.core.LoanApplication;
 import com.bankbroker.loanapp.exception.ResourceNotFoundException;
 import com.bankbroker.loanapp.mapper.core.CustomerMapper;
 import com.bankbroker.loanapp.repository.core.ApplicationStageHistoryRepository;
+import com.bankbroker.loanapp.repository.core.BankMasterRepository;
 import com.bankbroker.loanapp.repository.core.CustomerRepository;
 import com.bankbroker.loanapp.repository.core.LoanApplicationRepository;
 import com.bankbroker.loanapp.service.core.api.CustomerService;
@@ -27,6 +29,7 @@ public class CustomerServiceImpl implements CustomerService {
     private final PasswordEncoder passwordEncoder;
     private final LoanApplicationRepository loanApplicationRepository;
     private final ApplicationStageHistoryRepository stageHistoryRepository;
+    private final BankMasterRepository bankMasterRepository;
 
     @Override
     public CustomerResponse createCustomer(CustomerRequest request) {
@@ -52,19 +55,45 @@ public class CustomerServiceImpl implements CustomerService {
                 .toList();
     }
 
+//    @Override
+//    public CustomerResponse updateCustomer(String id, CustomerRequest request) {
+//        Customer customer = customerRepository.findById(id)
+//                .orElseThrow(() -> new ResourceNotFoundException("Customer", "id", id));
+//
+//        customer.setFirstName(request.getFirstName());
+//        customer.setLastName(request.getLastName());
+//        customer.setPhoneNumber(request.getPhoneNumber());
+//        customer.setBankId(request.getBankId());
+//
+//        customer = customerRepository.save(customer);
+//        return CustomerMapper.toResponse(customer);
+//    }
+
     @Override
     public CustomerResponse updateCustomer(String id, CustomerRequest request) {
-        Customer customer = customerRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Customer", "id", id));
 
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Customer", "id", id));
+
+        // ✅ Validate Bank exists
+        BankMaster bank = bankMasterRepository.findById(request.getBankId())
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("BankMaster", "id", request.getBankId()));
+
+        // Update fields
         customer.setFirstName(request.getFirstName());
         customer.setLastName(request.getLastName());
         customer.setPhoneNumber(request.getPhoneNumber());
-        customer.setBank(request.getBank());
+
+        // ✅ Correct bank linking
+        customer.setBankId(bank.getId());
 
         customer = customerRepository.save(customer);
+
         return CustomerMapper.toResponse(customer);
     }
+
 
     @Override
     public void deleteCustomer(String id) {
@@ -109,7 +138,8 @@ public class CustomerServiceImpl implements CustomerService {
                             .assignedToAdminId(null)
                             .assignedToName(null)
 
-                            .associatedBank(app.getAssociatedBank())
+                            .bankId(app.getBankId())
+                            .bankName(app.getBank() != null ? app.getBank().getBankName() : null)
                             .createdDate(app.getCreatedDate())
                             .updatedDate(app.getUpdatedDate())
                             .status(status)

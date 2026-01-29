@@ -44,4 +44,10 @@ public class BankMasterControllerImpl implements BankMasterController {
     public ResponseEntity<List<BankMasterResponse>> getActive() {
         return ResponseEntity.ok(service.getActiveBanks());
     }
+
+
+    @GetMapping("/my-banks")
+    public ResponseEntity<List<BankMasterResponse>> getMyBanks() {
+        return ResponseEntity.ok(service.getBanksForLoggedInAdmin());
+    }
 }
