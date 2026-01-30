@@ -26,7 +26,7 @@ public interface LoanApplicationRepository extends JpaRepository<LoanApplication
     List<LoanApplication> findApplicationsByValuatorId(String valuatorId);
 
 
-    // ✅ MANAGER STATUS COUNTS
+    //   MANAGER STATUS COUNTS
     @Query("""
     SELECT new com.bankbroker.loanapp.dto.admin.DashboardStatusSummaryResponse(
         app.status,
@@ -41,7 +41,7 @@ public interface LoanApplicationRepository extends JpaRepository<LoanApplication
     );
 
 
-    // ✅ MANAGER MONTHLY TREND (LAST 30 DAYS)
+    //   MANAGER MONTHLY TREND (LAST 30 DAYS)
     @Query("""
     SELECT new com.bankbroker.loanapp.dto.admin.DashboardMonthlyTrendResponse(
         DAY(app.createdDate),
@@ -60,7 +60,7 @@ public interface LoanApplicationRepository extends JpaRepository<LoanApplication
 
 
 
-    // ✅ MANAGER COMPLETED APPLICATIONS (LATEST Completed)
+    //   MANAGER COMPLETED APPLICATIONS (LATEST Completed)
     @Query("""
     SELECT new com.bankbroker.loanapp.dto.admin.DashboardLatestApplicationResponse(
         app.id,
@@ -84,7 +84,7 @@ public interface LoanApplicationRepository extends JpaRepository<LoanApplication
 
 
 
-    // ✅ MANAGER REJECTED APPLICATIONS (LATEST Rejected)
+    //   MANAGER REJECTED APPLICATIONS (LATEST Rejected)
     @Query("""
     SELECT new com.bankbroker.loanapp.dto.admin.DashboardLatestApplicationResponse(
         app.id,

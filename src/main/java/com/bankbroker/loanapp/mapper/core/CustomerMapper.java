@@ -22,7 +22,7 @@ public class CustomerMapper {
                 .lastName(request.getLastName())
                 .phoneNumber(request.getPhoneNumber())
                 .role(Role.USER)
-                .bankId(request.getBankId()) // ✅ Correct FK
+                .bankId(request.getBankId()) //   Correct FK
                 .createdDate(LocalDateTime.now())
                 .build();
     }
@@ -37,7 +37,7 @@ public class CustomerMapper {
                 .lastName(entity.getLastName())
                 .phoneNumber(entity.getPhoneNumber())
 
-                // ✅ Bank info
+                //   Bank info
                 .bankId(entity.getBankId())
                 .bankName(entity.getBank() != null
                         ? entity.getBank().getBankName()
@@ -57,7 +57,7 @@ public class CustomerMapper {
                 .lastName(entity.getLastName())
                 .phoneNumber(entity.getPhoneNumber())
 
-                // ✅ Bank mapping
+                //   Bank mapping
                 .bankId(entity.getBankId())
                 .bankName(entity.getBank() != null
                         ? entity.getBank().getBankName()

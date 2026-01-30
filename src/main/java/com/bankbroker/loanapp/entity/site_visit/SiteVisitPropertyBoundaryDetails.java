@@ -82,7 +82,7 @@ public class SiteVisitPropertyBoundaryDetails {
     private Boolean northMatch;
 
     // -------------------------------------------------
-    // ✅ Validations
+    //   Validations
     // -------------------------------------------------
     @Column(name = "boundary_matching")
     private Boolean boundaryMatching;

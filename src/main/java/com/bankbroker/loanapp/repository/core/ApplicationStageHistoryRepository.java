@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface ApplicationStageHistoryRepository extends JpaRepository<ApplicationStageHistory, Long> {
     Optional<ApplicationStageHistory> findByApplication(LoanApplication application);
 
-    // ✅ PIE CHART STATUS COUNT (Latest stage only)
+    //   PIE CHART STATUS COUNT (Latest stage only)
     @Query("""
         SELECT new com.bankbroker.loanapp.dto.admin.DashboardStatusSummaryResponse(
             hist.status,
@@ -31,7 +31,7 @@ public interface ApplicationStageHistoryRepository extends JpaRepository<Applica
     List<DashboardStatusSummaryResponse> getLatestStatusSummary();
 
 
-    // ✅ MONTHLY TREND (Applications per day)
+    //   MONTHLY TREND (Applications per day)
     @Query("""
         SELECT new com.bankbroker.loanapp.dto.admin.DashboardMonthlyTrendResponse(
             DAY(hist.createdDate),
@@ -45,7 +45,7 @@ public interface ApplicationStageHistoryRepository extends JpaRepository<Applica
     List<DashboardMonthlyTrendResponse> getMonthlyTrends();
 
 
-    // ✅ Latest Completed Applications
+    //   Latest Completed Applications
     @Query("""
         SELECT new com.bankbroker.loanapp.dto.admin.DashboardLatestApplicationResponse(
             app.id,
@@ -68,7 +68,7 @@ public interface ApplicationStageHistoryRepository extends JpaRepository<Applica
     List<DashboardLatestApplicationResponse> getLatestCompleted();
 
 
-    // ✅ Latest Rejected Applications
+    //   Latest Rejected Applications
     @Query("""
         SELECT new com.bankbroker.loanapp.dto.admin.DashboardLatestApplicationResponse(
             app.id,

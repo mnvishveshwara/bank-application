@@ -8,7 +8,7 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ApplicationCustomerDetailsMapper {
 
-    // ✅ Entity → Response
+    //   Entity → Response
     @Mapping(source = "application.id", target = "applicationId")
 
     // Bank Mapping
@@ -18,7 +18,7 @@ public interface ApplicationCustomerDetailsMapper {
     ApplicationCustomerDetailsResponse toResponse(ApplicationCustomerDetails entity);
 
 
-    // ✅ Request → Entity
+    //   Request → Entity
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "application", ignore = true)
     @Mapping(target = "bank", ignore = true) // important because bank is derived from bankId
@@ -29,7 +29,7 @@ public interface ApplicationCustomerDetailsMapper {
     ApplicationCustomerDetails toEntity(ApplicationCustomerDetailsRequest request);
 
 
-    // ✅ Update Existing Entity
+    //   Update Existing Entity
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "application", ignore = true)
     @Mapping(target = "bank", ignore = true)

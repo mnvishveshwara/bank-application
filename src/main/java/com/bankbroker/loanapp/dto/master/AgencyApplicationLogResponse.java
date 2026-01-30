@@ -14,7 +14,7 @@ public class AgencyApplicationLogResponse {
     private String applicationId;
     private String bankName;
 
-    // ✅ Must match hist.status type
+    //   Must match hist.status type
     private ApplicationHistoryStatus latestStage;
 
     private String valuatorName;

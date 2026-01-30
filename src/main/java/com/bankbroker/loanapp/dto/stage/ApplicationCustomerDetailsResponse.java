@@ -28,7 +28,7 @@ public class ApplicationCustomerDetailsResponse {
     private String propertyType;
     private String propertySubType;
 
-    // ✅ Correct Bank Fields
+    //   Correct Bank Fields
     private Long bankId;
     private String bankName;
 

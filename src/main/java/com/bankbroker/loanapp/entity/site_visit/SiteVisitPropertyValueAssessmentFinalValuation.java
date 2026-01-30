@@ -94,7 +94,7 @@ public class SiteVisitPropertyValueAssessmentFinalValuation {
     private Double insuranceValueLayout;
 
     // -------------------------------------------------
-    // ✅ FINAL VALUE TO BE CONSIDERED
+    //   FINAL VALUE TO BE CONSIDERED
     // -------------------------------------------------
     @Column(name = "final_value_considered")
     private Double finalValueConsidered;

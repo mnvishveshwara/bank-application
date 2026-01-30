@@ -211,10 +211,10 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
 
             MultipartFile file = files.get(i);
 
-            // ✅ Original type (for DB)
+            //   Original type (for DB)
             String docType = types.get(i);
 
-            // ✅ Safe type (for filename)
+            //   Safe type (for filename)
             String safeDocType = docType.replaceAll("[\\\\/:*?\"<>|]", "_");
 
             ApplicationUploadedDocument doc =
@@ -229,7 +229,7 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
                                     applicationId,
                                     "application-documents",
 
-                                    // ✅ use safeDocType for file saving
+                                    //   use safeDocType for file saving
                                     safeDocType +
                                             fileStorageService.getExtension(file.getOriginalFilename())
                             ))

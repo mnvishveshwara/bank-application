@@ -76,7 +76,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Customer", "id", id));
 
-        // ✅ Validate Bank exists
+        //   Validate Bank exists
         BankMaster bank = bankMasterRepository.findById(request.getBankId())
                 .orElseThrow(() ->
                         new ResourceNotFoundException("BankMaster", "id", request.getBankId()));
@@ -86,7 +86,7 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setLastName(request.getLastName());
         customer.setPhoneNumber(request.getPhoneNumber());
 
-        // ✅ Correct bank linking
+        //   Correct bank linking
         customer.setBankId(bank.getId());
 
         customer = customerRepository.save(customer);

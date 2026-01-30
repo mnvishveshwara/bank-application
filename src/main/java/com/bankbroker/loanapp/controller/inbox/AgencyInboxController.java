@@ -17,13 +17,13 @@ public class AgencyInboxController {
 
     private final InboxService inboxService;
 
-    // ✅ Inbox list
+    //   Inbox list
     @GetMapping
     public ResponseEntity<List<InboxThreadResponse>> getInbox() {
         return ResponseEntity.ok(inboxService.getAgencyInbox());
     }
 
-    // ✅ Thread messages
+    //   Thread messages
     @GetMapping("/{threadId}")
     public ResponseEntity<List<InboxMessageResponse>> getThread(
             @PathVariable Long threadId
@@ -31,14 +31,14 @@ public class AgencyInboxController {
         return ResponseEntity.ok(inboxService.getThreadMessages(threadId));
     }
 
-    // ✅ Mark as read
+    //   Mark as read
     @PutMapping("/{threadId}/read")
     public ResponseEntity<Void> markRead(@PathVariable Long threadId) {
         inboxService.markAsRead(threadId);
         return ResponseEntity.ok().build();
     }
 
-    // ✅ Send reply
+    //   Send reply
     @PostMapping(value = "/{threadId}/reply", consumes = "multipart/form-data")
     public ResponseEntity<Void> sendReply(
             @PathVariable Long threadId,

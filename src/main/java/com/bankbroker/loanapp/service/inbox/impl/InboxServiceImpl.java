@@ -35,6 +35,9 @@ public class InboxServiceImpl implements InboxService {
                         .id(t.getId())
                         .sender("Bank ID: " + t.getBankId())
                         .subject(t.getSubject())
+
+
+
                         .unread(t.isUnreadForAgency())
                         .lastUpdated(t.getLastUpdated())
                         .build())
@@ -74,7 +77,7 @@ public class InboxServiceImpl implements InboxService {
 
         String fileUrl = null;
 
-        // ✅ Save file if present
+        //   Save file if present
         if (file != null && !file.isEmpty()) {
             fileUrl = file.getOriginalFilename(); // later store properly
         }
@@ -105,12 +108,12 @@ public class InboxServiceImpl implements InboxService {
             String subject
     ) {
 
-        // ✅ Avoid duplicate thread creation
+        //   Avoid duplicate thread creation
         if (threadRepo.findByApplicationId(applicationId).isPresent()) {
             return;
         }
 
-        // ✅ Create new thread
+        //   Create new thread
         InboxThread thread = InboxThread.builder()
                 .applicationId(applicationId)
                 .bankId(bankId)
@@ -123,7 +126,7 @@ public class InboxServiceImpl implements InboxService {
 
         thread = threadRepo.save(thread);
 
-        // ✅ Add first system message
+        //   Add first system message
         InboxMessage firstMessage = InboxMessage.builder()
                 .thread(thread)
                 .senderType(SenderType.SYSTEM)
@@ -154,7 +157,7 @@ public class InboxServiceImpl implements InboxService {
                         .id(t.getId())
                         .sender("Agency ID: " + t.getAgencyId())
                         .subject(t.getSubject())
-                        .unread(t.isUnreadForBank()) // ✅ Manager checks bank unread flag
+                        .unread(t.isUnreadForBank()) //   Manager checks bank unread flag
                         .lastUpdated(t.getLastUpdated())
                         .build())
                 .toList();
@@ -166,7 +169,7 @@ public class InboxServiceImpl implements InboxService {
         InboxThread thread = threadRepo.findById(threadId)
                 .orElseThrow();
 
-        thread.setUnreadForBank(false); // ✅ Manager reads → bank unread cleared
+        thread.setUnreadForBank(false); //   Manager reads → bank unread cleared
         threadRepo.save(thread);
     }
     @Override
@@ -183,7 +186,7 @@ public class InboxServiceImpl implements InboxService {
 
         InboxMessage msg = InboxMessage.builder()
                 .thread(thread)
-                .senderType(SenderType.BANK) // ✅ Manager is Bank side
+                .senderType(SenderType.BANK) //   Manager is Bank side
                 .messageText(message)
                 .attachmentUrl(fileUrl)
                 .sentAt(LocalDateTime.now())
@@ -191,7 +194,7 @@ public class InboxServiceImpl implements InboxService {
 
         messageRepo.save(msg);
 
-        // ✅ Notify Agency unread
+        //   Notify Agency unread
         thread.setUnreadForAgency(true);
         thread.setLastUpdated(LocalDateTime.now());
 
