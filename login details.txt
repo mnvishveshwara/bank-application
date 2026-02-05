@@ -1,11 +1,66 @@
+Application URL: http://192.168.0.134:5173/
+
+
 // ADMIN DETAILS
 
 admin1@gmail.com
 Admin@123
 
+superadmin@gmail.com
+Super@123
+
+
+
 
 
 // BANK
+
+
+hdfcbank@gmail.com
+Bank@123
+
+
+sbi.manager@gmail.com
+Sbi@123
+
+
+
+
+// AGENCY DETAILS
+
+primeagency@gmail.com
+Agency@123
+
+//
+
+
+Agents Login:
+
+virat@gmail.com
+virat@123
+
+
+
+// Customer Details
+
+customer@gmail.com
+customer66692
+
+
+newuser@gmail.com
+new20425
+
+While creating the application what ever the firstname of the custmer name + last 5 digits of his primary number is the password of the applicant
+
+
+
+
+
+
+
+
+// NO NEED FOR YOU
+
 
 {
   "email": "sbi.manager@gmail.com",
@@ -29,12 +84,3 @@ Admin@123
   "role": "ADMIN",
   "bankIds": [1, 2, 3, 4]
 }
-
-
-
-// AGENCY DETAILS
-
-primeagency@gmail.com
-Agency@123
-
-//
