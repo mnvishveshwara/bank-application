@@ -28,11 +28,17 @@ public class SecurityConfig {
                 .sessionManagement(sess ->
                         sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers("/api/auth/**","/api/**").permitAll()
+//                        .requestMatchers("/api/**").authenticated() // protect APIs
+//                        .anyRequest().authenticated()
+//                );
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**","/api/**").permitAll()
-                        .requestMatchers("/api/**").authenticated() // protect APIs
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/**").authenticated()
                         .anyRequest().authenticated()
                 );
+
 
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 

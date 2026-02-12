@@ -39,6 +39,23 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
+    @ExceptionHandler(UserAlreadyLoggedInException.class)
+    public ResponseEntity<ApiError> handleUserAlreadyLoggedIn(
+            UserAlreadyLoggedInException ex,
+            HttpServletRequest request
+    ) {
+        ApiError error = ApiError.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.CONFLICT.value()) // 409
+                .error("User Already Logged In")
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleGeneric(Exception ex,
                                                   HttpServletRequest request) {

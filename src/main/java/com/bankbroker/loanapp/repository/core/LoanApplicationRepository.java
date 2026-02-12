@@ -5,6 +5,9 @@ import com.bankbroker.loanapp.dto.admin.DashboardMonthlyTrendResponse;
 import com.bankbroker.loanapp.dto.admin.DashboardStatusSummaryResponse;
 import com.bankbroker.loanapp.entity.core.Customer;
 import com.bankbroker.loanapp.entity.core.LoanApplication;
+import com.bankbroker.loanapp.entity.enums.ApplicationHistoryStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -14,12 +17,30 @@ public interface LoanApplicationRepository extends JpaRepository<LoanApplication
     List<LoanApplication> findByClient(Customer client);
 
     @Query("""
-        SELECT a 
-        FROM LoanApplication a
-        JOIN ApplicationAgencyAssignment aa ON aa.application = a
-        WHERE aa.agency.id = :agencyId
-    """)
-    List<LoanApplication> findApplicationsByAgencyId(Long agencyId);
+SELECT app
+FROM LoanApplication app
+JOIN ApplicationAgencyAssignment aa ON aa.application = app
+JOIN ApplicationStageHistory hist ON hist.application = app
+WHERE aa.agency.id = :agencyId
+AND hist.createdDate = (
+    SELECT MAX(h2.createdDate)
+    FROM ApplicationStageHistory h2
+    WHERE h2.application = app
+)
+AND (:status IS NULL OR hist.status = :status)
+AND (
+    :search IS NULL OR
+    LOWER(app.id) LIKE LOWER(CONCAT('%', :search, '%')) OR
+    LOWER(app.client.firstName) LIKE LOWER(CONCAT('%', :search, '%')) OR
+    LOWER(app.bank.bankName) LIKE LOWER(CONCAT('%', :search, '%'))
+)
+""")
+    Page<LoanApplication> findApplicationsByAgencyId(
+            Long agencyId,
+            String search,
+            ApplicationHistoryStatus status,
+            Pageable pageable
+    );
 
     List<LoanApplication> findByClient_Id(String customerId);
 

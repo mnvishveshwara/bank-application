@@ -7,9 +7,7 @@ public class IdGenerator {
     private static final String ALPHANUM = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private static final SecureRandom RANDOM = new SecureRandom();
 
-    /**
-     * Generate EXACT 12 characters: prefix(3) + random(9)
-     */
+
     public static String generateId(String prefix) {
         prefix = prefix.toUpperCase();
 
@@ -24,9 +22,6 @@ public class IdGenerator {
         return prefix + generateRandom(9);
     }
 
-    /**
-     * Default ID with GEN prefix
-     */
     public static String generateId() {
         return generateId("GEN");
     }

@@ -22,6 +22,10 @@ import com.bankbroker.loanapp.util.SecurityUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -209,66 +213,128 @@ public class AgencyMasterServiceImpl implements AgencyMasterService {
     // 🚀 AGENCY DASHBOARD - FETCH ASSIGNED APPLICATIONS
     // ---------------------------------------------------------------------
 
-    @Override
-    public List<LoanApplicationResponse> getApplicationsForLoggedInAgency() {
+//    @Override
+//    public List<LoanApplicationResponse> getApplicationsForLoggedInAgency() {
+//
+//        AdminUser loggedUser = securityUtil.getLoggedInAdmin();
+//
+//        if (loggedUser.getRole() != Role.AGENCY) {
+//            throw new IllegalArgumentException("Only agency users can access this");
+//        }
+//
+//        Long agencyId = loggedUser.getAgencyId();
+//        log.info("agency Id : {}", agencyId);
+//        List<LoanApplication> apps =
+//                loanApplicationRepository.findApplicationsByAgencyId(agencyId);
+//
+//        return apps.stream()
+//                .map(app -> {
+//                    String status = applicationStageHistoryRepository
+//                            .findByApplication(app)
+//                            .map(h -> h.getStatus().name())
+//                            .orElse("NOT_STARTED");
+//
+//                    return new AbstractMap.SimpleEntry<>(app, status);
+//                })
+//                // Exclude IN_PROGRESS applications
+//                .filter(entry -> !ApplicationHistoryStatus.IN_PROGRESS.name()
+//                        .equals(entry.getValue()))
+//                .map(entry -> {
+//                    LoanApplication app = entry.getKey();
+//                    String status = entry.getValue();
+//
+//                    return LoanApplicationResponse.builder()
+//                            .applicationId(app.getId())
+//                            .active(app.getActive())
+//                            .status(status)
+//
+//                            // Client details
+//                            .clientId(app.getClient() != null ? app.getClient().getId() : null)
+//                            .clientName(app.getClient() != null ? app.getClient().getFirstName() : null)
+//
+//                            // Created by admin
+//                            .createdByAdminId(app.getCreatedBy() != null ? app.getCreatedBy().getId() : null)
+//                            .createdByName(app.getCreatedBy() != null
+//                                    ? app.getCreatedBy().getFirstName() + " " + app.getCreatedBy().getLastName()
+//                                    : null)
+//
+//                            // Assigned to admin
+//                            .assignedToAdminId(app.getAssignedTo() != null ? app.getAssignedTo().getId() : null)
+//                            .assignedToName(app.getAssignedTo() != null
+//                                    ? app.getAssignedTo().getFirstName() + " " + app.getAssignedTo().getLastName()
+//                                    : null)
+//
+//                            .bankId(app.getBankId())
+//                            .bankName(app.getBank() != null ? app.getBank().getBankName() : null)
+//                            .createdDate(app.getCreatedDate())
+//                            .updatedDate(app.getUpdatedDate())
+//                            .build();
+//                })
+//                .toList();
+//
+//    }
 
+
+    @Override
+    public Page<LoanApplicationResponse> getApplicationsForLoggedInAgency(
+            int page,
+            int size,
+            String search,
+            String status
+    ) {
         AdminUser loggedUser = securityUtil.getLoggedInAdmin();
 
         if (loggedUser.getRole() != Role.AGENCY) {
             throw new IllegalArgumentException("Only agency users can access this");
         }
 
-        Long agencyId = loggedUser.getAgencyId();
-        log.info("agency Id : {}", agencyId);
-        List<LoanApplication> apps =
-                loanApplicationRepository.findApplicationsByAgencyId(agencyId);
+        ApplicationHistoryStatus historyStatus = null;
+        if (status != null && !status.isBlank()) {
+            historyStatus = ApplicationHistoryStatus.valueOf(status);
+        }
 
-        return apps.stream()
-                .map(app -> {
-                    String status = applicationStageHistoryRepository
+        Pageable pageable =
+                PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "updatedDate"));
+
+        Page<LoanApplication> apps =
+                loanApplicationRepository.findApplicationsByAgencyId(
+                        loggedUser.getAgencyId(),
+                        search,
+                        historyStatus,
+                        pageable
+                );
+
+        return apps.map(app -> {
+            String latestStatus =
+                    applicationStageHistoryRepository
                             .findByApplication(app)
                             .map(h -> h.getStatus().name())
                             .orElse("NOT_STARTED");
 
-                    return new AbstractMap.SimpleEntry<>(app, status);
-                })
-                // Exclude IN_PROGRESS applications
-                .filter(entry -> !ApplicationHistoryStatus.IN_PROGRESS.name()
-                        .equals(entry.getValue()))
-                .map(entry -> {
-                    LoanApplication app = entry.getKey();
-                    String status = entry.getValue();
-
-                    return LoanApplicationResponse.builder()
-                            .applicationId(app.getId())
-                            .active(app.getActive())
-                            .status(status)
-
-                            // Client details
-                            .clientId(app.getClient() != null ? app.getClient().getId() : null)
-                            .clientName(app.getClient() != null ? app.getClient().getFirstName() : null)
-
-                            // Created by admin
-                            .createdByAdminId(app.getCreatedBy() != null ? app.getCreatedBy().getId() : null)
-                            .createdByName(app.getCreatedBy() != null
-                                    ? app.getCreatedBy().getFirstName() + " " + app.getCreatedBy().getLastName()
-                                    : null)
-
-                            // Assigned to admin
-                            .assignedToAdminId(app.getAssignedTo() != null ? app.getAssignedTo().getId() : null)
-                            .assignedToName(app.getAssignedTo() != null
-                                    ? app.getAssignedTo().getFirstName() + " " + app.getAssignedTo().getLastName()
-                                    : null)
-
-                            .bankId(app.getBankId())
-                            .bankName(app.getBank() != null ? app.getBank().getBankName() : null)
-                            .createdDate(app.getCreatedDate())
-                            .updatedDate(app.getUpdatedDate())
-                            .build();
-                })
-                .toList();
-
+            return LoanApplicationResponse.builder()
+                    .applicationId(app.getId())
+                    .active(app.getActive())
+                    .status(latestStatus)
+                    .clientId(app.getClient() != null ? app.getClient().getId() : null)
+                    .clientName(app.getClient() != null ? app.getClient().getFirstName() : null)
+                    .createdByAdminId(app.getCreatedBy() != null ? app.getCreatedBy().getId() : null)
+                    .createdByName(app.getCreatedBy() != null
+                            ? app.getCreatedBy().getFirstName() + " " + app.getCreatedBy().getLastName()
+                            : null)
+                    .assignedToAdminId(app.getAssignedTo() != null ? app.getAssignedTo().getId() : null)
+                    .assignedToName(app.getAssignedTo() != null
+                            ? app.getAssignedTo().getFirstName() + " " + app.getAssignedTo().getLastName()
+                            : null)
+                    .bankId(app.getBankId())
+                    .bankName(app.getBank() != null ? app.getBank().getBankName() : null)
+                    .createdDate(app.getCreatedDate())
+                    .updatedDate(app.getUpdatedDate())
+                    .build();
+        });
     }
+
+
+
 
     @Override
     @Transactional
