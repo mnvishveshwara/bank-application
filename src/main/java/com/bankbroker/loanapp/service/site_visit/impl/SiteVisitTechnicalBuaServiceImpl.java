@@ -3,10 +3,14 @@ package com.bankbroker.loanapp.service.site_visit.impl;
 import com.bankbroker.loanapp.dto.site_visit.*;
 import com.bankbroker.loanapp.entity.core.AdminUser;
 import com.bankbroker.loanapp.entity.core.LoanApplication;
+import com.bankbroker.loanapp.entity.enums.AssignmentType;
+import com.bankbroker.loanapp.entity.enums.Role;
 import com.bankbroker.loanapp.entity.site_visit.*;
+import com.bankbroker.loanapp.exception.ResourceNotFoundException;
 import com.bankbroker.loanapp.mapper.site_visit.*;
 import com.bankbroker.loanapp.repository.core.LoanApplicationRepository;
 import com.bankbroker.loanapp.repository.site_visit.SiteVisitTechnicalBuaRepository;
+import com.bankbroker.loanapp.repository.stage.ApplicationAgencyAssignmentRepository;
 import com.bankbroker.loanapp.service.site_visit.api.SiteVisitTechnicalBuaService;
 import com.bankbroker.loanapp.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +32,66 @@ public class SiteVisitTechnicalBuaServiceImpl
     private final SiteVisitTechnicalBuaLevelMapper levelMapper;
     private final SiteVisitTechnicalBuaMapper buaMapper;
     private final SecurityUtil securityUtil;
+    private final ApplicationAgencyAssignmentRepository agencyAssignmentRepo;
+
+//    @Override
+//    @Transactional
+//    public SiteVisitTechnicalBuaResponse saveTechnicalBua(
+//            String applicationId,
+//            SiteVisitTechnicalBuaRequest request) {
+//
+//        AdminUser user = securityUtil.getLoggedInAdmin();
+//
+//        LoanApplication app = loanRepo.findById(applicationId)
+//                .orElseThrow(() -> new RuntimeException("Application not found"));
+//
+//        SiteVisitTechnicalBua bua = buaRepo.findByApplication(app)
+//                .orElseGet(() -> {
+//                    SiteVisitTechnicalBua b = new SiteVisitTechnicalBua();
+//                    b.setApplication(loanRepo.getReferenceById(applicationId));
+//                    b.setCreatedBy(user);
+//                    b.setCreatedDate(LocalDateTime.now());
+//                    return b;
+//                });
+//
+//        // Update scalar fields
+//        bua.setBasements(request.getBasements());
+//        bua.setFloors(request.getFloors());
+//        bua.setNonRcc(request.getNonRcc());
+//        bua.setUpdatedBy(user);
+//        bua.setUpdatedDate(LocalDateTime.now());
+//
+//        // IMPORTANT PART
+//        bua.getLevels().clear();  // DO NOT replace the list
+//
+//        double totalActual = 0;
+//        double totalDocument = 0;
+//        double totalApproved = 0;
+//
+//        for (SiteVisitTechnicalBuaLevelRequest levelReq : request.getLevels()) {
+//            SiteVisitTechnicalBuaLevel level = new SiteVisitTechnicalBuaLevel();
+//            level.setBua(bua);
+//            level.setLevelType(levelReq.getLevelType());
+//            level.setLevelOrder(levelReq.getLevelOrder());
+//            level.setAreaActual(levelReq.getAreaActual());
+//            level.setAreaDocument(levelReq.getAreaDocument());
+//            level.setAreaApproved(levelReq.getAreaApproved());
+//
+//            totalActual += safeTechnicalBua(levelReq.getAreaActual());
+//            totalDocument += safeTechnicalBua(levelReq.getAreaDocument());
+//            totalApproved += safeTechnicalBua(levelReq.getAreaApproved());
+//
+//            bua.getLevels().add(level);
+//        }
+//
+//        bua.setTotalBuaActual(totalActual);
+//        bua.setTotalBuaDocument(totalDocument);
+//        bua.setTotalBuaApproved(totalApproved);
+//
+//        SiteVisitTechnicalBua saved = buaRepo.save(bua);
+//
+//        return buaMapper.toResponse(saved);
+//    }
 
     @Override
     @Transactional
@@ -36,28 +100,37 @@ public class SiteVisitTechnicalBuaServiceImpl
             SiteVisitTechnicalBuaRequest request) {
 
         AdminUser user = securityUtil.getLoggedInAdmin();
+        Role role = user.getRole();
+
+        // 1. Role Validation
+        if (role != Role.AGENCY_VALUATOR && role != Role.BANK_VALUATOR) {
+            throw new RuntimeException("Unauthorized: Only assigned valuators can save BUA details");
+        }
 
         LoanApplication app = loanRepo.findById(applicationId)
-                .orElseThrow(() -> new RuntimeException("Application not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("LoanApplication", "id", applicationId));
+
+        // 2. Assignment Validation (Internal vs. Agency)
+        validateAssignment(app, user);
 
         SiteVisitTechnicalBua bua = buaRepo.findByApplication(app)
                 .orElseGet(() -> {
                     SiteVisitTechnicalBua b = new SiteVisitTechnicalBua();
-                    b.setApplication(loanRepo.getReferenceById(applicationId));
+                    b.setApplication(app);
                     b.setCreatedBy(user);
                     b.setCreatedDate(LocalDateTime.now());
                     return b;
                 });
 
-        // Update scalar fields
+        // 3. Update Audit & Scalar fields
         bua.setBasements(request.getBasements());
         bua.setFloors(request.getFloors());
         bua.setNonRcc(request.getNonRcc());
         bua.setUpdatedBy(user);
         bua.setUpdatedDate(LocalDateTime.now());
 
-        // IMPORTANT PART
-        bua.getLevels().clear();  // DO NOT replace the list
+        // 4. Update Levels and Calculate Totals
+        bua.getLevels().clear();
 
         double totalActual = 0;
         double totalDocument = 0;
@@ -84,34 +157,58 @@ public class SiteVisitTechnicalBuaServiceImpl
         bua.setTotalBuaApproved(totalApproved);
 
         SiteVisitTechnicalBua saved = buaRepo.save(bua);
-
         return buaMapper.toResponse(saved);
     }
 
+//    @Override
+//    @Transactional(readOnly = true)
+//    public SiteVisitTechnicalBuaResponse getTechnicalBua(String applicationId) {
+//
+//        LoanApplication app = loanRepo.findById(applicationId)
+//                .orElseThrow(() -> new RuntimeException("Application not found"));
+//
+//        SiteVisitTechnicalBua bua = buaRepo.findByApplication(app)
+//                .orElseThrow(() -> new RuntimeException("BUA not found"));
+//
+//        SiteVisitTechnicalBuaResponse response = buaMapper.toResponse(bua);
+//        response.setLevels(
+//                bua.getLevels()
+//                        .stream()
+//                        .map(levelMapper::toResponse)
+//                        .toList()
+//        );
+//
+//        return response;
+//    }
+@Override
+@Transactional(readOnly = true)
+public SiteVisitTechnicalBuaResponse getTechnicalBua(String applicationId) {
+    LoanApplication app = loanRepo.findById(applicationId)
+            .orElseThrow(() -> new ResourceNotFoundException("LoanApplication", "id", applicationId));
 
-    @Override
-    @Transactional(readOnly = true)
-    public SiteVisitTechnicalBuaResponse getTechnicalBua(String applicationId) {
+    SiteVisitTechnicalBua bua = buaRepo.findByApplication(app)
+            .orElseThrow(() -> new RuntimeException("BUA details not found for this application"));
 
-        LoanApplication app = loanRepo.findById(applicationId)
-                .orElseThrow(() -> new RuntimeException("Application not found"));
-
-        SiteVisitTechnicalBua bua = buaRepo.findByApplication(app)
-                .orElseThrow(() -> new RuntimeException("BUA not found"));
-
-        SiteVisitTechnicalBuaResponse response = buaMapper.toResponse(bua);
-        response.setLevels(
-                bua.getLevels()
-                        .stream()
-                        .map(levelMapper::toResponse)
-                        .toList()
-        );
-
-        return response;
-    }
+    return buaMapper.toResponse(bua);
+}
 
     private double safeTechnicalBua(Double value) {
         return value == null ? 0.0 : value;
     }
 
+
+    private void validateAssignment(LoanApplication app, AdminUser user) {
+        boolean isAssigned = false;
+
+        if (app.getAssignmentType() == AssignmentType.INTERNAL) {
+            isAssigned = app.getInternalValuator() != null &&
+                    app.getInternalValuator().getId().equals(user.getId());
+        } else if (app.getAssignmentType() == AssignmentType.AGENCY) {
+            isAssigned = agencyAssignmentRepo.existsByApplicationAndAgency(app, user.getAgency());
+        }
+
+        if (!isAssigned) {
+            throw new RuntimeException("Access Denied: You are not authorized to edit this application.");
+        }
+    }
 }

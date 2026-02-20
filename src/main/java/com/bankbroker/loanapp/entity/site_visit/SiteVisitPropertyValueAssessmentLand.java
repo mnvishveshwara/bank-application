@@ -20,21 +20,21 @@ import java.time.LocalDateTime;
 public class SiteVisitPropertyValueAssessmentLand {
 
     // -------------------------------------------------
-    // 🔑 Primary Key
+    //   Primary Key
     // -------------------------------------------------
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     // -------------------------------------------------
-    // 🔗 Application
+    //   Application
     // -------------------------------------------------
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id", nullable = false)
     private LoanApplication application;
 
     // -------------------------------------------------
-    // 📐 AREA DETAILS (Sq.ft)
+    //   AREA DETAILS (Sq.ft)
     // -------------------------------------------------
     @Column(name = "land_area_actual")
     private Double landAreaAsPerActual;
@@ -46,7 +46,7 @@ public class SiteVisitPropertyValueAssessmentLand {
     private Double landAreaAsPerLayoutPlan;
 
     // -------------------------------------------------
-    // 💰 RATE DETAILS (₹ / Sq.ft)
+    //   RATE DETAILS (₹ / Sq.ft)
     // -------------------------------------------------
     @Column(name = "government_rate_per_sqft")
     private Double governmentRatePerSqFt;
@@ -55,7 +55,7 @@ public class SiteVisitPropertyValueAssessmentLand {
     private Double considerationRatePerSqFt;
 
     // -------------------------------------------------
-    // 🧮 TOTAL VALUE – GOVERNMENT PRICE
+    //   TOTAL VALUE – GOVERNMENT PRICE
     // -------------------------------------------------
     @Column(name = "govt_total_value_actual")
     private Double govtTotalValueActual;
@@ -67,7 +67,7 @@ public class SiteVisitPropertyValueAssessmentLand {
     private Double govtTotalValueLayout;
 
     // -------------------------------------------------
-    // 🧮 TOTAL VALUE – CONSIDERATION PRICE
+    //   TOTAL VALUE – CONSIDERATION PRICE
     // -------------------------------------------------
     @Column(name = "consideration_total_value_actual")
     private Double considerationTotalValueActual;
@@ -79,7 +79,7 @@ public class SiteVisitPropertyValueAssessmentLand {
     private Double considerationTotalValueLayout;
 
     // -------------------------------------------------
-    // 🧮 TOTAL VALUE – FAIR MARKET VALUE
+    //   TOTAL VALUE – FAIR MARKET VALUE
     // -------------------------------------------------
     @Column(name = "fair_market_value_actual")
     private Double fairMarketValueActual;
@@ -91,7 +91,7 @@ public class SiteVisitPropertyValueAssessmentLand {
     private Double fairMarketValueLayout;
 
     // -------------------------------------------------
-    // 🧾 AUDIT
+    //   AUDIT
     // -------------------------------------------------
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", nullable = false)

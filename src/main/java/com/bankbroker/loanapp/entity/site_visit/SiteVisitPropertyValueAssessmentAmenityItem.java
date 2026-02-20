@@ -13,14 +13,14 @@ import lombok.*;
 public class SiteVisitPropertyValueAssessmentAmenityItem {
 
     // -------------------------------------------------
-    // 🔑 Primary Key
+    //   Primary Key
     // -------------------------------------------------
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     // -------------------------------------------------
-    // 🔗 Parent Amenities
+    //   Parent Amenities
     // -------------------------------------------------
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "amenities_id", nullable = false)
@@ -42,7 +42,7 @@ public class SiteVisitPropertyValueAssessmentAmenityItem {
     // Low / Medium / High
 
     // -------------------------------------------------
-    // 💰 AMENITY VALUE (Derived)
+    //   AMENITY VALUE (Derived)
     // -------------------------------------------------
     @Column(name = "amenity_value")
     private Double amenityValue;

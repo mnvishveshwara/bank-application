@@ -159,25 +159,31 @@ public class ValuatorMasterServiceImpl implements ValuatorMasterService {
 
     }
 
-    // -------------------------------------------------------------------------
-    //  GET APPLICATIONS FOR LOGGED-IN VALUATOR
-    // -------------------------------------------------------------------------
+
+
     @Override
     public List<LoanApplicationResponse> getApplicationsForLoggedInValuator() {
-
         AdminUser loggedUser = securityUtil.getLoggedInAdmin();
+        Role role = loggedUser.getRole();
 
-        if (loggedUser.getRole() != Role.AGENCY_VALUATOR) {
-            throw new RuntimeException("Only agency valuators can access this");
+        log.info("Role attempting access: {}", role);
+
+        // FIX: Logical AND check. A role cannot be both at the same time.
+        // If it is NOT Agency AND NOT Bank, then throw exception.
+        if (role != Role.AGENCY_VALUATOR && role != Role.BANK_VALUATOR) {
+            throw new RuntimeException("Unauthorized: Only valuators can access assigned applications.");
         }
 
-        List<LoanApplication> apps =
-                loanApplicationRepository
-                        .findApplicationsByValuatorId(loggedUser.getId());
+        // This repository method should handle looking up either the internal_valuator_id
+        // or the agency_assignment mapping depending on how you wrote the query.
+        List<LoanApplication> apps = loanApplicationRepository
+                .findApplicationsByValuatorId(loggedUser.getId());
+
+        log.info("Found {} applications for valuator {}", apps.size(), loggedUser.getId());
 
         return apps.stream()
                 .map(app -> {
-
+                    // Fetch the current stage status
                     String status = applicationStageHistoryRepository
                             .findByApplication(app)
                             .map(h -> h.getStatus().name())
@@ -188,26 +194,17 @@ public class ValuatorMasterServiceImpl implements ValuatorMasterService {
                             .active(app.getActive())
                             .status(status)
 
+                            // NEW CHANGE: Include assignment type so frontend knows if it's INTERNAL/AGENCY
+                            .assignmentType(app.getAssignmentType() != null ? app.getAssignmentType().name() : null)
+
                             .clientId(app.getClient() != null ? app.getClient().getId() : null)
                             .clientName(app.getClient() != null
-                                    ? app.getClient().getFirstName() + " " +
-                                    app.getClient().getLastName()
+                                    ? app.getClient().getFirstName() + " " + app.getClient().getLastName()
                                     : null)
 
-                            .createdByAdminId(app.getCreatedBy() != null
-                                    ? app.getCreatedBy().getId()
-                                    : null)
+                            .createdByAdminId(app.getCreatedBy() != null ? app.getCreatedBy().getId() : null)
                             .createdByName(app.getCreatedBy() != null
-                                    ? app.getCreatedBy().getFirstName() + " " +
-                                    app.getCreatedBy().getLastName()
-                                    : null)
-
-                            .assignedToAdminId(app.getAssignedTo() != null
-                                    ? app.getAssignedTo().getId()
-                                    : null)
-                            .assignedToName(app.getAssignedTo() != null
-                                    ? app.getAssignedTo().getFirstName() + " " +
-                                    app.getAssignedTo().getLastName()
+                                    ? app.getCreatedBy().getFirstName() + " " + app.getCreatedBy().getLastName()
                                     : null)
 
                             .bankId(app.getBankId())

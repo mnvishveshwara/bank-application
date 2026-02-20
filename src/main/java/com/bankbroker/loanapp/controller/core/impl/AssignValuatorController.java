@@ -24,7 +24,7 @@ public class AssignValuatorController implements AssignValuatorControllerApi {
     private final AssignValuatorService assignValuatorService;
 
     @Override
-    @PreAuthorize("hasRole('AGENCY')")   // ⭐ Only AGENCY users can assign valuators
+    @PreAuthorize("hasRole('AGENCY')")   //   Only AGENCY users can assign valuators
     public ResponseEntity<AssignValuatorResponse> assignValuator(
             String applicationId,
             @Valid AssignValuatorRequest request
@@ -43,7 +43,7 @@ public class AssignValuatorController implements AssignValuatorControllerApi {
     }
 
     @Override
-    @PreAuthorize("hasAnyRole('AGENCY','AGENCY_VALUATOR','ADMIN')")   // you may adjust
+    @PreAuthorize("hasAnyRole('AGENCY','AGENCY_VALUATOR','ADMIN','BANK_VALUATOR)")   // you may adjust
     public ResponseEntity<AssignValuatorResponse> getValuatorAssignment(String applicationId) {
 
 
@@ -53,7 +53,7 @@ public class AssignValuatorController implements AssignValuatorControllerApi {
     }
 
     @Override
-    @PreAuthorize("hasAnyRole('AGENCY','AGENCY_VALUATOR')")
+    @PreAuthorize("hasAnyRole('AGENCY','AGENCY_VALUATOR','BANK_VALUATOR','ADMIN')")   // you may adjust
     public ResponseEntity<?> scheduleSiteVisit(
             String applicationId,
             @Valid SiteVisitRequest request
@@ -68,7 +68,7 @@ public class AssignValuatorController implements AssignValuatorControllerApi {
 
 
     @Override
-    @PreAuthorize("hasRole('AGENCY')")   // ⭐ Only AGENCY users can assign valuators
+    @PreAuthorize("hasRole('AGENCY')")   //   Only AGENCY users can assign valuators
     public ResponseEntity<AssignValuatorResponse> reAssignValuator(
             String applicationId,
             @Valid AssignValuatorRequest request

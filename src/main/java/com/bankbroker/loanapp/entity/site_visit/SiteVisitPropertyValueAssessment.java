@@ -20,14 +20,14 @@ public class SiteVisitPropertyValueAssessment {
     private Long id;
 
     // -------------------------------------------------
-    // 🔗 Application Mapping
+    //   Application Mapping
     // -------------------------------------------------
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id", nullable = false, unique = true)
     private LoanApplication application;
 
     // =================================================
-    // 🟩 LAND TAB
+    //   LAND TAB
     // =================================================
 
     // Area (Sq.Ft)
@@ -78,7 +78,7 @@ public class SiteVisitPropertyValueAssessment {
     private BigDecimal fairMarketValueAsPerLayout;
 
     // =================================================
-    // 🟩 AMENITIES TAB
+    //   AMENITIES TAB
     // =================================================
 
     @Column(name = "amenity_category")
@@ -94,7 +94,7 @@ public class SiteVisitPropertyValueAssessment {
     private BigDecimal amenitiesTotalValue;
 
     // =================================================
-    // 🟩 FINAL VALUATION TAB
+    //   FINAL VALUATION TAB
     // =================================================
 
     // FMV as on Date
@@ -152,7 +152,7 @@ public class SiteVisitPropertyValueAssessment {
     private BigDecimal finalValueToBeConsidered;
 
     // =================================================
-    // 🟩 SUMMARY TABLE (Bottom Section)
+    //   SUMMARY TABLE (Bottom Section)
     // =================================================
 
     @Column(name = "building_total_value")

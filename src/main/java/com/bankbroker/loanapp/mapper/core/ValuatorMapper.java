@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ValuatorMapper {
 
-    // 1️⃣ Convert Request → Entity (for Creation)
+    //   Convert Request → Entity (for Creation)
     public ValuatorMaster toEntity(ValuatorRequest request, AgencyMaster agency, AdminUser creator, AdminUser loginUser) {
         return ValuatorMaster.builder()
                 .valuatorName(request.getName())
@@ -24,7 +24,7 @@ public class ValuatorMapper {
                 .build();
     }
 
-    // 2️⃣ Update Existing Entity
+    //   Update Existing Entity
     public void updateEntity(ValuatorRequest request, ValuatorMaster entity, AdminUser updater) {
         entity.setValuatorName(request.getName());
         entity.setContactNumber(request.getPhone());
@@ -32,7 +32,7 @@ public class ValuatorMapper {
         entity.setUpdatedBy(updater);
     }
 
-    // 3️⃣ Convert Entity → Response DTO
+    //  Convert Entity → Response DTO
     public ValuatorResponse toResponse(ValuatorMaster v) {
         return ValuatorResponse.builder()
                 .id(v.getId())

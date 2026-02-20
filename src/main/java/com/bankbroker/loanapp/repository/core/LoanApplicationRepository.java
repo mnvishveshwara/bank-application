@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -44,8 +45,13 @@ AND (
 
     List<LoanApplication> findByClient_Id(String customerId);
 
-    List<LoanApplication> findApplicationsByValuatorId(String valuatorId);
+//    List<LoanApplication> findApplicationsByValuatorId(String valuatorId);
 
+    @Query("SELECT a FROM LoanApplication a " +
+            "LEFT JOIN ApplicationAgencyAssignment aaa ON aaa.application = a " +
+            "WHERE a.internalValuator.id = :valuatorId " +
+            "OR aaa.agency.id = (SELECT adm.agency.id FROM AdminUser adm WHERE adm.id = :valuatorId)")
+    List<LoanApplication> findApplicationsByValuatorId(@Param("valuatorId") String valuatorId);
 
     //   MANAGER STATUS COUNTS
     @Query("""

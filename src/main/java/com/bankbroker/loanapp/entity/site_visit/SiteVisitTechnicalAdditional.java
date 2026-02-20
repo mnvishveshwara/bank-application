@@ -21,21 +21,21 @@ import java.time.LocalDateTime;
 public class SiteVisitTechnicalAdditional {
 
     // -------------------------------------------------
-    // 🔑 Primary Key
+    //   Primary Key
     // -------------------------------------------------
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     // -------------------------------------------------
-    // 🔗 Application
+    //   Application
     // -------------------------------------------------
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id", nullable = false)
     private LoanApplication application;
 
     // -------------------------------------------------
-    // ⚠ RISK & CONSTRUCTION PROGRESS
+    //   RISK & CONSTRUCTION PROGRESS
     // -------------------------------------------------
     @Column(name = "risk_of_demolition")
     private String riskOfDemolition;
@@ -48,13 +48,13 @@ public class SiteVisitTechnicalAdditional {
     private String constructionProgressRemarks;
 
     // -------------------------------------------------
-    // 💰 FUNDING RECOMMENDATION
+    //   FUNDING RECOMMENDATION
     // -------------------------------------------------
     @Column(name = "recommended_funding_percent")
     private Integer recommendedFundingPercent;
 
     // -------------------------------------------------
-    // 🏠 PROPERTY AGE
+    //   PROPERTY AGE
     // -------------------------------------------------
     @Column(name = "age_of_property")
     private Integer ageOfProperty;
@@ -63,7 +63,7 @@ public class SiteVisitTechnicalAdditional {
     private Integer residualAgeOfProperty;
 
     // -------------------------------------------------
-    // 📜 OWNERSHIP DETAILS (FROM DOCUMENT)
+    //   OWNERSHIP DETAILS (FROM DOCUMENT)
     // -------------------------------------------------
     @Column(name = "document_type")
     private String documentType;
@@ -78,7 +78,7 @@ public class SiteVisitTechnicalAdditional {
     private String documentNumber;
 
     // -------------------------------------------------
-    // 🏛 REGULATORY & MARKET
+    //   REGULATORY & MARKET
     // -------------------------------------------------
     @Column(name = "rera_details")
     private String reraDetails;
@@ -87,13 +87,13 @@ public class SiteVisitTechnicalAdditional {
     private String marketFeedback;
 
     // -------------------------------------------------
-    // 🌆 DEVELOPMENT IN VICINITY
+    //   DEVELOPMENT IN VICINITY
     // -------------------------------------------------
     @Column(name = "development_in_vicinity_percent")
     private Integer developmentInVicinityPercent;
 
     // -------------------------------------------------
-    // ⚖ COMPLIANCE / OBSERVATIONS
+    //   COMPLIANCE / OBSERVATIONS
     // -------------------------------------------------
     @Column(name = "earlier_valuation_done")
     private Boolean earlierValuationDone;
@@ -111,7 +111,7 @@ public class SiteVisitTechnicalAdditional {
     private String municipalNotification;
 
     // -------------------------------------------------
-    // 🧾 AUDIT
+    //   AUDIT
     // -------------------------------------------------
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", nullable = false)

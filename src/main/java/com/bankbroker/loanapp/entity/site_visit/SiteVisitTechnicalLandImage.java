@@ -19,7 +19,7 @@ public class SiteVisitTechnicalLandImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 🔗 Link ONLY to Land
+    //   Link ONLY to Land
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "technical_land_id", nullable = false)
     private SiteVisitTechnicalLand technicalLand;

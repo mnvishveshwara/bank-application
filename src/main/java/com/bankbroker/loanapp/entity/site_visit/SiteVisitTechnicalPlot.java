@@ -22,28 +22,28 @@ import java.time.LocalDateTime;
 public class SiteVisitTechnicalPlot {
 
     // -------------------------------------------------
-    // 🔑 Primary Key
+    //   Primary Key
     // -------------------------------------------------
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     // -------------------------------------------------
-    // 🔗 Loan Application
+    //   Loan Application
     // -------------------------------------------------
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id", nullable = false)
     private LoanApplication application;
 
     // -------------------------------------------------
-    // 🏠 PROPERTY TYPE
+    //   PROPERTY TYPE
     // -------------------------------------------------
     @Column(name = "property_type", nullable = false)
     private String propertyType;
     // Independent / Villa / Apartment / Multi-Storied / Commercial
 
     // -------------------------------------------------
-    // 🧭 EAST SIDE
+    //   EAST SIDE
     // -------------------------------------------------
     @Column(name = "east_site_visit")
     private String eastAsPerSiteVisit;
@@ -55,7 +55,7 @@ public class SiteVisitTechnicalPlot {
     private Boolean eastMatch;
 
     // -------------------------------------------------
-    // 🧭 WEST SIDE
+    //   WEST SIDE
     // -------------------------------------------------
     @Column(name = "west_site_visit")
     private String westAsPerSiteVisit;
@@ -67,7 +67,7 @@ public class SiteVisitTechnicalPlot {
     private Boolean westMatch;
 
     // -------------------------------------------------
-    // 🧭 NORTH SIDE
+    //   NORTH SIDE
     // -------------------------------------------------
     @Column(name = "north_site_visit")
     private String northAsPerSiteVisit;
@@ -79,7 +79,7 @@ public class SiteVisitTechnicalPlot {
     private Boolean northMatch;
 
     // -------------------------------------------------
-    // 🧭 SOUTH SIDE
+    //   SOUTH SIDE
     // -------------------------------------------------
     @Column(name = "south_site_visit")
     private String southAsPerSiteVisit;
@@ -91,7 +91,7 @@ public class SiteVisitTechnicalPlot {
     private Boolean southMatch;
 
     // -------------------------------------------------
-    // 🧾 AUDIT
+    //   AUDIT
     // -------------------------------------------------
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", nullable = false)

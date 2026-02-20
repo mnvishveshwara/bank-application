@@ -53,21 +53,21 @@ public class AuthController {
         String role = extractRole(principal);
         String userId = resolveUserId(email, role);
 
-        // 🔥 FORCE LOGIN: kill all existing sessions
+        //   FORCE LOGIN: kill all existing sessions
         userSessionRepository.deactivateAllActiveSessions(userId);
 
-        // 🔐 Generate new JWT
+        //   Generate new JWT
         String token = tokenProvider.generateToken(
                 userId,
                 email,
                 role
         );
 
-        // 🌍 Device & IP
+        //   Device & IP
         String ipAddress = getClientIp(httpRequest);
         String deviceInfo = getDeviceInfo(httpRequest);
 
-        // ✅ Save new active session
+        //   Save new active session
         userSessionRepository.save(
                 UserSession.builder()
                         .userId(userId)
@@ -107,7 +107,7 @@ public class AuthController {
 
 
     // -------------------------------------------------
-    // 🔐 Helper Methods
+    //   Helper Methods
     // -------------------------------------------------
 
     private String extractRole(UserDetails principal) {

@@ -9,5 +9,5 @@ public enum Role {
     ADMIN,
     AGENCY,
     AGENCY_VALUATOR,
-
+    BANK_VALUATOR,
 }

@@ -13,7 +13,7 @@ public interface PropertyOwnerDetailsControllerApi {
      * Prefill Property Owner Details for Site Visit
      * Used before filling Basic Valuation screen
      */
-    @PreAuthorize("hasAnyRole('AGENCY', 'AGENCY_VALUATOR')")
+    @PreAuthorize("hasAnyRole('AGENCY', 'AGENCY_VALUATOR','BANK_VALUATOR')")
     @GetMapping("/{applicationId}/site-visit/property-owner-details")
     ResponseEntity<PropertyOwnerDetailsResponse> getPropertyOwnerDetails(
             @PathVariable String applicationId

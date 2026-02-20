@@ -52,4 +52,6 @@ public class AdminController implements AdminControllerApi {
     public ResponseEntity<List<LoanApplicationResponse>> getCompleteApplication() {
         return ResponseEntity.ok(adminUserService.getCompleteApplication());
     }
+
+
 }

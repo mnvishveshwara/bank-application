@@ -43,9 +43,6 @@ public class AdminUser {
     @Column(name = "created_date", nullable = false)
     private LocalDateTime createdDate;
 
-//    @Column(name = "bank", nullable = false)
-//    private String bank;
-
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "admin_bank_mapping",

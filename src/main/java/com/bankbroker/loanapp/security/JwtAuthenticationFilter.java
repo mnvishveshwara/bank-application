@@ -33,31 +33,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String username = null;
 
 
-//        if (header != null && header.startsWith("Bearer ")) {
-//            token = header.substring(7);
-//
-//            if (tokenProvider.validateToken(token)) {
-//                username = tokenProvider.getUsernameFromJwt(token);
-//                String adminId = tokenProvider.getUserIdFromJwt(token);
-//
-//                // Save adminId in request (so your service can read it)
-//                request.setAttribute("adminId", adminId);
-//            }
-//        }
-
         if (header != null && header.startsWith("Bearer ")) {
             token = header.substring(7);
 
             if (tokenProvider.validateToken(token)) {
 
-                // 🔐 CHECK DB: is this token still active?
+                //   CHECK DB: is this token still active?
                 boolean active = userSessionRepository
                         .findByTokenAndActiveTrue(token)
                         .isPresent();
 
                 if (!active) {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    return; // ❌ stop filter chain
+                    return; //   stop filter chain
                 }
 
                 username = tokenProvider.getUsernameFromJwt(token);

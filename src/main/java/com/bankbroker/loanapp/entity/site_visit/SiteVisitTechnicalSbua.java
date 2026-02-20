@@ -20,21 +20,21 @@ import java.time.LocalDateTime;
 public class SiteVisitTechnicalSbua {
 
     // -------------------------------------------------
-    // 🔑 Primary Key
+    //   Primary Key
     // -------------------------------------------------
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     // -------------------------------------------------
-    // 🔗 Application
+    //   Application
     // -------------------------------------------------
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id", nullable = false)
     private LoanApplication application;
 
     // -------------------------------------------------
-    // 🏙 SUPER BUILT-UP AREA
+    //   SUPER BUILT-UP AREA
     // -------------------------------------------------
     @Column(name = "sbua_actual")
     private Double sbuaAsPerActual;
@@ -46,7 +46,7 @@ public class SiteVisitTechnicalSbua {
     private Double sbuaAsPerApprovedPlan;
 
     // -------------------------------------------------
-    // 🧾 AUDIT
+    //   AUDIT
     // -------------------------------------------------
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", nullable = false)

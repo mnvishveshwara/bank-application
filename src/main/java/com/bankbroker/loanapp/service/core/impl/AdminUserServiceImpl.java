@@ -104,7 +104,7 @@
 //            case EMPLOYEE -> IdGenerator.generateId("EMP");
 //            case USER -> IdGenerator.generateId("USR");
 //
-//            // 🔥 Fallback for roles not explicitly mapped
+//            //   Fallback for roles not explicitly mapped
 //            default -> IdGenerator.generateId("GEN");
 //        };
 //    }
@@ -116,6 +116,7 @@ package com.bankbroker.loanapp.service.core.impl;
 
 import com.bankbroker.loanapp.dto.admin.AdminRequest;
 import com.bankbroker.loanapp.dto.admin.AdminResponse;
+import com.bankbroker.loanapp.dto.admin.CreateBankValuatorRequest;
 import com.bankbroker.loanapp.dto.application.LoanApplicationResponse;
 import com.bankbroker.loanapp.entity.core.AdminUser;
 import com.bankbroker.loanapp.entity.core.BankMaster;
@@ -128,14 +129,19 @@ import com.bankbroker.loanapp.repository.core.ApplicationStageCurrentRepository;
 import com.bankbroker.loanapp.repository.core.BankMasterRepository;
 import com.bankbroker.loanapp.service.core.api.AdminUserService;
 import com.bankbroker.loanapp.util.IdGenerator;
+import com.bankbroker.loanapp.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static com.bankbroker.loanapp.util.IdGenerator.generateId;
 
 @Service
 @RequiredArgsConstructor
@@ -145,6 +151,7 @@ public class AdminUserServiceImpl implements AdminUserService {
     private final PasswordEncoder passwordEncoder;
     private final ApplicationStageCurrentRepository applicationStageCurrentRepository;
     private final BankMasterRepository bankRepository;
+    private final SecurityUtil securityUtil;
 
     @Override
     public AdminResponse createAdmin(AdminRequest request) {
@@ -309,6 +316,63 @@ public class AdminUserServiceImpl implements AdminUserService {
                 .toList();
     }
 
+    @Override
+    @Transactional
+    public void createBankValuator(CreateBankValuatorRequest request) {
+        // 1. Validate if user exists
+        if (adminUserRepository.existsByEmail(request.getEmail())) {
+            throw new RuntimeException("Email already exists");
+        }
+
+        // 2. Fetch the Bank entity
+        BankMaster bank = bankRepository.findById(request.getBankId())
+                .orElseThrow(() -> new RuntimeException("Bank not found"));
+
+        // 3. Build the AdminUser
+        AdminUser valuator = AdminUser.builder()
+                .id(generateId("BVAL")) // e.g., "VAL" + random numeric string
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
+                .phoneNumber(request.getPhoneNumber())
+                .role(Role.BANK_VALUATOR) // Ensure BANK_VALUATOR is in your Role enum
+                .createdDate(LocalDateTime.now())
+                .banks(new HashSet<>()) // Initialize the set
+                .build();
+
+        // 4. Establish the relationship (This populates admin_bank_mapping)
+        valuator.getBanks().add(bank);
+
+        // 5. Save the user
+        adminUserRepository.save(valuator);
+    }
+
+
+
+    @Override
+    public List<AdminResponse> getInternalValuators() {
+        AdminUser loggedInAdmin = securityUtil.getLoggedInAdmin();
+
+        // A Manager is usually mapped to one bank. Get the first bank's ID.
+        Long bankId = loggedInAdmin.getBanks().stream()
+                .findFirst()
+                .map(BankMaster::getId)
+                .orElseThrow(() -> new RuntimeException("Logged in user is not associated with any bank"));
+
+        List<AdminUser> valuators = adminUserRepository.findByBankIdAndRole(bankId, Role.BANK_VALUATOR);
+
+        // Map the entities to DTOs for the frontend
+        return valuators.stream()
+                .map(user -> AdminResponse.builder()
+                        .id(user.getId())
+                        .firstName(user.getFirstName())
+                        .lastName(user.getLastName())
+                        .email(user.getEmail())
+                        .phoneNumber(user.getPhoneNumber())
+                        .build())
+                .collect(Collectors.toList());
+    }
 
     private AdminResponse mapToResponse(AdminUser admin) {
         return AdminResponse.builder()
@@ -335,13 +399,13 @@ public class AdminUserServiceImpl implements AdminUserService {
 
     private String generateRoleBasedId(Role role) {
         return switch (role) {
-            case ADMIN -> IdGenerator.generateId("ADM");
-            case AGENCY -> IdGenerator.generateId("AGN");
-            case AGENT -> IdGenerator.generateId("AGT");
-            case AGENCY_VALUATOR -> IdGenerator.generateId("VAL");
-            case EMPLOYEE -> IdGenerator.generateId("EMP");
-            case USER -> IdGenerator.generateId("USR");
-            default -> IdGenerator.generateId("GEN"); // fallback for any other role
+            case ADMIN -> generateId("ADM");
+            case AGENCY -> generateId("AGN");
+            case AGENT -> generateId("AGT");
+            case AGENCY_VALUATOR -> generateId("VAL");
+            case EMPLOYEE -> generateId("EMP");
+            case USER -> generateId("USR");
+            default -> generateId("GEN"); // fallback for any other role
         };
     }
 }

@@ -22,20 +22,20 @@ public class SiteVisitTechnicalDetails {
     private Long id;
 
     // -------------------------------------------------
-    // 🔗 Application
+    //   Application
     // -------------------------------------------------
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id", nullable = false, unique = true)
     private LoanApplication application;
 
     // -------------------------------------------------
-    // 🏗 Property Type (Plot / Land / Apartment / etc.)
+    //   Property Type (Plot / Land / Apartment / etc.)
     // -------------------------------------------------
     @Column(name = "property_type")
     private String propertyType;
 
     // -------------------------------------------------
-    // 📐 LAND / PLOT AREA DETAILS
+    //   LAND / PLOT AREA DETAILS
     // -------------------------------------------------
     @Column(name = "land_area_actual")
     private Double landAreaAsPerActual;
@@ -50,13 +50,13 @@ public class SiteVisitTechnicalDetails {
     private Boolean landAreaMatch;
 
     // -------------------------------------------------
-    // 📄 HOLDING TYPE
+    //   HOLDING TYPE
     // -------------------------------------------------
     @Column(name = "holding_type")
     private String holdingType; // Freehold / Mortgage / Leasehold
 
     // -------------------------------------------------
-    // 🏢 CONFIGURATION (BUA)
+    //   CONFIGURATION (BUA)
     // -------------------------------------------------
     @Column(name = "no_of_basements")
     private Integer basements;
@@ -68,7 +68,7 @@ public class SiteVisitTechnicalDetails {
     private Integer nonRcc;
 
     // -------------------------------------------------
-    // 📏 FLOOR WISE AREA (BUA)
+    //   FLOOR WISE AREA (BUA)
     // -------------------------------------------------
     @Column(name = "first_basement_actual")
     private Double firstBasementActual;
@@ -116,7 +116,7 @@ public class SiteVisitTechnicalDetails {
     private Double nonRccApproved;
 
     // -------------------------------------------------
-    // ➕ SUMMATION (AUTO CALCULATED)
+    //   SUMMATION (AUTO CALCULATED)
     // -------------------------------------------------
     @Column(name = "total_bua_actual")
     private Double totalBuaActual;
@@ -128,7 +128,7 @@ public class SiteVisitTechnicalDetails {
     private Double totalBuaApproved;
 
     // -------------------------------------------------
-    // 🏙 SUPER BUILT UP AREA (SBUA)
+    //   SUPER BUILT UP AREA (SBUA)
     // -------------------------------------------------
     @Column(name = "sbua_actual")
     private Double sbuaActual;
@@ -140,7 +140,7 @@ public class SiteVisitTechnicalDetails {
     private Double sbuaApproved;
 
     // -------------------------------------------------
-    // ⚠ ADDITIONAL / TECHNICAL OBSERVATIONS
+    //   ADDITIONAL / TECHNICAL OBSERVATIONS
     // -------------------------------------------------
     @Column(name = "risk_of_demolition")
     private String riskOfDemolition; // Yes / No / Maybe
@@ -161,7 +161,7 @@ public class SiteVisitTechnicalDetails {
     private Integer residualAgeOfProperty;
 
     // -------------------------------------------------
-    // 📜 OWNERSHIP DETAILS
+    //   OWNERSHIP DETAILS
     // -------------------------------------------------
     @Column(name = "document_type")
     private String documentType;
@@ -176,7 +176,7 @@ public class SiteVisitTechnicalDetails {
     private String documentNumber;
 
     // -------------------------------------------------
-    // 🏛 REGULATORY & MARKET
+    //   REGULATORY & MARKET
     // -------------------------------------------------
     @Column(name = "rera_details")
     private String reraDetails;
@@ -203,7 +203,7 @@ public class SiteVisitTechnicalDetails {
     private String municipalNotification;
 
     // -------------------------------------------------
-    // 🧾 AUDIT
+    //   AUDIT
     // -------------------------------------------------
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", nullable = false)

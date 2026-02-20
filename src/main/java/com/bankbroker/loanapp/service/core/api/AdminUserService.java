@@ -2,6 +2,7 @@ package com.bankbroker.loanapp.service.core.api;
 
 import com.bankbroker.loanapp.dto.admin.AdminRequest;
 import com.bankbroker.loanapp.dto.admin.AdminResponse;
+import com.bankbroker.loanapp.dto.admin.CreateBankValuatorRequest;
 import com.bankbroker.loanapp.dto.application.LoanApplicationResponse;
 
 import java.util.List;
@@ -16,5 +17,9 @@ public interface AdminUserService {
     List<LoanApplicationResponse> getIncompleteApplication();
 
     List<LoanApplicationResponse> getCompleteApplication();
+
+    void createBankValuator(CreateBankValuatorRequest request);
+
+    List<AdminResponse> getInternalValuators();
 
 }

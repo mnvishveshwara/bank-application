@@ -22,4 +22,5 @@ public class LoanApplicationResponse {
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
     private String status;
+    private String assignmentType;
 }

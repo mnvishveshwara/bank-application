@@ -29,7 +29,7 @@ ApplicationDocumentDetailsResponse uploadDocuments(
 
     ApplicationAgencyAssignmentResponse saveAgencyAssignment(String applicationId,
                                                              ApplicationAgencyAssignmentRequest request);
-    AgencyMasterResponse getAgencyAssignment(String applicationId);
+    ApplicationAgencyAssignmentResponse getAgencyAssignment(String applicationId);
 
     ApplicationSummaryResponse saveSummary(String applicationId,
                                            ApplicationSummaryRequest request);

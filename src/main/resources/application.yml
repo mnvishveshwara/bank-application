@@ -8,7 +8,9 @@ spring:
 
   datasource:
 #    url: jdbc:mysql://localhost:3306/bank_application?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-    url: jdbc:mysql://localhost:3306/bank_application_changed?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+#    url: jdbc:mysql://localhost:3306/bank_application_changed?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+
+    url: jdbc:mysql://localhost:3306/bank_valuator?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
 
     username: root
     password: root

@@ -1,8 +1,11 @@
 package com.bankbroker.loanapp.entity.site_visit;
 
+import com.bankbroker.loanapp.entity.core.AdminUser;
 import com.bankbroker.loanapp.entity.enums.SiteVisitImageCategory;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "site_visit_image_files")
@@ -18,7 +21,7 @@ public class SiteVisitImage {
     private Long id;
 
     // -------------------------------------------------
-    // 🔗 Parent Mapping
+    //   Parent Mapping
     // -------------------------------------------------
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "image_group_id", nullable = false)
@@ -32,7 +35,7 @@ public class SiteVisitImage {
     private SiteVisitImageCategory category;
 
     // -------------------------------------------------
-    // 📁 File Metadata
+    //   File Metadata
     // -------------------------------------------------
     @Column(name = "file_name", nullable = false)
     private String fileName;
@@ -45,4 +48,5 @@ public class SiteVisitImage {
 
     @Column(name = "file_size")
     private Long fileSize;
+
 }

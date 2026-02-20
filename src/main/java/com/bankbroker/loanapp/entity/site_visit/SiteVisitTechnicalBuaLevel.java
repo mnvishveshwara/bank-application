@@ -17,14 +17,14 @@ public class SiteVisitTechnicalBuaLevel {
     private Long id;
 
     // -------------------------------------------------
-    // 🔗 Parent BUA
+    //   Parent BUA
     // -------------------------------------------------
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bua_id", nullable = false)
     private SiteVisitTechnicalBua bua;
 
     // -------------------------------------------------
-    // 🏢 LEVEL TYPE
+    //   LEVEL TYPE
     // -------------------------------------------------
     @Column(name = "level_type", nullable = false)
     private String levelType;
@@ -41,7 +41,7 @@ public class SiteVisitTechnicalBuaLevel {
     private Integer levelOrder;
 
     // -------------------------------------------------
-    // 📏 AREA DETAILS
+    //   AREA DETAILS
     // -------------------------------------------------
     @Column(name = "area_actual")
     private Double areaActual;

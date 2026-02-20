@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/applications")
 public interface SiteVisitBuildingDetailsControllerApi {
 
-    @PreAuthorize("hasAnyRole('AGENCY','AGENCY_VALUATOR')")
+    @PreAuthorize("hasAnyRole('AGENCY', 'AGENCY_VALUATOR','BANK_VALUATOR')")
     @PostMapping("/{applicationId}/site-visit/building-details")
     ResponseEntity<SiteVisitBuildingDetailsResponse> saveBuildingDetails(
             @PathVariable String applicationId,
             @RequestBody SiteVisitBuildingDetailsRequest request
     );
 
-    @PreAuthorize("hasAnyRole('AGENCY', 'AGENCY_VALUATOR')")
+    @PreAuthorize("hasAnyRole('AGENCY', 'AGENCY_VALUATOR','BANK_VALUATOR')")
     @GetMapping("/{applicationId}/site-visit/building-details")
     ResponseEntity<SiteVisitBuildingDetailsResponse> getBuildingDetails(
             @PathVariable String applicationId

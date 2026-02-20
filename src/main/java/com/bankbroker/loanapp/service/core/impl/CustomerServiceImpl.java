@@ -55,19 +55,6 @@ public class CustomerServiceImpl implements CustomerService {
                 .toList();
     }
 
-//    @Override
-//    public CustomerResponse updateCustomer(String id, CustomerRequest request) {
-//        Customer customer = customerRepository.findById(id)
-//                .orElseThrow(() -> new ResourceNotFoundException("Customer", "id", id));
-//
-//        customer.setFirstName(request.getFirstName());
-//        customer.setLastName(request.getLastName());
-//        customer.setPhoneNumber(request.getPhoneNumber());
-//        customer.setBankId(request.getBankId());
-//
-//        customer = customerRepository.save(customer);
-//        return CustomerMapper.toResponse(customer);
-//    }
 
     @Override
     public CustomerResponse updateCustomer(String id, CustomerRequest request) {

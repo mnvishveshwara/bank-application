@@ -1,5 +1,6 @@
 package com.bankbroker.loanapp.repository.stage;
 
+import com.bankbroker.loanapp.entity.core.AgencyMaster;
 import com.bankbroker.loanapp.entity.core.LoanApplication;
 import com.bankbroker.loanapp.entity.stage.ApplicationAgencyAssignment;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,4 +9,6 @@ import java.util.Optional;
 
 public interface ApplicationAgencyAssignmentRepository extends JpaRepository<ApplicationAgencyAssignment, Long> {
     Optional<ApplicationAgencyAssignment> findByApplication(LoanApplication application);
+
+    boolean existsByApplicationAndAgency(LoanApplication application, AgencyMaster agency);
 }

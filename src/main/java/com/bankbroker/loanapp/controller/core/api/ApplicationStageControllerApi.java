@@ -11,7 +11,7 @@ import java.util.List;
 @RequestMapping("/api/applications")
 public interface ApplicationStageControllerApi {
 
-    // 🔹 History
+    //   History
     @PostMapping("/{applicationId}/history")
     ResponseEntity<ApplicationHistoryResponse> addHistory(
             @PathVariable String applicationId,
@@ -21,7 +21,7 @@ public interface ApplicationStageControllerApi {
     ResponseEntity<List<ApplicationHistoryResponse>> getHistory(
             @PathVariable String applicationId);
 
-    // 🔹 Create Application + Save Customer Details
+    //   Create Application + Save Customer Details
     @PostMapping("/customer-details")
     ResponseEntity<ApplicationCustomerDetailsResponse> saveCustomerDetails(
             @RequestBody ApplicationCustomerDetailsRequest request);
@@ -30,7 +30,7 @@ public interface ApplicationStageControllerApi {
     ResponseEntity<ApplicationCustomerDetailsResponse> getCustomerDetails(
             @PathVariable String applicationId);
 
-    // 🔹 Property Details
+    //   Property Details
     @PostMapping("/{applicationId}/property-details")
     ResponseEntity<ApplicationPropertyDetailsResponse> savePropertyDetails(
             @PathVariable String applicationId,
@@ -46,17 +46,17 @@ public interface ApplicationStageControllerApi {
     ResponseEntity<ApplicationDocumentDetailsResponse> getDocumentDetails(
             @PathVariable String applicationId);
 
-    // 🔹 Agency Assignment
+    //   Agency Assignment
     @PostMapping("/{applicationId}/agency-assignment")
     ResponseEntity<ApplicationAgencyAssignmentResponse> saveAgencyAssignment(
             @PathVariable String applicationId,
             @RequestBody ApplicationAgencyAssignmentRequest request);
 
     @GetMapping("/{applicationId}/agency-assignment")
-    ResponseEntity<AgencyMasterResponse> getAgencyAssignment(
+    ResponseEntity<ApplicationAgencyAssignmentResponse> getAgencyAssignment(
             @PathVariable String applicationId);
 
-    // 🔹 Summary
+    //   Summary
     @PostMapping("/{applicationId}/summary")
     ResponseEntity<ApplicationSummaryResponse> saveSummary(
             @PathVariable String applicationId,

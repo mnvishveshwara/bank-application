@@ -20,17 +20,17 @@ public class AssignValuator {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 🔗 Application being assigned
+    //   Application being assigned
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id", nullable = false)
     private LoanApplication application;
 
-    // 🔗 Which valuator is assigned (AdminUser with role AGENCY_VALUATOR)
+    //   Which valuator is assigned (AdminUser with role AGENCY_VALUATOR)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "valuator_id", nullable = false)
     private AdminUser valuator;
 
-    // 🔗 Assigned by (Agency Admin)
+    //   Assigned by (Agency Admin)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assigned_by", nullable = false)
     private AdminUser assignedBy;

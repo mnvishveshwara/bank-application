@@ -46,7 +46,7 @@ public class BankMasterServiceImpl implements BankMasterService {
 
         AdminUser user = securityUtil.getLoggedInAdmin();
 
-        // 🔥 MapStruct magic
+        //   MapStruct magic
         mapper.updateEntityFromRequest(request, bank);
 
         bank.setUpdatedDate(LocalDateTime.now());

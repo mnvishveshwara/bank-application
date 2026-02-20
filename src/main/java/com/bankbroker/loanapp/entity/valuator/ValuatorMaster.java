@@ -32,12 +32,12 @@ public class ValuatorMaster {
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    // ⭐ Every valuator belongs to ONE agency
+    //   Every valuator belongs to ONE agency
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "agency_id", nullable = false)
     private AgencyMaster agency;
 
-    // ⭐ Audit fields
+    //   Audit fields
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by")
     private AdminUser createdBy;

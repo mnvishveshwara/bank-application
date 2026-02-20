@@ -13,4 +13,6 @@ public class ApplicationAgencyAssignmentRequest {
     private Long id;
     private Long agencyId;
     private String remarks;
+    private String assignmentType;
+    private String internalValuatorId;
 }

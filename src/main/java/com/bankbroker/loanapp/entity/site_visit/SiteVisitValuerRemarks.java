@@ -21,14 +21,14 @@ public class SiteVisitValuerRemarks {
     private Long id;
 
     // -------------------------------------------------
-    // 🔗 Application Mapping
+    //   Application Mapping
     // -------------------------------------------------
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id", nullable = false, unique = true)
     private LoanApplication application;
 
     // -------------------------------------------------
-    // 📝 Valuer Remarks (Step-9)
+    //   Valuer Remarks (Step-9)
     // -------------------------------------------------
 
     @Lob
@@ -44,7 +44,7 @@ public class SiteVisitValuerRemarks {
     private String insights;
 
     // -------------------------------------------------
-    // 🕒 Audit Fields
+    //   Audit Fields
     // -------------------------------------------------
 
     @Column(name = "created_date", nullable = false, updatable = false)

@@ -21,20 +21,20 @@ public class SiteVisitPropertyBoundaryDetails {
     private Long id;
 
     // -------------------------------------------------
-    // 🔗 Application
+    //   Application
     // -------------------------------------------------
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id", nullable = false, unique = true)
     private LoanApplication application;
 
     // -------------------------------------------------
-    // 🧭 Property Facing
+    //   Property Facing
     // -------------------------------------------------
     @Column(name = "property_facing")
     private String propertyFacing; // East / West / North / South
 
     // -------------------------------------------------
-    // 🧱 East Boundary
+    //   East Boundary
     // -------------------------------------------------
     @Column(name = "east_site_visit")
     private String eastAsPerSiteVisit;
@@ -46,7 +46,7 @@ public class SiteVisitPropertyBoundaryDetails {
     private Boolean eastMatch;
 
     // -------------------------------------------------
-    // 🧱 South Boundary
+    //   South Boundary
     // -------------------------------------------------
     @Column(name = "south_site_visit")
     private String southAsPerSiteVisit;
@@ -58,7 +58,7 @@ public class SiteVisitPropertyBoundaryDetails {
     private Boolean southMatch;
 
     // -------------------------------------------------
-    // 🧱 West Boundary
+    //   West Boundary
     // -------------------------------------------------
     @Column(name = "west_site_visit")
     private String westAsPerSiteVisit;
@@ -70,7 +70,7 @@ public class SiteVisitPropertyBoundaryDetails {
     private Boolean westMatch;
 
     // -------------------------------------------------
-    // 🧱 North Boundary
+    //   North Boundary
     // -------------------------------------------------
     @Column(name = "north_site_visit")
     private String northAsPerSiteVisit;
@@ -94,13 +94,13 @@ public class SiteVisitPropertyBoundaryDetails {
     private Boolean propertyIdentification;
 
     // -------------------------------------------------
-    // 🏛 Zoning
+    //   Zoning
     // -------------------------------------------------
     @Column(name = "current_zoning")
     private String currentZoning;
 
     // -------------------------------------------------
-    // 🧾 Audit
+    //   Audit
     // -------------------------------------------------
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", nullable = false)

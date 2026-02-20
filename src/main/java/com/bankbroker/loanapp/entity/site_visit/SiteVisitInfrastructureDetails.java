@@ -21,14 +21,14 @@ public class SiteVisitInfrastructureDetails {
     private Long id;
 
     // -------------------------------------------------
-    // 🔗 Application
+    //   Application
     // -------------------------------------------------
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id", nullable = false, unique = true)
     private LoanApplication application;
 
     // -------------------------------------------------
-    // 🚧 Site Accessibility
+    //   Site Accessibility
     // -------------------------------------------------
     @Column(name = "site_accessibility")
     private Boolean siteAccessibility;     // Yes / No
@@ -43,7 +43,7 @@ public class SiteVisitInfrastructureDetails {
     private String roadWidth;               // <10 ft / 10–20 ft / >20 ft
 
     // -------------------------------------------------
-    // 🚰 Utilities
+    //   Utilities
     // -------------------------------------------------
     @Column(name = "sewerage_system")
     private Boolean sewerageSystem;         // Yes / No
@@ -58,7 +58,7 @@ public class SiteVisitInfrastructureDetails {
     private Integer numberOfLifts;
 
     // -------------------------------------------------
-    // 🧾 Audit
+    //   Audit
     // -------------------------------------------------
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", nullable = false)

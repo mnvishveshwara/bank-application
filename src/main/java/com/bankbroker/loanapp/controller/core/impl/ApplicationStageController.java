@@ -90,7 +90,7 @@ public class ApplicationStageController implements ApplicationStageControllerApi
     }
 
     @Override
-    public ResponseEntity<AgencyMasterResponse> getAgencyAssignment(
+    public ResponseEntity<ApplicationAgencyAssignmentResponse> getAgencyAssignment(
             @PathVariable String applicationId) {
 
         return ResponseEntity.ok(applicationStageService.getAgencyAssignment(applicationId));

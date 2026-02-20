@@ -2,6 +2,7 @@ package com.bankbroker.loanapp.controller.core.api;
 
 import com.bankbroker.loanapp.dto.admin.BankMasterRequest;
 import com.bankbroker.loanapp.dto.admin.BankMasterResponse;
+import com.bankbroker.loanapp.dto.admin.CreateBankValuatorRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -19,4 +20,6 @@ public interface BankMasterController {
 
     ResponseEntity<List<BankMasterResponse>> getActive();
     ResponseEntity<List<BankMasterResponse>> getMyBanks();
+
+    ResponseEntity<?> createBankValuator(CreateBankValuatorRequest request);
 }

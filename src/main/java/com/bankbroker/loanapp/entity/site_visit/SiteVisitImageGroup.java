@@ -1,9 +1,11 @@
 package com.bankbroker.loanapp.entity.site_visit;
 
+import com.bankbroker.loanapp.entity.core.AdminUser;
 import com.bankbroker.loanapp.entity.core.LoanApplication;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,14 +23,14 @@ public class SiteVisitImageGroup {
     private Long id;
 
     // -------------------------------------------------
-    // 🔗 Application Mapping
+    //   Application Mapping
     // -------------------------------------------------
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id", nullable = false, unique = true)
     private LoanApplication application;
 
     // -------------------------------------------------
-    // 🖼 Images
+    //   Images
     // -------------------------------------------------
     @OneToMany(
             mappedBy = "imageGroup",

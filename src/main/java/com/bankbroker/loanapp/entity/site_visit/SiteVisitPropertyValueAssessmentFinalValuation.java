@@ -20,21 +20,21 @@ import java.time.LocalDateTime;
 public class SiteVisitPropertyValueAssessmentFinalValuation {
 
     // -------------------------------------------------
-    // 🔑 Primary Key
+    //   Primary Key
     // -------------------------------------------------
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     // -------------------------------------------------
-    // 🔗 Application
+    //   Application
     // -------------------------------------------------
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id", nullable = false)
     private LoanApplication application;
 
     // -------------------------------------------------
-    // 💰 FAIR MARKET VALUE (FMV) – AS ON DATE
+    //   FAIR MARKET VALUE (FMV) – AS ON DATE
     // -------------------------------------------------
     @Column(name = "fmv_on_date_actual")
     private Double fmvOnDateActual;
@@ -46,7 +46,7 @@ public class SiteVisitPropertyValueAssessmentFinalValuation {
     private Double fmvOnDateLayout;
 
     // -------------------------------------------------
-    // 💰 FAIR MARKET VALUE (FMV) – ON COMPLETION
+    //   FAIR MARKET VALUE (FMV) – ON COMPLETION
     // -------------------------------------------------
     @Column(name = "fmv_on_completion_actual")
     private Double fmvOnCompletionActual;
@@ -58,7 +58,7 @@ public class SiteVisitPropertyValueAssessmentFinalValuation {
     private Double fmvOnCompletionLayout;
 
     // -------------------------------------------------
-    // 💸 DISTRESSED SALE VALUE
+    //   DISTRESSED SALE VALUE
     // -------------------------------------------------
     @Column(name = "distressed_value_actual")
     private Double distressedValueActual;
@@ -70,7 +70,7 @@ public class SiteVisitPropertyValueAssessmentFinalValuation {
     private Double distressedValueLayout;
 
     // -------------------------------------------------
-    // 📘 GUIDELINE / CIRCLE VALUE
+    //  GUIDELINE / CIRCLE VALUE
     // -------------------------------------------------
     @Column(name = "guideline_value_actual")
     private Double guidelineValueActual;
@@ -100,7 +100,7 @@ public class SiteVisitPropertyValueAssessmentFinalValuation {
     private Double finalValueConsidered;
 
     // -------------------------------------------------
-    // 🧾 AUDIT
+    //   AUDIT
     // -------------------------------------------------
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", nullable = false)

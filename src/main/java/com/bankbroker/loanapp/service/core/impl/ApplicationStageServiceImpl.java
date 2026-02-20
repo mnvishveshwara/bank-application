@@ -5,6 +5,7 @@ import com.bankbroker.loanapp.dto.stage.*;
 import com.bankbroker.loanapp.entity.core.*;
 import com.bankbroker.loanapp.entity.enums.ApplicationHistoryStatus;
 import com.bankbroker.loanapp.entity.enums.ApplicationStageType;
+import com.bankbroker.loanapp.entity.enums.AssignmentType;
 import com.bankbroker.loanapp.entity.enums.Role;
 import com.bankbroker.loanapp.entity.stage.*;
 import com.bankbroker.loanapp.exception.ResourceNotFoundException;
@@ -186,26 +187,6 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
 
         docDetails.getDocuments().clear();
 
-//        for (int i = 0; i < files.size(); i++) {
-//            MultipartFile file = files.get(i);
-//
-//            ApplicationUploadedDocument doc =
-//                    ApplicationUploadedDocument.builder()
-//                            .documentDetails(docDetails)
-//                            .fileName(file.getOriginalFilename())
-//                            .fileType(file.getContentType())
-//                            .fileSizeKB(file.getSize() / 1024)
-//                            .documentType(types.get(i))
-//                            .fileUrl(fileStorageService.store(
-//                                    file,
-//                                    applicationId,
-//                                    "application-documents",
-//                                    types.get(i) +
-//                                            fileStorageService.getExtension(file.getOriginalFilename())))
-//                            .build();
-//
-//            docDetails.getDocuments().add(doc);
-//        }
 
         for (int i = 0; i < files.size(); i++) {
 
@@ -255,6 +236,55 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
         return mapDocumentDetailsToResponse(entity);
     }
 
+//    @Override
+//    @Transactional
+//    public ApplicationAgencyAssignmentResponse saveAgencyAssignment(
+//            String applicationId,
+//            ApplicationAgencyAssignmentRequest request) {
+//
+//        LoanApplication app = getApplication(applicationId);
+//        AdminUser admin = securityUtil.getLoggedInAdmin();
+//
+//        AgencyMaster agency = agencyRepo.findById(request.getAgencyId())
+//                .orElseThrow(() ->
+//                        new ResourceNotFoundException("AgencyMaster", "id", request.getAgencyId()));
+//
+//        ApplicationAgencyAssignment entity =
+//                agencyAssignmentRepo.findByApplication(app)
+//                        .orElseGet(() -> ApplicationAgencyAssignment.builder()
+//                                .application(app)
+//                                .createdBy(admin)
+//                                .build());
+//
+//        entity.setAgency(agency);
+//        entity.setUpdatedBy(admin);
+//        entity.setRemarks(request.getRemarks());
+//
+//        agencyAssignmentRepo.save(entity);
+//
+//        AdminUser agencyAdmin =
+//                adminUserRepository.findByAgencyIdAndRole(agency.getId(), Role.AGENCY)
+//                        .orElseThrow(() ->
+//                                new IllegalArgumentException("No agency admin found"));
+//
+//        app.setAssignedTo(agencyAdmin);
+//        app.setUpdatedDate(LocalDateTime.now());
+//        loanApplicationRepository.save(app);
+//
+//        updateStage(app, ApplicationStageType.ASSIGN_AGENCY, admin);
+//
+//
+//        inboxService.createThreadForAssignment(
+//                app.getId(),       // Application Id
+//                app.getBankId(),        // Bank Id
+//                agency.getId(),               // Agency Id
+//                "New Application Assigned - " + app.getId()
+//        );
+//        return agencyMapper.toResponse(entity);
+//    }
+
+
+
     @Override
     @Transactional
     public ApplicationAgencyAssignmentResponse saveAgencyAssignment(
@@ -263,63 +293,133 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
 
         LoanApplication app = getApplication(applicationId);
         AdminUser admin = securityUtil.getLoggedInAdmin();
+        AssignmentType type = AssignmentType.valueOf(request.getAssignmentType());
+        app.setAssignmentType(type);
 
-        AgencyMaster agency = agencyRepo.findById(request.getAgencyId())
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("AgencyMaster", "id", request.getAgencyId()));
+        if (type == AssignmentType.INTERNAL) {
+            // --- INTERNAL PATH ---
+            AdminUser internalValuator = adminUserRepository.findById(request.getInternalValuatorId())
+                    .orElseThrow(() -> new ResourceNotFoundException("AdminUser", "id", request.getInternalValuatorId()));
 
-        ApplicationAgencyAssignment entity =
-                agencyAssignmentRepo.findByApplication(app)
-                        .orElseGet(() -> ApplicationAgencyAssignment.builder()
-                                .application(app)
-                                .createdBy(admin)
-                                .build());
+            app.setInternalValuator(internalValuator);
+            app.setAssignedTo(internalValuator);
+            app.setAssignmentRemarks(request.getRemarks());
 
-        entity.setAgency(agency);
-        entity.setUpdatedBy(admin);
-        entity.setRemarks(request.getRemarks());
+            // Remove existing agency link if any
+            agencyAssignmentRepo.findByApplication(app).ifPresent(agencyAssignmentRepo::delete);
 
-        agencyAssignmentRepo.save(entity);
+            app.setUpdatedDate(LocalDateTime.now());
+            loanApplicationRepository.save(app);
+            updateStage(app, ApplicationStageType.ASSIGN_AGENCY, admin);
 
-        AdminUser agencyAdmin =
-                adminUserRepository.findByAgencyIdAndRole(agency.getId(), Role.AGENCY)
-                        .orElseThrow(() ->
-                                new IllegalArgumentException("No agency admin found"));
+            // Map manually or use a helper for the Internal Response
+            return ApplicationAgencyAssignmentResponse.builder()
+                    .applicationId(applicationId)
+                    .assignmentType("INTERNAL")
+                    .internalValuatorId(internalValuator.getId())
+                    .internalValuatorName(internalValuator.getFirstName() + " " + internalValuator.getLastName())
+                    .remarks(request.getRemarks())
+                    .updatedByAdminId(admin.getId())
+                    .updatedAt(LocalDateTime.now())
+                    .build();
 
-        app.setAssignedTo(agencyAdmin);
-        app.setUpdatedDate(LocalDateTime.now());
-        loanApplicationRepository.save(app);
+        } else {
+            // --- AGENCY PATH (Original Logic) ---
+            AgencyMaster agency = agencyRepo.findById(request.getAgencyId())
+                    .orElseThrow(() -> new ResourceNotFoundException("AgencyMaster", "id", request.getAgencyId()));
 
-        updateStage(app, ApplicationStageType.ASSIGN_AGENCY, admin);
+            ApplicationAgencyAssignment entity = agencyAssignmentRepo.findByApplication(app)
+                    .orElseGet(() -> ApplicationAgencyAssignment.builder()
+                            .application(app)
+                            .createdBy(admin)
+                            .build());
 
+            entity.setAgency(agency);
+            entity.setUpdatedBy(admin);
+            entity.setRemarks(request.getRemarks());
+            agencyAssignmentRepo.save(entity);
 
-        inboxService.createThreadForAssignment(
-                app.getId(),       // Application Id
-                app.getBankId(),        // Bank Id
-                agency.getId(),               // Agency Id
-                "New Application Assigned - " + app.getId()
-        );
-        return agencyMapper.toResponse(entity);
+            AdminUser agencyAdmin = adminUserRepository.findByAgencyIdAndRole(agency.getId(), Role.AGENCY)
+                    .orElseThrow(() -> new IllegalArgumentException("No agency admin found"));
+
+            app.setInternalValuator(null);
+            app.setAssignedTo(agencyAdmin);
+            app.setUpdatedDate(LocalDateTime.now());
+            loanApplicationRepository.save(app);
+
+            updateStage(app, ApplicationStageType.ASSIGN_AGENCY, admin);
+
+            // Your existing inbox thread logic...
+            inboxService.createThreadForAssignment(
+                    app.getId(),
+                    app.getBankId(),
+                    agency.getId(),
+                    "New Application Assigned - " + app.getId()
+            );
+
+            // Map using your existing mapper but add the type
+            ApplicationAgencyAssignmentResponse response = agencyMapper.toResponse(entity);
+            response.setAssignmentType("AGENCY");
+            return response;
+        }
     }
 
 
-
+//    @Override
+//    public AgencyMasterResponse getAgencyAssignment(String applicationId) {
+//        LoanApplication app = getApplicationOrThrow(applicationId);
+//
+//        ApplicationAgencyAssignment entity = agencyAssignmentRepo
+//                .findByApplication(app)
+//                .orElseThrow(() -> new ResourceNotFoundException(
+//                        "ApplicationAgencyAssignment", "applicationId", applicationId));
+//
+//        AgencyMaster agency = agencyRepo.findById(entity.getAgency().getId())
+//                .orElseThrow(() -> new ResourceNotFoundException("AgencyMaster", "id", entity.getAgency().getId()));
+//
+//        return toResponse(agency, entity);
+//    }
 
     @Override
-    public AgencyMasterResponse getAgencyAssignment(String applicationId) {
+    public ApplicationAgencyAssignmentResponse getAgencyAssignment(String applicationId) {
         LoanApplication app = getApplicationOrThrow(applicationId);
 
+        // If the assignment type is null, we assume it hasn't been assigned yet
+        if (app.getAssignmentType() == null) {
+            throw new ResourceNotFoundException("Assignment", "applicationId", applicationId);
+        }
+
+        // --- CASE 1: INTERNAL ASSIGNMENT ---
+        if (app.getAssignmentType() == AssignmentType.INTERNAL) {
+            AdminUser valuator = app.getInternalValuator();
+            if (valuator == null) {
+                throw new ResourceNotFoundException("Internal Valuator", "applicationId", applicationId);
+            }
+
+            return ApplicationAgencyAssignmentResponse.builder()
+                    .applicationId(applicationId)
+                    .assignmentType("INTERNAL")
+                    .internalValuatorId(valuator.getId())
+                    .internalValuatorName(valuator.getFirstName() + " " + valuator.getLastName())
+                    // Since there is no row in agencyAssignmentRepo for internal,
+                    // we might need to store/fetch remarks from somewhere else or skip.
+                    .remarks(app.getAssignmentRemarks())
+                    .build();
+        }
+
+        // --- CASE 2: AGENCY ASSIGNMENT (Existing Logic) ---
         ApplicationAgencyAssignment entity = agencyAssignmentRepo
                 .findByApplication(app)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "ApplicationAgencyAssignment", "applicationId", applicationId));
 
-        AgencyMaster agency = agencyRepo.findById(entity.getAgency().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("AgencyMaster", "id", entity.getAgency().getId()));
+        // Map the entity to our response DTO
+        ApplicationAgencyAssignmentResponse response = agencyMapper.toResponse(entity);
+        response.setAssignmentType("AGENCY");
+        response.setAgencyName(entity.getAgency().getAgencyName());
 
-        return toResponse(agency, entity);
+        return response;
     }
-
 
 
     @Override

@@ -22,21 +22,21 @@ import java.util.List;
 //public class SiteVisitTechnicalBua {
 //
 //    // -------------------------------------------------
-//    // 🔑 Primary Key
+//    //   Primary Key
 //    // -------------------------------------------------
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
 //    private Long id;
 //
 //    // -------------------------------------------------
-//    // 🔗 Application
+//    //   Application
 //    // -------------------------------------------------
 //    @OneToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "application_id", nullable = false)
 //    private LoanApplication application;
 //
 //    // -------------------------------------------------
-//    // 🏗 CONFIGURATION (from UI counters)
+//    //   CONFIGURATION (from UI counters)
 //    // -------------------------------------------------
 //    @Column(name = "no_of_basements")
 //    private Integer basements;
@@ -48,7 +48,7 @@ import java.util.List;
 //    private Integer nonRcc;
 //
 //    // -------------------------------------------------
-//    // ➕ SUMMATION (AUTO CALCULATED)
+//    //   SUMMATION (AUTO CALCULATED)
 //    // -------------------------------------------------
 //    @Column(name = "total_bua_actual")
 //    private Double totalBuaActual;
@@ -60,7 +60,7 @@ import java.util.List;
 //    private Double totalBuaApproved;
 //
 //    // -------------------------------------------------
-//    // 🔗 DYNAMIC LEVELS
+//    //   DYNAMIC LEVELS
 //    // -------------------------------------------------
 //    @OneToMany(
 //            mappedBy = "bua",
@@ -71,7 +71,7 @@ import java.util.List;
 //    private List<SiteVisitTechnicalBuaLevel> levels;
 //
 //    // -------------------------------------------------
-//    // 🧾 AUDIT
+//    //   AUDIT
 //    // -------------------------------------------------
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "created_by", nullable = false)

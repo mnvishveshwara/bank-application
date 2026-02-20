@@ -21,14 +21,14 @@ public class SiteVisitBuildingDetails {
     private Long id;
 
     // -------------------------------------------------
-    // 🔗 Application
+    //   Application
     // -------------------------------------------------
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id", nullable = false, unique = true)
     private LoanApplication application;
 
     // -------------------------------------------------
-    // 🏗 Construction Details (Construction Tab)
+    //   Construction Details (Construction Tab)
     // -------------------------------------------------
     @Column(name = "construction_type")
     private String constructionType;          // RCC / Load Bearing / Steel etc.
@@ -46,7 +46,7 @@ public class SiteVisitBuildingDetails {
     private String starType;                   // 1 Star / 2 Star / NA
 
     // -------------------------------------------------
-    // 📐 Plan Details (Plan Tab – Future Ready)
+    //   Plan Details (Plan Tab – Future Ready)
     // -------------------------------------------------
     @Column(name = "approved_plan_available")
     private Boolean approvedPlanAvailable;
@@ -67,7 +67,7 @@ public class SiteVisitBuildingDetails {
     private String planDeviationRemarks;
 
     // -------------------------------------------------
-    // 🧾 Audit
+    //   Audit
     // -------------------------------------------------
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", nullable = false)

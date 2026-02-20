@@ -22,27 +22,27 @@ import java.util.List;
 public class SiteVisitPropertyValueAssessmentAmenities {
 
     // -------------------------------------------------
-    // 🔑 Primary Key
+    //   Primary Key
     // -------------------------------------------------
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     // -------------------------------------------------
-    // 🔗 Application
+    //   Application
     // -------------------------------------------------
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id", nullable = false)
     private LoanApplication application;
 
     // -------------------------------------------------
-    // ➕ SUMMATION (AUTO CALCULATED)
+    //   SUMMATION (AUTO CALCULATED)
     // -------------------------------------------------
     @Column(name = "total_amenities_value")
     private Double totalAmenitiesValue;
 
     // -------------------------------------------------
-    // 🔗 DYNAMIC AMENITIES
+    //   DYNAMIC AMENITIES
     // -------------------------------------------------
     @OneToMany(
             mappedBy = "amenities",
@@ -53,7 +53,7 @@ public class SiteVisitPropertyValueAssessmentAmenities {
     private List<SiteVisitPropertyValueAssessmentAmenityItem> items= new ArrayList<>();
 
     // -------------------------------------------------
-    // 🧾 AUDIT
+    //   AUDIT
     // -------------------------------------------------
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", nullable = false)

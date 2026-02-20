@@ -21,14 +21,14 @@ public class SiteVisitPropertyDetails {
     private Long id;
 
     // -------------------------------------------------
-    // 🔗 Application
+    //   Application
     // -------------------------------------------------
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id", nullable = false, unique = true)
     private LoanApplication application;
 
     // -------------------------------------------------
-    // 📍 Postal Address
+    //   Postal Address
     // -------------------------------------------------
     @Column(name = "postal_door_no")
     private String postalDoorNo;
@@ -52,7 +52,7 @@ public class SiteVisitPropertyDetails {
     private String postalState;
 
     // -------------------------------------------------
-    // 📄 Address As Per Document
+    //   Address As Per Document
     // -------------------------------------------------
     @Column(name = "doc_door_no")
     private String documentDoorNo;
@@ -76,7 +76,7 @@ public class SiteVisitPropertyDetails {
     private String documentState;
 
     // -------------------------------------------------
-    // 🌍 Geo Coordinates
+    //   Geo Coordinates
     // -------------------------------------------------
     @Column(name = "latitude")
     private Double latitude;
@@ -88,7 +88,7 @@ public class SiteVisitPropertyDetails {
     private Double distanceFromCityCentre;
 
     // -------------------------------------------------
-    // 🏛 Jurisdiction & Landmark
+    //   Jurisdiction & Landmark
     // -------------------------------------------------
     @Column(name = "jurisdiction")
     private String jurisdiction;
@@ -97,7 +97,7 @@ public class SiteVisitPropertyDetails {
     private String nearbyLandmark;
 
     // -------------------------------------------------
-    // 🏠 Property Info
+    //   Property Info
     // -------------------------------------------------
     @Column(name = "property_type")
     private String propertyType;
@@ -106,7 +106,7 @@ public class SiteVisitPropertyDetails {
     private String propertySubType;
 
     // -------------------------------------------------
-    // 🧾 Audit
+    //   Audit
     // -------------------------------------------------
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", nullable = false)
