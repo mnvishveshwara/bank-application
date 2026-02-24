@@ -16,7 +16,7 @@ public interface SiteVisitBuildingDetailsControllerApi {
             @RequestBody SiteVisitBuildingDetailsRequest request
     );
 
-    @PreAuthorize("hasAnyRole('AGENCY', 'AGENCY_VALUATOR','BANK_VALUATOR')")
+    @PreAuthorize("hasAnyRole('AGENCY', 'AGENCY_VALUATOR','BANK_VALUATOR','MANAGER')")
     @GetMapping("/{applicationId}/site-visit/building-details")
     ResponseEntity<SiteVisitBuildingDetailsResponse> getBuildingDetails(
             @PathVariable String applicationId

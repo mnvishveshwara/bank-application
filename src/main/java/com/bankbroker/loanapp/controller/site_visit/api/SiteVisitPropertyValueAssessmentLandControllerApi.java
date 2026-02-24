@@ -16,7 +16,7 @@ public interface SiteVisitPropertyValueAssessmentLandControllerApi {
             @PathVariable String applicationId,
             @RequestBody SiteVisitPropertyValueAssessmentLandRequest request
     );
-    @PreAuthorize("hasAnyRole('AGENCY', 'AGENCY_VALUATOR','BANK_VALUATOR')")
+    @PreAuthorize("hasAnyRole('AGENCY', 'AGENCY_VALUATOR','BANK_VALUATOR','MANAGER')")
     @GetMapping
     ResponseEntity<SiteVisitPropertyValueAssessmentLandResponse> getLand(
             @PathVariable String applicationId

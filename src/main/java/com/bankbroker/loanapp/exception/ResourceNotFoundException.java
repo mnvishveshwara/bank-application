@@ -7,4 +7,6 @@ public class ResourceNotFoundException extends RuntimeException {
     public ResourceNotFoundException(String entity, String field, Object value) {
         super(entity + " not found for " + field + " : " + value);
     }
+
+
 }

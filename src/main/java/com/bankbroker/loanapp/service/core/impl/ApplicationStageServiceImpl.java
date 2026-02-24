@@ -691,30 +691,30 @@ private void updateStage(LoanApplication app, ApplicationStageType stage, AdminU
 
         return customerMapper.toResponse(details);
     }
-
-
-
-    private AgencyMasterResponse toResponse(AgencyMaster a, ApplicationAgencyAssignment assignment) {
-        return AgencyMasterResponse.builder()
-                .id(a.getId())
-                .agencyName(a.getAgencyName())
-                .contactName(a.getContactName())
-                .contactNumber(a.getContactNumber())
-                .streetLine1(a.getStreetLine1())
-                .streetLine2(a.getStreetLine2())
-                .pinCode(a.getPinCode())
-                .city(a.getCity())
-                .state(a.getState())
-                .latitude(a.getLatitude())
-                .longitude(a.getLongitude())
-                .mapURL(a.getMapURL())
-                .createdAt(a.getCreatedAt())
-                .updatedAt(a.getUpdatedAt())
-                .createdBy(a.getCreatedBy().getId())
-                .updatedBy(a.getUpdatedBy().getId())
-                .remarks(assignment.getRemarks())
-                .build();
-    }
+//
+//
+//
+//    private AgencyMasterResponse toResponse(AgencyMaster a, ApplicationAgencyAssignment assignment) {
+//        return AgencyMasterResponse.builder()
+//                .id(a.getId())
+//                .agencyName(a.getAgencyName())
+//                .contactName(a.getContactName())
+//                .contactNumber(a.getContactNumber())
+//                .streetLine1(a.getStreetLine1())
+//                .streetLine2(a.getStreetLine2())
+//                .pinCode(a.getPinCode())
+//                .city(a.getCity())
+//                .state(a.getState())
+//                .latitude(a.getLatitude())
+//                .longitude(a.getLongitude())
+//                .mapURL(a.getMapURL())
+//                .createdAt(a.getCreatedAt())
+//                .updatedAt(a.getUpdatedAt())
+//                .createdBy(a.getCreatedBy().getId())
+//                .updatedBy(a.getUpdatedBy().getId())
+//                .remarks(assignment.getRemarks())
+//                .build();
+//    }
 
 
 

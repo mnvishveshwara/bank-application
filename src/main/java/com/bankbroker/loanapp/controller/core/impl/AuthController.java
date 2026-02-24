@@ -34,12 +34,65 @@ public class AuthController {
     private final CustomerRepository customerRepository;
     private final UserSessionRepository userSessionRepository;
 
+//    @PostMapping("/login")
+//    public ResponseEntity<AuthResponse> login(
+//            @RequestBody LoginRequest request,
+//            HttpServletRequest httpRequest
+//    ) {
+//
+//        Authentication authentication = authenticationManager.authenticate(
+//                new UsernamePasswordAuthenticationToken(
+//                        request.getUsername(),
+//                        request.getPassword()
+//                )
+//        );
+//
+//        UserDetails principal = (UserDetails) authentication.getPrincipal();
+//
+//        String email = principal.getUsername();
+//        String role = extractRole(principal);
+//        String userId = resolveUserId(email, role);
+//
+//        //   FORCE LOGIN: kill all existing sessions
+//        userSessionRepository.deactivateAllActiveSessions(userId);
+//
+//        //   Generate new JWT
+//        String token = tokenProvider.generateToken(
+//                userId,
+//                email,
+//                role
+//        );
+//
+//        //   Device & IP
+//        String ipAddress = getClientIp(httpRequest);
+//        String deviceInfo = getDeviceInfo(httpRequest);
+//
+//        //   Save new active session
+//        userSessionRepository.save(
+//                UserSession.builder()
+//                        .userId(userId)
+//                        .token(token)
+//                        .active(true)
+//                        .loginTime(LocalDateTime.now())
+//                        .ipAddress(ipAddress)
+//
+//                        .deviceInfo(deviceInfo)
+//                        .build()
+//        );
+//
+//        return ResponseEntity.ok(
+//                AuthResponse.builder()
+//                        .token(token)
+//                        .role(role)
+//                        .build()
+//        );
+//    }
+
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(
             @RequestBody LoginRequest request,
             HttpServletRequest httpRequest
     ) {
-
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getUsername(),
@@ -48,35 +101,27 @@ public class AuthController {
         );
 
         UserDetails principal = (UserDetails) authentication.getPrincipal();
-
         String email = principal.getUsername();
         String role = extractRole(principal);
-        String userId = resolveUserId(email, role);
 
-        //   FORCE LOGIN: kill all existing sessions
-        userSessionRepository.deactivateAllActiveSessions(userId);
+        // Fetch User Details (ID and Name)
+        UserInfo userInfo = resolveUserInfo(email, role);
 
-        //   Generate new JWT
-        String token = tokenProvider.generateToken(
-                userId,
-                email,
-                role
-        );
+        // FORCE LOGIN: kill existing sessions
+        userSessionRepository.deactivateAllActiveSessions(userInfo.getId());
 
-        //   Device & IP
-        String ipAddress = getClientIp(httpRequest);
-        String deviceInfo = getDeviceInfo(httpRequest);
+        // Generate JWT
+        String token = tokenProvider.generateToken(userInfo.getId(), email, role);
 
-        //   Save new active session
+        // Save Session
         userSessionRepository.save(
                 UserSession.builder()
-                        .userId(userId)
+                        .userId(userInfo.getId())
                         .token(token)
                         .active(true)
                         .loginTime(LocalDateTime.now())
-                        .ipAddress(ipAddress)
-
-                        .deviceInfo(deviceInfo)
+                        .ipAddress(getClientIp(httpRequest))
+                        .deviceInfo(getDeviceInfo(httpRequest))
                         .build()
         );
 
@@ -84,8 +129,38 @@ public class AuthController {
                 AuthResponse.builder()
                         .token(token)
                         .role(role)
+                        .name(userInfo.getFullName()) // Now returning the name
                         .build()
         );
+    }
+
+// -------------------------------------------------
+//   Updated Helper Methods
+// -------------------------------------------------
+
+    private UserInfo resolveUserInfo(String email, String role) {
+        if (!"ROLE_USER".equals(role)) {
+            AdminUser admin = adminUserRepository.findByEmail(email)
+                    .orElseThrow(() -> new RuntimeException("Admin user not found"));
+
+            // Assuming AdminUser has getFirstName() and getLastName()
+            String fullName = admin.getFirstName() + " " + admin.getLastName();
+            return new UserInfo(admin.getId(), fullName.trim());
+        }
+
+        Customer customer = customerRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Customer not found"));
+
+        // Assuming Customer has getFirstName() and getLastName()
+        String fullName = customer.getFirstName() + " " + customer.getLastName();
+        return new UserInfo(customer.getId(), fullName.trim());
+    }
+
+    // Simple internal class to hold temporary data
+    @lombok.Value
+    private static class UserInfo {
+        String id;
+        String fullName;
     }
 
  

@@ -15,7 +15,7 @@ public interface SiteVisitValuerRemarksControllerApi {
             @PathVariable String applicationId,
             @RequestBody SiteVisitValuerRemarksRequest request
     );
-    @PreAuthorize("hasAnyRole('AGENCY', 'AGENCY_VALUATOR','BANK_VALUATOR')")
+    @PreAuthorize("hasAnyRole('AGENCY', 'AGENCY_VALUATOR','BANK_VALUATOR','MANAGER')")
     @GetMapping
     ResponseEntity<SiteVisitValuerRemarksResponse> get(
             @PathVariable String applicationId

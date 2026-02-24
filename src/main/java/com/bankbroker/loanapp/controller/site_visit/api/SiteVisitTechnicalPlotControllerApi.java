@@ -14,7 +14,7 @@ public interface SiteVisitTechnicalPlotControllerApi {
             @PathVariable String applicationId,
             @RequestBody SiteVisitTechnicalPlotRequest request
     );
-    @PreAuthorize("hasAnyRole('AGENCY', 'AGENCY_VALUATOR','BANK_VALUATOR')")
+    @PreAuthorize("hasAnyRole('AGENCY', 'AGENCY_VALUATOR','BANK_VALUATOR','MANAGER')")
     @GetMapping
     ResponseEntity<SiteVisitTechnicalPlotResponse> get(
             @PathVariable String applicationId

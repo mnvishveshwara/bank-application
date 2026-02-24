@@ -4,7 +4,6 @@ import com.bankbroker.loanapp.dto.admin.BankMasterRequest;
 import com.bankbroker.loanapp.dto.admin.BankMasterResponse;
 import com.bankbroker.loanapp.entity.core.AdminUser;
 import com.bankbroker.loanapp.entity.core.BankMaster;
-import com.bankbroker.loanapp.entity.enums.Role;
 import com.bankbroker.loanapp.mapper.core.BankMasterMapper;
 import com.bankbroker.loanapp.repository.core.BankMasterRepository;
 import com.bankbroker.loanapp.service.core.api.BankMasterService;

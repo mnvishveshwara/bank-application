@@ -143,7 +143,7 @@ public interface ApplicationStageHistoryRepository extends JpaRepository<Applica
     LEFT JOIN ApplicationAgencyAssignment assign 
         ON assign.application.id = app.id
     LEFT JOIN assign.agency agency
-    WHERE hist.status = com.bankbroker.loanapp.entity.enums.ApplicationHistoryStatus.SITE_VISIT_COMPLETED
+    WHERE hist.status = com.bankbroker.loanapp.entity.enums.ApplicationHistoryStatus.BANK_APPROVED
       AND app.bankId IN :bankIds
     ORDER BY hist.createdDate DESC
 """)
@@ -167,9 +167,10 @@ public interface ApplicationStageHistoryRepository extends JpaRepository<Applica
     LEFT JOIN ApplicationAgencyAssignment assign 
         ON assign.application.id = app.id
     LEFT JOIN assign.agency agency
-    WHERE hist.status = com.bankbroker.loanapp.entity.enums.ApplicationHistoryStatus.REJECTED
+    WHERE hist.status = com.bankbroker.loanapp.entity.enums.ApplicationHistoryStatus.BANK_REJECTED
       AND app.bankId IN :bankIds
     ORDER BY hist.createdDate DESC
+    
 """)
     List<DashboardLatestApplicationResponse> getManagerLatestRejected(
             List<Long> bankIds

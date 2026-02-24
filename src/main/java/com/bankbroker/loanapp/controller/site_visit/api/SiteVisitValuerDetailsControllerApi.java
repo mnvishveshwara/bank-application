@@ -21,7 +21,7 @@ public interface SiteVisitValuerDetailsControllerApi {
             @RequestPart(required = false) MultipartFile valuerSignature
     );
 
-    @PreAuthorize("hasAnyRole('AGENCY', 'AGENCY_VALUATOR','BANK_VALUATOR')")
+    @PreAuthorize("hasAnyRole('AGENCY', 'AGENCY_VALUATOR','BANK_VALUATOR','MANAGER')")
     @GetMapping("/valuer-details")
     ResponseEntity<SiteVisitValuerDetailsResponse> get(
             @PathVariable String applicationId

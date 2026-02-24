@@ -16,7 +16,7 @@ public interface SiteVisitInfrastructureDetailsControllerApi {
             @RequestBody SiteVisitInfrastructureDetailsRequest request
     );
 
-    @PreAuthorize("hasAnyRole('AGENCY', 'AGENCY_VALUATOR','BANK_VALUATOR')")
+    @PreAuthorize("hasAnyRole('AGENCY', 'AGENCY_VALUATOR','BANK_VALUATOR','MANAGER')")
     @GetMapping
     ResponseEntity<SiteVisitInfrastructureDetailsResponse> getInfrastructureDetails(
             @PathVariable String applicationId

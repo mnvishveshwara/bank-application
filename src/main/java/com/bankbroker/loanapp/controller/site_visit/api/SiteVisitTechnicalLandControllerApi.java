@@ -17,7 +17,7 @@ public interface SiteVisitTechnicalLandControllerApi {
             @PathVariable String applicationId,
             @RequestBody SiteVisitTechnicalLandRequest request
     );
-    @PreAuthorize("hasAnyRole('AGENCY', 'AGENCY_VALUATOR','BANK_VALUATOR')")
+    @PreAuthorize("hasAnyRole('AGENCY', 'AGENCY_VALUATOR','BANK_VALUATOR','MANAGER')")
     @GetMapping
     ResponseEntity<SiteVisitTechnicalLandDetailsResponse> get(
             @PathVariable String applicationId

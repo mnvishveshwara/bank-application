@@ -14,7 +14,7 @@ public interface SiteVisitTechnicalSbuaControllerApi {
             @PathVariable String applicationId,
             @RequestBody SiteVisitTechnicalSbuaRequest request
     );
-    @PreAuthorize("hasAnyRole('AGENCY', 'AGENCY_VALUATOR','BANK_VALUATOR')")
+    @PreAuthorize("hasAnyRole('AGENCY', 'AGENCY_VALUATOR','BANK_VALUATOR','MANAGER')")
     @GetMapping
     ResponseEntity<SiteVisitTechnicalSbuaResponse> get(
             @PathVariable String applicationId

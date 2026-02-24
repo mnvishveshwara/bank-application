@@ -14,7 +14,7 @@ public interface SiteVisitPropertyValueAssessmentFinalValuationControllerApi {
             @PathVariable String applicationId,
             @RequestBody SiteVisitPropertyValueAssessmentFinalValuationRequest request
     );
-    @PreAuthorize("hasAnyRole('AGENCY', 'AGENCY_VALUATOR','BANK_VALUATOR')")
+    @PreAuthorize("hasAnyRole('AGENCY', 'AGENCY_VALUATOR','BANK_VALUATOR','MANAGER')")
     @GetMapping
     ResponseEntity<SiteVisitPropertyValueAssessmentFinalValuationResponse> getFinalValuation(
             @PathVariable String applicationId

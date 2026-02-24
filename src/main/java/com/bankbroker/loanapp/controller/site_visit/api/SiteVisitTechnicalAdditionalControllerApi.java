@@ -14,7 +14,7 @@ public interface SiteVisitTechnicalAdditionalControllerApi {
             @PathVariable String applicationId,
             @RequestBody SiteVisitTechnicalAdditionalRequest request
     );
-    @PreAuthorize("hasAnyRole('AGENCY', 'AGENCY_VALUATOR','BANK_VALUATOR')")
+    @PreAuthorize("hasAnyRole('AGENCY', 'AGENCY_VALUATOR','BANK_VALUATOR','MANAGER')")
     @GetMapping
     ResponseEntity<SiteVisitTechnicalAdditionalResponse> getTechnicalAdditional(
             @PathVariable String applicationId
