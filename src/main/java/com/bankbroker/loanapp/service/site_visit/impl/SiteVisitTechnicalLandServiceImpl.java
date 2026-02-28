@@ -24,6 +24,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Base64;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -129,90 +133,61 @@ public SiteVisitTechnicalLandDetailsResponse save(
         return buildResponse(land);
     }
 
-//    @Override
-//    public ResponseEntity<String> uploadImages(String applicationId, List<MultipartFile> files) {
-//
-//        if (files == null || files.isEmpty()) {
-//            return ResponseEntity.badRequest().body("No files to upload");
-//        }
-//
-//        AdminUser user = securityUtil.getLoggedInAdmin();
-//
-//        LoanApplication app = loanRepo.findById(applicationId)
-//                .orElseThrow(() -> new RuntimeException("Application not found"));
-//
-//        SiteVisitTechnicalLand land = landRepo.findByApplication(app)
-//                .orElseThrow(() ->
-//                        new RuntimeException("Save land details before uploading images")
-//                );
-//
-//        for (MultipartFile file : files) {
-//
-//            if (file == null || file.isEmpty()) continue;
-//
-//
-//            String fileName = file.getOriginalFilename();
-//
-//            //  Store file using common service
-//            String filePath = fileStorageService.store(
-//                    file,
-//                    applicationId,
-//                    "site-visit/techinical-land",
-//                    fileName
-//            );
-//
-//            //  Persist DB record
-//            SiteVisitTechnicalLandImage image =
-//                    SiteVisitTechnicalLandImage.builder()
-//                            .technicalLand(land)
-//                            .fileName(fileName)
-//                            .filePath(filePath)
-//                            .contentType(file.getContentType())
-//                            .fileSize(file.getSize())
-//                            .uploadedBy(user)
-//                            .uploadedDate(LocalDateTime.now())
-//                            .build();
-//
-//            imageRepo.save(image);
-//        }
-//        return ResponseEntity.ok("Images uploaded successfully");
-//    }
-@Override
-public ResponseEntity<String> uploadImages(String applicationId, List<MultipartFile> files) {
-    if (files == null || files.isEmpty()) {
-        return ResponseEntity.badRequest().body("No files to upload");
+    @Override
+    public ResponseEntity<String> uploadImages(Long landId, List<MultipartFile> files) {
+
+        if (files == null || files.isEmpty()) {
+            return ResponseEntity.badRequest().body("No files to upload");
+        }
+
+        AdminUser user = securityUtil.getLoggedInAdmin();
+
+        SiteVisitTechnicalLand land = landRepo.findById(landId)
+                .orElseThrow(() -> new RuntimeException("Land not found"));
+
+        //   STEP 1 — Delete Existing Images (Disk + DB)
+        List<SiteVisitTechnicalLandImage> existingImages =
+                imageRepo.findByTechnicalLand(land);
+
+        for (SiteVisitTechnicalLandImage oldImg : existingImages) {
+
+            // delete physical file from disk
+            fileStorageService.delete(oldImg.getFilePath());
+
+            // delete DB record
+            imageRepo.delete(oldImg);
+        }
+
+        //   STEP 2 — Upload New File(s)
+        for (MultipartFile file : files) {
+
+            if (file == null || file.isEmpty()) continue;
+
+            String fileName = file.getOriginalFilename();
+
+            String filePath = fileStorageService.store(
+                    file,
+                    land.getApplication().getId(),
+                    "site-visit/technical-land",
+                    fileName
+            );
+
+            SiteVisitTechnicalLandImage image =
+                    SiteVisitTechnicalLandImage.builder()
+                            .technicalLand(land)
+                            .fileName(fileName)
+                            .filePath(filePath)
+                            .contentType(file.getContentType())
+                            .fileSize(file.getSize())
+                            .uploadedBy(user)
+                            .uploadedDate(LocalDateTime.now())
+                            .build();
+
+            imageRepo.save(image);
+        }
+
+        return ResponseEntity.ok("Image replaced successfully");
     }
-
-    AdminUser user = securityUtil.getLoggedInAdmin();
-    LoanApplication app = loanRepo.findById(applicationId)
-            .orElseThrow(() -> new ResourceNotFoundException("LoanApplication", "id", applicationId));
-
-    // 2. Assignment Validation (Crucial for security)
-    validateAssignment(app, user);
-
-    SiteVisitTechnicalLand land = landRepo.findByApplication(app)
-            .orElseThrow(() -> new RuntimeException("Save land details before uploading images"));
-
-    for (MultipartFile file : files) {
-        if (file == null || file.isEmpty()) continue;
-
-        String fileName = file.getOriginalFilename();
-        String filePath = fileStorageService.store(file, applicationId, "site-visit/technical-land", fileName);
-
-        SiteVisitTechnicalLandImage image = SiteVisitTechnicalLandImage.builder()
-                .technicalLand(land)
-                .fileName(fileName)
-                .filePath(filePath)
-                .contentType(file.getContentType())
-                .fileSize(file.getSize())
-                .uploadedBy(user)
-                .uploadedDate(LocalDateTime.now())
-                .build();
-
-        imageRepo.save(image);
-    }
-    return ResponseEntity.ok("Images uploaded successfully");
-}
 
     private SiteVisitTechnicalLandDetailsResponse buildResponse(
             SiteVisitTechnicalLand land) {
@@ -220,13 +195,28 @@ public ResponseEntity<String> uploadImages(String applicationId, List<MultipartF
         List<SiteVisitTechnicalLandImageResponse> images =
                 imageRepo.findByTechnicalLand(land)
                         .stream()
-                        .map(img -> SiteVisitTechnicalLandImageResponse.builder()
-                                .id(img.getId())
-                                .fileName(img.getFileName())
-                                .filePath(img.getFilePath())
-                                .contentType(img.getContentType())
-                                .fileSize(img.getFileSize())
-                                .build())
+                        .map(img -> {
+
+                            String base64File = null;
+
+                            try {
+                                Path path = Paths.get(img.getFilePath());
+                                byte[] fileBytes = Files.readAllBytes(path);
+                                base64File = Base64.getEncoder().encodeToString(fileBytes);
+                            }
+                            catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            return SiteVisitTechnicalLandImageResponse.builder()
+                                    .id(img.getId())
+                                    .fileName(img.getFileName())
+                                    .filePath(img.getFilePath())
+                                    .contentType(img.getContentType())
+                                    .fileSize(img.getFileSize())
+                                    .fileData(base64File)
+                                    .build();
+                        })
                         .toList();
 
         return SiteVisitTechnicalLandDetailsResponse.builder()

@@ -35,19 +35,31 @@ public class SiteVisitTechnicalLandControllerImpl
     }
 
     @Override
-    public ResponseEntity<String> uploadImages(
-            String applicationId,
-            List<MultipartFile> files) {
-
+    public ResponseEntity<String> uploadImages(Long landId, List<MultipartFile> files) {
         if (files == null || files.isEmpty()) {
             return ResponseEntity.badRequest()
                     .body("No files provided for upload");
         }
 
 
-        service.uploadImages(applicationId, files);
+        service.uploadImages(landId, files);
 
-        return ResponseEntity.ok("Images uploaded successfully");
-    }
+        return ResponseEntity.ok("Images uploaded successfully");    }
+
+//    @Override
+//    public ResponseEntity<String> uploadImages(
+//            String applicationId,
+//            List<MultipartFile> files) {
+//
+//        if (files == null || files.isEmpty()) {
+//            return ResponseEntity.badRequest()
+//                    .body("No files provided for upload");
+//        }
+//
+//
+//        service.uploadImages(applicationId, files);
+//
+//        return ResponseEntity.ok("Images uploaded successfully");
+//    }
 
 }

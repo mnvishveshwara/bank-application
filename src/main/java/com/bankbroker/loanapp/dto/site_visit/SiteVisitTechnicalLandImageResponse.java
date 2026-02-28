@@ -14,4 +14,5 @@ public class SiteVisitTechnicalLandImageResponse {
     private String filePath;
     private String contentType;
     private Long fileSize;
+    private String fileData;
 }

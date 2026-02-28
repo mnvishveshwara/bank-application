@@ -1,11 +1,13 @@
 package com.bankbroker.loanapp.service.storage;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.*;
 
+@Slf4j
 @Service
 public class FileStorageService {
 
@@ -48,5 +50,22 @@ public class FileStorageService {
     public String getExtension(String filename) {
         if (filename == null || !filename.contains(".")) return "";
         return filename.substring(filename.lastIndexOf("."));
+    }
+
+    public void delete(String filePath) {
+
+        if (filePath == null || filePath.isBlank()) return;
+
+        try {
+
+            Path path = Paths.get(filePath);
+
+            if (Files.exists(path)) {
+                Files.delete(path);
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to delete file: " + filePath, e);
+        }
     }
 }

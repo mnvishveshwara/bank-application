@@ -23,9 +23,9 @@ public interface SiteVisitTechnicalLandControllerApi {
             @PathVariable String applicationId
     );
     @PreAuthorize("hasAnyRole('AGENCY', 'AGENCY_VALUATOR','BANK_VALUATOR')")
-    @PostMapping(value = "/images", consumes = "multipart/form-data")
+    @PostMapping(value = "/{landId}/images", consumes = "multipart/form-data")
     ResponseEntity<String> uploadImages(
-            @PathVariable String applicationId,
+            @PathVariable Long landId,
             @RequestPart("files") List<MultipartFile> files
     );
 }

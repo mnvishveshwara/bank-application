@@ -17,7 +17,7 @@ public interface SiteVisitTechnicalLandService {
     SiteVisitTechnicalLandDetailsResponse get(String applicationId);
 
     ResponseEntity<String> uploadImages(
-            String applicationId,
+            Long landId,
             List<MultipartFile> files
     );
 }
