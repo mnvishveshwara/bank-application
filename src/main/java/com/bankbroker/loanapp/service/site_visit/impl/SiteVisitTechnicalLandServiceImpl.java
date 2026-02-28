@@ -47,38 +47,6 @@ public class SiteVisitTechnicalLandServiceImpl
     private final FileStorageService fileStorageService;
     private final ApplicationAgencyAssignmentRepository agencyAssignmentRepo;
 
-//    @Override
-//    public SiteVisitTechnicalLandDetailsResponse save(
-//            String applicationId,
-//            SiteVisitTechnicalLandRequest request) {
-//
-//        AdminUser user = securityUtil.getLoggedInAdmin();
-//
-//        LoanApplication app = loanRepo.findById(applicationId)
-//                .orElseThrow(() -> new RuntimeException("Application not found"));
-//
-//        SiteVisitTechnicalLand land = landRepo.findByApplication(app)
-//                .orElseGet(() -> mapper.toEntity(request, app, user));
-//
-//        if (land.getId() != null) {
-//            mapper.updateEntity(request, land);
-//            land.setUpdatedBy(user);
-//        }
-//
-//        land.setLandAreaMatch(
-//                land.getLandAreaAsPerActual() != null &&
-//                        land.getLandAreaAsPerDocument() != null &&
-//                        land.getLandAreaAsPerLayoutPlan() != null &&
-//                        land.getLandAreaAsPerActual()
-//                                .equals(land.getLandAreaAsPerDocument()) &&
-//                        land.getLandAreaAsPerActual()
-//                                .equals(land.getLandAreaAsPerLayoutPlan())
-//        );
-//
-//        SiteVisitTechnicalLand saved = landRepo.save(land);
-//
-//        return buildResponse(saved);
-//    }
 @Override
 public SiteVisitTechnicalLandDetailsResponse save(
         String applicationId,
