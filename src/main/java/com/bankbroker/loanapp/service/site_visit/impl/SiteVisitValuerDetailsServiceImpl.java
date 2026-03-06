@@ -117,7 +117,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.Base64;
 
 @Slf4j
 @Service
@@ -213,9 +218,42 @@ public class SiteVisitValuerDetailsServiceImpl
     @Override
     @Transactional(readOnly = true)
     public SiteVisitValuerDetailsResponse getByApplicationId(String applicationId) {
-        SiteVisitValuerDetails entity = repository.findByApplication_Id(applicationId)
-                .orElseThrow(() -> new ResourceNotFoundException("ValuerDetails", "applicationId", applicationId));
 
-        return mapper.toResponse(entity);
+        SiteVisitValuerDetails entity = repository.findByApplication_Id(applicationId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "ValuerDetails", "applicationId", applicationId));
+
+        String sealBase64 = readFileBase64(entity.getOrganisationSealFilePath());
+        String signatureBase64 = readFileBase64(entity.getValuerSignatureFilePath());
+
+        return SiteVisitValuerDetailsResponse.builder()
+                .id(entity.getId())
+                .applicationId(applicationId)
+                .organisationSealFilePath(entity.getOrganisationSealFilePath())
+                .valuerSignatureFilePath(entity.getValuerSignatureFilePath())
+                .organisationSealFileData(sealBase64)
+                .valuerSignatureFileData(signatureBase64)
+                .build();
+    }
+
+
+    private String readFileBase64(String path) {
+
+        if (path == null) return null;
+
+        try {
+            Path filePath = Paths.get(path);
+
+            if (!Files.exists(filePath)) {
+                return null;
+            }
+
+            byte[] fileBytes = Files.readAllBytes(filePath);
+
+            return Base64.getEncoder().encodeToString(fileBytes);
+
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to read file: " + path, e);
+        }
     }
 }

@@ -14,4 +14,5 @@ public class SiteVisitImageResponse {
     private String category;
     private String fileName;
     private String filePath;
+    private String fileData;
 }

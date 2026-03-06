@@ -111,6 +111,9 @@
 
 package com.bankbroker.loanapp.service.site_visit.impl;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Base64;
 import com.bankbroker.loanapp.dto.site_visit.SiteVisitImageResponse;
 import com.bankbroker.loanapp.entity.core.AdminUser;
 import com.bankbroker.loanapp.entity.core.LoanApplication;
@@ -186,41 +189,101 @@ public class SiteVisitImagesServiceImpl implements SiteVisitImagesService {
         saveImages(applicationId, group, SiteVisitImageCategory.COMPARISON, comparisonImages, user);
     }
 
-    private void saveImages(
-            String applicationId,
-            SiteVisitImageGroup group,
-            SiteVisitImageCategory category,
-            List<MultipartFile> files,
-            AdminUser user) {
+//    private void saveImages(
+//            String applicationId,
+//            SiteVisitImageGroup group,
+//            SiteVisitImageCategory category,
+//            List<MultipartFile> files,
+//            AdminUser user) {
+//
+//        if (files == null || files.isEmpty()) return;
+//
+//        for (MultipartFile file : files) {
+//            if (file == null || file.isEmpty()) continue;
+//
+//            String fileName = category.name().toLowerCase()
+//                    + "-" + System.currentTimeMillis()
+//                    + fileStorageService.getExtension(file.getOriginalFilename());
+//
+//            String path = fileStorageService.store(
+//                    file,
+//                    applicationId,
+//                    "site-visit/images/" + category.name().toLowerCase(),
+//                    fileName
+//            );
+//
+//            SiteVisitImage image = SiteVisitImage.builder()
+//                    .imageGroup(group)
+//                    .category(category)
+//                    .fileName(fileName)
+//                    .filePath(path)
+//                    .fileType(file.getContentType())
+//                    .fileSize(file.getSize())
+//                    .build();
+//
+//            imageRepository.save(image);
+//        }
+//    }
+private void saveImages(
+        String applicationId,
+        SiteVisitImageGroup group,
+        SiteVisitImageCategory category,
+        List<MultipartFile> files,
+        AdminUser user) {
 
-        if (files == null || files.isEmpty()) return;
+    if (files == null || files.isEmpty()) return;
 
-        for (MultipartFile file : files) {
-            if (file == null || file.isEmpty()) continue;
+    MultipartFile file = files.get(0);
+    if (file == null || file.isEmpty()) return;
 
-            String fileName = category.name().toLowerCase()
-                    + "-" + System.currentTimeMillis()
-                    + fileStorageService.getExtension(file.getOriginalFilename());
+    String fileName = category.name().toLowerCase()
+            + "-" + System.currentTimeMillis()
+            + fileStorageService.getExtension(file.getOriginalFilename());
 
-            String path = fileStorageService.store(
-                    file,
-                    applicationId,
-                    "site-visit/images/" + category.name().toLowerCase(),
-                    fileName
-            );
+    String path = fileStorageService.store(
+            file,
+            applicationId,
+            "site-visit/images/" + category.name().toLowerCase(),
+            fileName
+    );
 
-            SiteVisitImage image = SiteVisitImage.builder()
-                    .imageGroup(group)
-                    .category(category)
-                    .fileName(fileName)
-                    .filePath(path)
-                    .fileType(file.getContentType())
-                    .fileSize(file.getSize())
-                    .build();
+    List<SiteVisitImage> existingImages =
+            imageRepository.findByImageGroupAndCategory(group, category);
 
-            imageRepository.save(image);
+    SiteVisitImage image;
+
+    if (!existingImages.isEmpty()) {
+
+        image = existingImages.get(0);
+
+        // delete duplicate records
+        for (int i = 1; i < existingImages.size(); i++) {
+            fileStorageService.delete(existingImages.get(i).getFilePath());
+            imageRepository.delete(existingImages.get(i));
         }
+
+        // delete old file
+        fileStorageService.delete(image.getFilePath());
+
+        image.setFileName(fileName);
+        image.setFilePath(path);
+        image.setFileType(file.getContentType());
+        image.setFileSize(file.getSize());
+
+    } else {
+
+        image = SiteVisitImage.builder()
+                .imageGroup(group)
+                .category(category)
+                .fileName(fileName)
+                .filePath(path)
+                .fileType(file.getContentType())
+                .fileSize(file.getSize())
+                .build();
     }
+
+    imageRepository.save(image);
+}
 
     private void validateAssignment(LoanApplication app, AdminUser user) {
         boolean isAssigned = false;
@@ -241,16 +304,37 @@ public class SiteVisitImagesServiceImpl implements SiteVisitImagesService {
     @Override
     @Transactional(readOnly = true)
     public List<SiteVisitImageResponse> getImages(String applicationId) {
+
         SiteVisitImageGroup group = groupRepository.findByApplication_Id(applicationId)
                 .orElseThrow(() -> new ResourceNotFoundException("SiteVisitImageGroup", "applicationId", applicationId));
 
         return group.getImages().stream()
-                .map(image -> SiteVisitImageResponse.builder()
-                        .id(image.getId())
-                        .category(image.getCategory().name())
-                        .fileName(image.getFileName())
-                        .filePath(image.getFilePath())
-                        .build())
+                .map(image -> {
+
+                    String base64 = null;
+
+                    try {
+                        if (image.getFilePath() != null) {
+
+                            Path path = Path.of(image.getFilePath());
+
+                            if (Files.exists(path)) {
+                                byte[] bytes = Files.readAllBytes(path);
+                                base64 = Base64.getEncoder().encodeToString(bytes);
+                            }
+                        }
+                    } catch (Exception e) {
+                        log.error("Failed to read image file {}", image.getFilePath(), e);
+                    }
+
+                    return SiteVisitImageResponse.builder()
+                            .id(image.getId())
+                            .category(image.getCategory().name())
+                            .fileName(image.getFileName())
+                            .filePath(image.getFilePath())
+                            .fileData(base64)
+                            .build();
+                })
                 .toList();
     }
 }

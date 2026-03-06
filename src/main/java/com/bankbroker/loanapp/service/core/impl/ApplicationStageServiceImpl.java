@@ -27,8 +27,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 @Slf4j
@@ -513,18 +518,54 @@ public class ApplicationStageServiceImpl implements ApplicationStageService {
 
 
 
+//    private ApplicationDocumentDetailsResponse mapDocumentDetailsToResponse(ApplicationDocumentDetails e) {
+//
+//        List<ApplicationUploadedDocumentResponse> docs = e.getDocuments().stream()
+//                .map(doc -> ApplicationUploadedDocumentResponse.builder()
+//                        .id(doc.getId())
+//                        .fileName(doc.getFileName())
+//                        .fileType(doc.getFileType())
+//                        .fileSizeKB(doc.getFileSizeKB())
+//                        .documentType(doc.getDocumentType())
+//                        .fileUrl(doc.getFileUrl())
+//                        .build()
+//                )
+//                .toList();
+//
+//        return ApplicationDocumentDetailsResponse.builder()
+//                .id(e.getId())
+//                .applicationId(e.getApplication().getId())
+//                .documents(docs)
+//                .build();
+//    }
+
     private ApplicationDocumentDetailsResponse mapDocumentDetailsToResponse(ApplicationDocumentDetails e) {
 
         List<ApplicationUploadedDocumentResponse> docs = e.getDocuments().stream()
-                .map(doc -> ApplicationUploadedDocumentResponse.builder()
-                        .id(doc.getId())
-                        .fileName(doc.getFileName())
-                        .fileType(doc.getFileType())
-                        .fileSizeKB(doc.getFileSizeKB())
-                        .documentType(doc.getDocumentType())
-                        .fileUrl(doc.getFileUrl())
-                        .build()
-                )
+                .map(doc -> {
+
+                    String base64 = null;
+
+                    try {
+                        Path path = Paths.get(doc.getFileUrl());
+                        if (Files.exists(path)) {
+                            byte[] bytes = Files.readAllBytes(path);
+                            base64 = Base64.getEncoder().encodeToString(bytes);
+                        }
+                    } catch (IOException ex) {
+                        throw new RuntimeException("Failed to read file: " + doc.getFileName(), ex);
+                    }
+
+                    return ApplicationUploadedDocumentResponse.builder()
+                            .id(doc.getId())
+                            .fileName(doc.getFileName())
+                            .fileType(doc.getFileType())
+                            .fileSizeKB(doc.getFileSizeKB())
+                            .documentType(doc.getDocumentType())
+                            .fileUrl(doc.getFileUrl())
+                            .fileData(base64)
+                            .build();
+                })
                 .toList();
 
         return ApplicationDocumentDetailsResponse.builder()

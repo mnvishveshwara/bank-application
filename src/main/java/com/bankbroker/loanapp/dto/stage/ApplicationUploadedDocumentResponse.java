@@ -14,4 +14,5 @@ public class ApplicationUploadedDocumentResponse {
     private Long fileSizeKB;
     private String documentType;
     private String fileUrl;
+    private String fileData;
 }

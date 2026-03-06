@@ -15,4 +15,7 @@ public class SiteVisitValuerDetailsResponse {
 
     private String organisationSealFilePath;
     private String valuerSignatureFilePath;
+
+    private String organisationSealFileData;
+    private String valuerSignatureFileData;
 }
