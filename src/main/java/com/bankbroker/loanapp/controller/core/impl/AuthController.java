@@ -34,60 +34,6 @@ public class AuthController {
     private final CustomerRepository customerRepository;
     private final UserSessionRepository userSessionRepository;
 
-//    @PostMapping("/login")
-//    public ResponseEntity<AuthResponse> login(
-//            @RequestBody LoginRequest request,
-//            HttpServletRequest httpRequest
-//    ) {
-//
-//        Authentication authentication = authenticationManager.authenticate(
-//                new UsernamePasswordAuthenticationToken(
-//                        request.getUsername(),
-//                        request.getPassword()
-//                )
-//        );
-//
-//        UserDetails principal = (UserDetails) authentication.getPrincipal();
-//
-//        String email = principal.getUsername();
-//        String role = extractRole(principal);
-//        String userId = resolveUserId(email, role);
-//
-//        //   FORCE LOGIN: kill all existing sessions
-//        userSessionRepository.deactivateAllActiveSessions(userId);
-//
-//        //   Generate new JWT
-//        String token = tokenProvider.generateToken(
-//                userId,
-//                email,
-//                role
-//        );
-//
-//        //   Device & IP
-//        String ipAddress = getClientIp(httpRequest);
-//        String deviceInfo = getDeviceInfo(httpRequest);
-//
-//        //   Save new active session
-//        userSessionRepository.save(
-//                UserSession.builder()
-//                        .userId(userId)
-//                        .token(token)
-//                        .active(true)
-//                        .loginTime(LocalDateTime.now())
-//                        .ipAddress(ipAddress)
-//
-//                        .deviceInfo(deviceInfo)
-//                        .build()
-//        );
-//
-//        return ResponseEntity.ok(
-//                AuthResponse.builder()
-//                        .token(token)
-//                        .role(role)
-//                        .build()
-//        );
-//    }
-
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(
             @RequestBody LoginRequest request,
