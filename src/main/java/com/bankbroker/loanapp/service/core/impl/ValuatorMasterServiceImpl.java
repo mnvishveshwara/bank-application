@@ -181,6 +181,7 @@ public class ValuatorMasterServiceImpl implements ValuatorMasterService {
 
         log.info("Found {} applications for valuator {}", apps.size(), loggedUser.getId());
 
+
         return apps.stream()
                 .map(app -> {
                     // Fetch the current stage status
