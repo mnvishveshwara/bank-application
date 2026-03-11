@@ -47,10 +47,12 @@ AND (
 
 //    List<LoanApplication> findApplicationsByValuatorId(String valuatorId);
 
-    @Query("SELECT a FROM LoanApplication a " +
-            "LEFT JOIN ApplicationAgencyAssignment aaa ON aaa.application = a " +
-            "WHERE a.internalValuator.id = :valuatorId " +
-            "OR aaa.agency.id = (SELECT adm.agency.id FROM AdminUser adm WHERE adm.id = :valuatorId)")
+    @Query("""
+       SELECT a
+       FROM LoanApplication a
+       WHERE a.internalValuator.id = :valuatorId
+       OR a.valuator.id = :valuatorId
+       """)
     List<LoanApplication> findApplicationsByValuatorId(@Param("valuatorId") String valuatorId);
 
     //   MANAGER STATUS COUNTS
