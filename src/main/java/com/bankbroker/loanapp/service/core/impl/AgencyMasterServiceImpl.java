@@ -329,6 +329,9 @@ public class AgencyMasterServiceImpl implements AgencyMasterService {
                     .bankName(app.getBank() != null ? app.getBank().getBankName() : null)
                     .createdDate(app.getCreatedDate())
                     .updatedDate(app.getUpdatedDate())
+                    .valuatorName(app.getValuator() != null
+                            ? app.getValuator().getFirstName() + " " + app.getValuator().getLastName()
+                            : null)
                     .build();
         });
     }

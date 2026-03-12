@@ -29,11 +29,11 @@ public class AdminDashboardServiceImpl implements AdminDashboardService {
 
     @Override
     public List<DashboardLatestApplicationResponse> getLatestCompleted() {
-        return historyRepo.getLatestCompleted().stream().limit(5).toList();
+        return historyRepo.getLatestCompleted().stream().toList();
     }
 
     @Override
     public List<DashboardLatestApplicationResponse> getLatestRejected() {
-        return historyRepo.getLatestRejected().stream().limit(5).toList();
+        return historyRepo.getLatestRejected().stream().toList();
     }
 }

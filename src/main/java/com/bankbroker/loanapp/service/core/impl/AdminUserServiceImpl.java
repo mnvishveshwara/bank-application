@@ -121,11 +121,13 @@ import com.bankbroker.loanapp.dto.application.LoanApplicationResponse;
 import com.bankbroker.loanapp.entity.core.AdminUser;
 import com.bankbroker.loanapp.entity.core.BankMaster;
 import com.bankbroker.loanapp.entity.core.LoanApplication;
+import com.bankbroker.loanapp.entity.enums.ApplicationHistoryStatus;
 import com.bankbroker.loanapp.entity.enums.ApplicationStageType;
 import com.bankbroker.loanapp.entity.enums.Role;
 import com.bankbroker.loanapp.exception.ResourceNotFoundException;
 import com.bankbroker.loanapp.repository.core.AdminUserRepository;
 import com.bankbroker.loanapp.repository.core.ApplicationStageCurrentRepository;
+import com.bankbroker.loanapp.repository.core.ApplicationStageHistoryRepository;
 import com.bankbroker.loanapp.repository.core.BankMasterRepository;
 import com.bankbroker.loanapp.service.core.api.AdminUserService;
 import com.bankbroker.loanapp.util.IdGenerator;
@@ -150,6 +152,7 @@ public class AdminUserServiceImpl implements AdminUserService {
     private final AdminUserRepository adminUserRepository;
     private final PasswordEncoder passwordEncoder;
     private final ApplicationStageCurrentRepository applicationStageCurrentRepository;
+    private final ApplicationStageHistoryRepository applicationStageHistoryRepository;
     private final BankMasterRepository bankRepository;
     private final SecurityUtil securityUtil;
 
@@ -246,11 +249,47 @@ public class AdminUserServiceImpl implements AdminUserService {
         adminUserRepository.deleteById(id);
     }
 
+//    @Override
+//    public List<LoanApplicationResponse> getIncompleteApplication() {
+//
+//        return applicationStageHistoryRepository
+//                .findByStageNot(ApplicationHistoryStatus.APPLICATION_APPLIED || ApplicationHistoryStatus.)
+//                .stream()
+//                .map(stage -> {
+//
+//                    LoanApplication app = stage.getApplication();
+//
+//                    return LoanApplicationResponse.builder()
+//                            .applicationId(app.getId())
+//                            .active(app.getActive())
+//                            .clientId(app.getClient() != null ? app.getClient().getId() : null)
+//                            .clientName(app.getClient() != null
+//                                    ? app.getClient().getFirstName() + " " + app.getClient().getLastName()
+//                                    : null)
+//                            .createdByAdminId(app.getCreatedBy() != null ? app.getCreatedBy().getId() : null)
+//                            .createdByName(app.getCreatedBy() != null
+//                                    ? app.getCreatedBy().getFirstName() + " " + app.getCreatedBy().getLastName()
+//                                    : null)
+//                            .assignedToAdminId(app.getAssignedTo() != null ? app.getAssignedTo().getId() : null)
+//                            .assignedToName(app.getAssignedTo() != null
+//                                    ? app.getAssignedTo().getFirstName() + " " + app.getAssignedTo().getLastName()
+//                                    : null)
+//                            .bankId(app.getBankId())
+//                            .bankName(app.getBank() != null ? app.getBank().getBankName() : null)
+//                            .createdDate(app.getCreatedDate())
+//                            .updatedDate(app.getUpdatedDate())
+//                            .status(stage.getStage().name())
+//                            .build();
+//                })
+//                .toList();
+//    }
+
+
     @Override
     public List<LoanApplicationResponse> getIncompleteApplication() {
 
-        return applicationStageCurrentRepository
-                .findByStageNot(ApplicationStageType.APPLICATION_APPLIED)
+        return applicationStageHistoryRepository
+                .findIncompleteApplications()
                 .stream()
                 .map(stage -> {
 
@@ -275,17 +314,53 @@ public class AdminUserServiceImpl implements AdminUserService {
                             .bankName(app.getBank() != null ? app.getBank().getBankName() : null)
                             .createdDate(app.getCreatedDate())
                             .updatedDate(app.getUpdatedDate())
-                            .status(stage.getStage().name())
+                            .status(stage.getStatus().name())
                             .build();
                 })
                 .toList();
     }
 
+//    @Override
+//    public List<LoanApplicationResponse> getCompleteApplication() {
+//
+//        return applicationStageCurrentRepository
+//                .findByStage(ApplicationStageType.APPLICATION_APPLIED)
+//                .stream()
+//                .map(stage -> {
+//
+//                    LoanApplication app = stage.getApplication();
+//
+//                    return LoanApplicationResponse.builder()
+//                            .applicationId(app.getId())
+//                            .active(app.getActive())
+//                            .clientId(app.getClient() != null ? app.getClient().getId() : null)
+//                            .clientName(app.getClient() != null
+//                                    ? app.getClient().getFirstName() + " " + app.getClient().getLastName()
+//                                    : null)
+//                            .createdByAdminId(app.getCreatedBy() != null ? app.getCreatedBy().getId() : null)
+//                            .createdByName(app.getCreatedBy() != null
+//                                    ? app.getCreatedBy().getFirstName() + " " + app.getCreatedBy().getLastName()
+//                                    : null)
+//                            .assignedToAdminId(app.getAssignedTo() != null ? app.getAssignedTo().getId() : null)
+//                            .assignedToName(app.getAssignedTo() != null
+//                                    ? app.getAssignedTo().getFirstName() + " " + app.getAssignedTo().getLastName()
+//                                    : null)
+//                            .bankId(app.getBankId())
+//                            .bankName(app.getBank() != null ? app.getBank().getBankName() : null)
+//                            .createdDate(app.getCreatedDate())
+//                            .updatedDate(app.getUpdatedDate())
+//                            .status(stage.getStage().name())
+//                            .build();
+//                })
+//                .toList();
+//    }
+
+
     @Override
     public List<LoanApplicationResponse> getCompleteApplication() {
 
-        return applicationStageCurrentRepository
-                .findByStage(ApplicationStageType.APPLICATION_APPLIED)
+        return applicationStageHistoryRepository
+                .findLatestCompletedApplications()
                 .stream()
                 .map(stage -> {
 
@@ -310,7 +385,7 @@ public class AdminUserServiceImpl implements AdminUserService {
                             .bankName(app.getBank() != null ? app.getBank().getBankName() : null)
                             .createdDate(app.getCreatedDate())
                             .updatedDate(app.getUpdatedDate())
-                            .status(stage.getStage().name())
+                            .status(stage.getStatus().name())
                             .build();
                 })
                 .toList();

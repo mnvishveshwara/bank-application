@@ -23,4 +23,5 @@ public class LoanApplicationResponse {
     private LocalDateTime updatedDate;
     private String status;
     private String assignmentType;
+    private String valuatorName;
 }

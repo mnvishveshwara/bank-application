@@ -3,6 +3,7 @@ package com.bankbroker.loanapp.repository.core;
 import com.bankbroker.loanapp.dto.admin.DashboardLatestApplicationResponse;
 import com.bankbroker.loanapp.dto.admin.DashboardMonthlyTrendResponse;
 import com.bankbroker.loanapp.dto.admin.DashboardStatusSummaryResponse;
+import com.bankbroker.loanapp.dto.application.LoanApplicationResponse;
 import com.bankbroker.loanapp.entity.core.ApplicationStageHistory;
 import com.bankbroker.loanapp.entity.core.LoanApplication;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -61,7 +62,7 @@ public interface ApplicationStageHistoryRepository extends JpaRepository<Applica
         LEFT JOIN ApplicationAgencyAssignment assign ON assign.application.id = app.id
         LEFT JOIN assign.agency agency
 
-        WHERE hist.status = com.bankbroker.loanapp.entity.enums.ApplicationHistoryStatus.SITE_VISIT_COMPLETED
+        WHERE hist.status = com.bankbroker.loanapp.entity.enums.ApplicationHistoryStatus.BANK_APPROVED
 
         ORDER BY hist.createdDate DESC
     """)
@@ -84,7 +85,7 @@ public interface ApplicationStageHistoryRepository extends JpaRepository<Applica
         LEFT JOIN ApplicationAgencyAssignment assign ON assign.application.id = app.id
         LEFT JOIN assign.agency agency
 
-        WHERE hist.status = com.bankbroker.loanapp.entity.enums.ApplicationHistoryStatus.REJECTED
+        WHERE hist.status = com.bankbroker.loanapp.entity.enums.ApplicationHistoryStatus.BANK_REJECTED
 
         ORDER BY hist.createdDate DESC
     """)
@@ -176,4 +177,33 @@ public interface ApplicationStageHistoryRepository extends JpaRepository<Applica
             List<Long> bankIds
     );
 
+
+    @Query("""
+    SELECT hist
+    FROM ApplicationStageHistory hist
+    WHERE hist.status NOT IN (
+        com.bankbroker.loanapp.entity.enums.ApplicationHistoryStatus.BANK_APPROVED,
+        com.bankbroker.loanapp.entity.enums.ApplicationHistoryStatus.BANK_REJECTED,
+        com.bankbroker.loanapp.entity.enums.ApplicationHistoryStatus.BANK_ON_HOLD
+    )
+""")
+    List<ApplicationStageHistory> findIncompleteApplications();
+
+
+
+    @Query("""
+    SELECT hist
+    FROM ApplicationStageHistory hist
+    WHERE hist.createdDate = (
+        SELECT MAX(h2.createdDate)
+        FROM ApplicationStageHistory h2
+        WHERE h2.application.id = hist.application.id
+    )
+    AND hist.status IN (
+        com.bankbroker.loanapp.entity.enums.ApplicationHistoryStatus.BANK_APPROVED,
+        com.bankbroker.loanapp.entity.enums.ApplicationHistoryStatus.BANK_REJECTED,
+        com.bankbroker.loanapp.entity.enums.ApplicationHistoryStatus.BANK_ON_HOLD
+    )
+""")
+    List<ApplicationStageHistory> findLatestCompletedApplications();
 }
