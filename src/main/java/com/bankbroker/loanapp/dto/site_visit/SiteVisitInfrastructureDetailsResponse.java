@@ -20,4 +20,5 @@ public class SiteVisitInfrastructureDetailsResponse {
     private Boolean electricity;
     private String waterSupply;
     private Integer numberOfLifts;
+    private String accessibility;
 }

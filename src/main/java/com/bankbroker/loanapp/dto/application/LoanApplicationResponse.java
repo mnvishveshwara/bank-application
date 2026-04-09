@@ -24,4 +24,6 @@ public class LoanApplicationResponse {
     private String status;
     private String assignmentType;
     private String valuatorName;
+    private String clientNumber;
+    private String propertyAddress;
 }

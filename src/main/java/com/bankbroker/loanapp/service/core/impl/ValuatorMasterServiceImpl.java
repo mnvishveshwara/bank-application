@@ -11,6 +11,8 @@ import com.bankbroker.loanapp.entity.valuator.ValuatorMaster;
 import com.bankbroker.loanapp.exception.ResourceNotFoundException;
 import com.bankbroker.loanapp.mapper.core.ValuatorMapper;
 import com.bankbroker.loanapp.repository.core.*;
+import com.bankbroker.loanapp.repository.stage.ApplicationCustomerDetailsRepository;
+import com.bankbroker.loanapp.repository.stage.ApplicationPropertyDetailsRepository;
 import com.bankbroker.loanapp.repository.valuator.ValuatorMasterRepository;
 import com.bankbroker.loanapp.service.core.api.ValuatorMasterService;
 import com.bankbroker.loanapp.util.IdGenerator;
@@ -37,6 +39,8 @@ public class ValuatorMasterServiceImpl implements ValuatorMasterService {
     private final LoanApplicationRepository loanApplicationRepository;
     private final ApplicationStageHistoryRepository applicationStageHistoryRepository;
     private final SecurityUtil securityUtil;
+    private final ApplicationCustomerDetailsRepository customerDetailsRepository;
+    private final ApplicationPropertyDetailsRepository propertyDetailsRepository;
 
     // -------------------------------------------------------------------------
     // CREATE VALUATOR
@@ -190,13 +194,43 @@ public class ValuatorMasterServiceImpl implements ValuatorMasterService {
                             .map(h -> h.getStatus().name())
                             .orElse("NOT_STARTED");
 
+                    // Fetch customer details
+                    var customerDetails = customerDetailsRepository
+                            .findByApplication(app)
+                            .orElse(null);
+
+                    String clientNumber = customerDetails != null
+                            ? customerDetails.getPrimaryContactNumber()
+                            : null;
+
+                    // Fetch property details
+                    var propertyDetails = propertyDetailsRepository
+                            .findByApplication(app)
+                            .orElse(null);
+
+                    String propertyAddress = null;
+
+                    if (propertyDetails != null && propertyDetails.getPropertyAddress() != null) {
+                        var addr = propertyDetails.getPropertyAddress();
+
+                        propertyAddress = String.join(", ",
+                                safe(addr.getDoorOrApartmentNumber()),
+                                safe(addr.getBuildingOrApartmentName()),
+                                safe(addr.getStreetLine1()),
+                                safe(addr.getStreetLine2()),
+                                safe(addr.getCity()),
+                                safe(addr.getState()),
+                                safe(addr.getPinCode())
+                        );
+                    }
+
                     return LoanApplicationResponse.builder()
                             .applicationId(app.getId())
                             .active(app.getActive())
                             .status(status)
-
-                            // NEW CHANGE: Include assignment type so frontend knows if it's INTERNAL/AGENCY
-                            .assignmentType(app.getAssignmentType() != null ? app.getAssignmentType().name() : null)
+                            .assignmentType(app.getAssignmentType() != null
+                                    ? app.getAssignmentType().name()
+                                    : null)
 
                             .clientId(app.getClient() != null ? app.getClient().getId() : null)
                             .clientName(app.getClient() != null
@@ -210,10 +244,19 @@ public class ValuatorMasterServiceImpl implements ValuatorMasterService {
 
                             .bankId(app.getBankId())
                             .bankName(app.getBank() != null ? app.getBank().getBankName() : null)
+
+                            .clientNumber(clientNumber)
+                            .propertyAddress(propertyAddress)
+
                             .createdDate(app.getCreatedDate())
                             .updatedDate(app.getUpdatedDate())
                             .build();
                 })
                 .toList();
+    }
+
+
+    private String safe(String value) {
+        return value != null ? value : "";
     }
 }

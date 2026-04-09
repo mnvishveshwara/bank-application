@@ -40,5 +40,6 @@ public interface SiteVisitInfrastructureDetailsMapper {
 
     // RESPONSE
     @Mapping(target = "applicationId", source = "application.id")
+    @Mapping(target = "accessibility", source = "accessibility")
     SiteVisitInfrastructureDetailsResponse toResponse(SiteVisitInfrastructureDetails entity);
 }

@@ -32,44 +32,7 @@ public class SiteVisitInfrastructureDetailsServiceImpl
     private final SiteVisitInfrastructureDetailsMapper mapper;
     private final SecurityUtil securityUtil;
     private final ApplicationAgencyAssignmentRepository agencyAssignmentRepo;
-//    @Override
-//    @Transactional
-//    public SiteVisitInfrastructureDetailsResponse saveInfrastructureDetails(
-//            String applicationId,
-//            SiteVisitInfrastructureDetailsRequest request) {
-//
-//        AdminUser logged = securityUtil.getLoggedInAdmin();
-//
-//        if (logged.getRole() != Role.AGENCY_VALUATOR) {
-//            throw new RuntimeException(
-//                    "Only valuators can submit infrastructure details");
-//        }
-//
-//        LoanApplication app = loanRepo.findById(applicationId)
-//                .orElseThrow(() ->
-//                        new ResourceNotFoundException(
-//                                "LoanApplication", "id", applicationId));
-//
-//        if (app.getValuator() == null
-//                || !app.getValuator().getId().equals(logged.getId())) {
-//            throw new RuntimeException(
-//                    "You are not assigned to this application");
-//        }
-//
-//        SiteVisitInfrastructureDetails entity =
-//                repo.findByApplication(app)
-//                        .orElseGet(() ->
-//                                mapper.toEntity(request, app, logged));
-//
-//        if (entity.getId() != null) {
-//            mapper.updateEntity(request, entity);
-//        }
-//
-//        entity = repo.save(entity);
-//
-//
-//        return mapper.toResponse(entity);
-//    }
+
 
     @Override
     @Transactional

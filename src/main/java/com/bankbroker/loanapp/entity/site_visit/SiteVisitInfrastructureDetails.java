@@ -42,6 +42,9 @@ public class SiteVisitInfrastructureDetails {
     @Column(name = "road_width")
     private String roadWidth;               // <10 ft / 10–20 ft / >20 ft
 
+    @Column(name = "accessibility")
+    private String accessibility;           // No. of accessible sides (1 / 2 / 3 / 4)
+
     // -------------------------------------------------
     //   Utilities
     // -------------------------------------------------

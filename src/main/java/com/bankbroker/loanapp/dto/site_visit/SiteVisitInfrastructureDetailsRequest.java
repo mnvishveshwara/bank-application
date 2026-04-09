@@ -13,6 +13,7 @@ public class SiteVisitInfrastructureDetailsRequest {
     private String accessibleThrough;
     private String accessibilityType;
     private String roadWidth;
+    private String accessibility;
 
     private Boolean sewerageSystem;
     private Boolean electricity;
