@@ -1,5 +1,47 @@
-package com.bankbroker.loanapp.controller.site_visit.impl;
+//package com.bankbroker.loanapp.controller.site_visit.impl;
+//
+//
+//import com.bankbroker.loanapp.controller.site_visit.api.SiteVisitImagesControllerApi;
+//import com.bankbroker.loanapp.service.site_visit.api.SiteVisitImagesService;
+//import lombok.RequiredArgsConstructor;
+//import lombok.extern.slf4j.Slf4j;
+//import org.springframework.http.ResponseEntity;
+//import org.springframework.web.bind.annotation.RestController;
+//import org.springframework.web.multipart.MultipartFile;
+//
+//import java.util.List;
+//
+//@Slf4j
+//@RestController
+//@RequiredArgsConstructor
+//public class SiteVisitImagesController implements SiteVisitImagesControllerApi {
+//
+//    private final SiteVisitImagesService service;
+//
+//    @Override
+//    public ResponseEntity<Void> uploadAll(
+//            String applicationId,
+//            List<MultipartFile> propertySpecificImages,
+//            List<MultipartFile> unitSpecificImages,
+//            List<MultipartFile> comparisonImages) {
+//
+//        service.uploadAll(
+//                applicationId,
+//                propertySpecificImages,
+//                unitSpecificImages,
+//                comparisonImages
+//        );
+//
+//        return ResponseEntity.ok().build();
+//    }
+//
+//    @Override
+//    public ResponseEntity<?> getAll(String applicationId) {
+//        return ResponseEntity.ok(service.getImages(applicationId));
+//    }
+//}
 
+package com.bankbroker.loanapp.controller.site_visit.impl;
 
 import com.bankbroker.loanapp.controller.site_visit.api.SiteVisitImagesControllerApi;
 import com.bankbroker.loanapp.service.site_visit.api.SiteVisitImagesService;
@@ -9,7 +51,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -21,17 +63,9 @@ public class SiteVisitImagesController implements SiteVisitImagesControllerApi {
     @Override
     public ResponseEntity<Void> uploadAll(
             String applicationId,
-            List<MultipartFile> propertySpecificImages,
-            List<MultipartFile> unitSpecificImages,
-            List<MultipartFile> comparisonImages) {
+            Map<String, MultipartFile> images) {
 
-        service.uploadAll(
-                applicationId,
-                propertySpecificImages,
-                unitSpecificImages,
-                comparisonImages
-        );
-
+        service.uploadAll(applicationId, images);
         return ResponseEntity.ok().build();
     }
 

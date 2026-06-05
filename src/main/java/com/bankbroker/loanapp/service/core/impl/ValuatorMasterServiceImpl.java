@@ -247,6 +247,12 @@ public class ValuatorMasterServiceImpl implements ValuatorMasterService {
 
                             .clientNumber(clientNumber)
                             .propertyAddress(propertyAddress)
+                            .siteVisitDate(
+                                    app.getReschedSiteVisitDate() != null
+                                            ? app.getReschedSiteVisitDate().atStartOfDay()
+                                            : app.getPlannedSiteVisitDate() != null
+                                            ? app.getPlannedSiteVisitDate().atStartOfDay()
+                                            : null)
 
                             .createdDate(app.getCreatedDate())
                             .updatedDate(app.getUpdatedDate())

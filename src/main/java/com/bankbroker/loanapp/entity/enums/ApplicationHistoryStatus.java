@@ -19,5 +19,7 @@ public enum ApplicationHistoryStatus {
     BANK_APPROVED,
     BANK_REJECTED,
     BANK_ON_HOLD,
+    VALUATOR_ON_HOLD,
+    VALUATOR_REJECTED,
 
 }

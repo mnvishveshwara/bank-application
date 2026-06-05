@@ -34,65 +34,6 @@ public class SiteVisitTechnicalBuaServiceImpl
     private final SecurityUtil securityUtil;
     private final ApplicationAgencyAssignmentRepository agencyAssignmentRepo;
 
-//    @Override
-//    @Transactional
-//    public SiteVisitTechnicalBuaResponse saveTechnicalBua(
-//            String applicationId,
-//            SiteVisitTechnicalBuaRequest request) {
-//
-//        AdminUser user = securityUtil.getLoggedInAdmin();
-//
-//        LoanApplication app = loanRepo.findById(applicationId)
-//                .orElseThrow(() -> new RuntimeException("Application not found"));
-//
-//        SiteVisitTechnicalBua bua = buaRepo.findByApplication(app)
-//                .orElseGet(() -> {
-//                    SiteVisitTechnicalBua b = new SiteVisitTechnicalBua();
-//                    b.setApplication(loanRepo.getReferenceById(applicationId));
-//                    b.setCreatedBy(user);
-//                    b.setCreatedDate(LocalDateTime.now());
-//                    return b;
-//                });
-//
-//        // Update scalar fields
-//        bua.setBasements(request.getBasements());
-//        bua.setFloors(request.getFloors());
-//        bua.setNonRcc(request.getNonRcc());
-//        bua.setUpdatedBy(user);
-//        bua.setUpdatedDate(LocalDateTime.now());
-//
-//        // IMPORTANT PART
-//        bua.getLevels().clear();  // DO NOT replace the list
-//
-//        double totalActual = 0;
-//        double totalDocument = 0;
-//        double totalApproved = 0;
-//
-//        for (SiteVisitTechnicalBuaLevelRequest levelReq : request.getLevels()) {
-//            SiteVisitTechnicalBuaLevel level = new SiteVisitTechnicalBuaLevel();
-//            level.setBua(bua);
-//            level.setLevelType(levelReq.getLevelType());
-//            level.setLevelOrder(levelReq.getLevelOrder());
-//            level.setAreaActual(levelReq.getAreaActual());
-//            level.setAreaDocument(levelReq.getAreaDocument());
-//            level.setAreaApproved(levelReq.getAreaApproved());
-//
-//            totalActual += safeTechnicalBua(levelReq.getAreaActual());
-//            totalDocument += safeTechnicalBua(levelReq.getAreaDocument());
-//            totalApproved += safeTechnicalBua(levelReq.getAreaApproved());
-//
-//            bua.getLevels().add(level);
-//        }
-//
-//        bua.setTotalBuaActual(totalActual);
-//        bua.setTotalBuaDocument(totalDocument);
-//        bua.setTotalBuaApproved(totalApproved);
-//
-//        SiteVisitTechnicalBua saved = buaRepo.save(bua);
-//
-//        return buaMapper.toResponse(saved);
-//    }
-
     @Override
     @Transactional
     public SiteVisitTechnicalBuaResponse saveTechnicalBua(

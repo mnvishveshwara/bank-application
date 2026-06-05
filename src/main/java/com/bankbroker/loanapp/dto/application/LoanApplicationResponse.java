@@ -26,4 +26,5 @@ public class LoanApplicationResponse {
     private String valuatorName;
     private String clientNumber;
     private String propertyAddress;
+    private LocalDateTime siteVisitDate;
 }
